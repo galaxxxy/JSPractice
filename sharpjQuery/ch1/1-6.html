@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var domObj = document.getElementsByTagName("h3")[0];//返回的是数组
+            var $jQueryObj = $(domObj);// dom->jQuery
+            // domObj = $jQuery[0]; jQuery->dom
+            // domObj = $jQuery.get(0); jQuery->dom
+            alert("DOM对象:"+domObj.innerHTML);
+            alert("jQuery对象:"+$jQueryObj.html());
+        });
+    </script>
+</head>
+<body>
+    <h3>例子</h3>
+    <p title="选择你最喜欢的水果.">你最喜欢的水果是？</p>
+    <ul>
+        <li>苹果</li>
+        <li>橘子</li>
+        <li>菠萝</li>
+    </ul>
+</body>
+</html>

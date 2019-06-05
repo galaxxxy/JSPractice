@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/default.css">
+    <script src="../../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".level1 > a").click(function(){
+                $(this).addClass("current")//为.level1的标签添加current样式
+                .next().show()//显示下一个元素(<a>)
+                .parent().siblings().children("a").removeClass("current")//为父元素(<li>)的兄弟元素(<li>)的子元素(<a>)移除current样式
+                .next().hide();//隐藏下一个元素(<a>)
+                return false;
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="box">
+        <ul class="menu">
+            <li class="level1">
+                <a href="#none">衬衫</a>
+                <ul class="level2">
+                    <li><a href="#none">短袖衬衫</a></li>
+                    <li><a href="#none">长袖衬衫</a></li>
+                    <li><a href="#none">短袖T恤</a></li>
+                    <li><a href="#none">长袖T恤</a></li>
+                </ul>
+            </li>
+            <li class="level1">
+                <a href="#none">卫衣</a>
+                    <ul class="level2">
+                        <li><a href="#none">开襟卫衣</a></li>
+                        <li><a href="#none">套头卫衣</a></li>
+                        <li><a href="#none">运动卫衣</a></li>
+                        <li><a href="#none">童装卫衣</a></li>
+                    </ul>
+            </li>
+            <li class="level1">
+                <a href="#none">裤子</a>
+                <ul class="level2">
+                    <li><a href="#none">短裤</a></li>
+                    <li><a href="#none">牛仔裤</a></li>
+                    <li><a href="#none">休闲裤</a></li>
+                    <li><a href="#none">免烫卡其裤</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

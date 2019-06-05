@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#table>tbody>tr:has(td:has(:checkbox:enabled))").css("background-color","red");
+        });
+    </script>
+</head>
+<body>
+    <table id="table">
+        <tbody>
+        <tr>
+            <td>第1行</td>
+            <td>第1行</td>
+            <td>第1行</td>
+            <td>第1行</td>
+            <td>第1行<input type="checkbox" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>第2行</td>
+            <td>第2行</td>
+            <td>第2行</td>
+            <td>第2行</td>
+            <td>第2行<input type="checkbox" /></td>
+        </tr>
+        <tr>
+            <td>第3行</td>
+            <td>第3行</td>
+            <td>第3行</td>
+            <td>第3行</td>
+            <td>第3行<input type="checkbox" disabled="disabled"/></td>
+        </tr>
+        <tr>
+            <td>第4行</td>
+            <td>第4行</td>
+            <td>第4行</td>
+            <td>第4行</td>
+            <td>第4行<input type="checkbox" /></td>
+        </tr>
+        </tbody>
+        </table>
+</body>
+</html>
