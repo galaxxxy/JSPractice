@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script><!--jQuery于其他库前导入-->
+    <script src="lib/prototype.js"></script>
+</head>
+<body>
+    <p id="pp">Test-prototype（将被隐藏）</p>
+    <p>Test-jQuery（将被绑定为点击事件）</p>
+    <script type="text/javascript">
+        jQuery(function(){//直接使用jQuery，无需noConflict()函数
+            jQuery("p").click(function(){
+                alert(jQuery(this).text());
+            });
+        })
+        $("pp").style.display = "none";//prototype.js隐藏元素
+    </script>
+</body>
+</html>
