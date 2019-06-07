@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript">
+                                      //保证所有元素加载完毕使用window.onload或者把script标签移到body的闭标签前
+        window.onload = function () { //Uncaught TypeError: Cannot set property 'onclick' of null
+            var btn = document.getElementById("btn");
+            btn.onclick=function(){
+                var array = [];
+                var items = document.getElementsByName("check");
+                for(var i = 0; i < items.length; i++) {
+                    if(items[i].checked){
+                        array.push(items[i].value);
+                    }
+                }
+                alert("选中的元素个数为:"+array.length);
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="checkbox" name="check" value="1" checked />
+    <input type="checkbox" name="check" value="2" />
+    <input type="checkbox" name="check" value="3" checked />
+    <input type="button" value="你选中的个数" id="btn" />
+</body>
+</html>
