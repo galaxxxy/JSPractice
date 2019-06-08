@@ -3,10 +3,10 @@ $(document).ready(function(){
         $("*").removeAttr("style");
         $("div[class=none]").css("display","none");
     });
-    $("input[type=button]").click(function(){
-        if ($("#isrest").is(":checked")) {
-            $("*").removeAttr("style");
-            $("div[class=none]").css("display","none");
+    $("input[type='button']").click(function(){
+        // console.log($("#isreset").is(":checked"));
+        if($("#isreset").is(":checked")) {
+            $("#reset").click();
         }
     });
     function animateIt() {

@@ -9,13 +9,13 @@ div,span,p {
     font-family: Verdana;
 }
 
-div .mini {
+div.mini {
     width: 55px;
     height: 55px;
     background-color: #aaa;
     font-size: 12px;
 }
 
-div .hide {
+div.hide {
     display: none;
 }
