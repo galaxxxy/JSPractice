@@ -1,7 +1,7 @@
 # 锋利的jQuery
 ## Note for chapter 1
 ### jQuery与DOM对象的相互转换
-jQuery->DOM [index]/get(index)
+jQuery->DOM [index]/get(index)<br/>
 DOM->jQuery $(DOM object)
 ### 解决jQuery与其他库的冲突
 1. jQuery在其他库之后导入
@@ -43,8 +43,9 @@ jQuery.noConflict();
  #id | 根据给定的id匹配元素 | 单个元素
  .class | 根据给定的类名匹配元素 | 集合元素
  element | 根据给定的元素名匹配元素 | 集合元素
- * | 匹配所有元素 | 集合元素
- selector1, selector2, ...,selectorN | 将每个选择器匹配到的元素集合一起返回 | 集合元素
+ selector1, selector2, ..., selectorN | 将每个选择器匹配到的元素集合一起返回 | 集合元素
+  \* | 匹配所有元素 | 集合元素
+ 
 #### 层次选择器
 选择器|描述|返回
  :-: | :-: | :-: 
@@ -52,7 +53,8 @@ jQuery.noConflict();
  $("parent>child") | 选取parent元素下的child元素 | 集合元素
  $("prev+next") | 选取紧接prev元素后的next元素 | 集合元素
  $("prev~siblings") | 选取prev元素后的所有siblings元素 | 集合元素
-\$("prev+next") <=> \$("prev").next("next")</br>
+ 
+\$("prev+next") <=> \$("prev").next("next")<br/>
 \$("prev~siblings") <=> \$("prev").nextAll("siblings")
 #### 过滤选择器
 选择器|描述|返回
