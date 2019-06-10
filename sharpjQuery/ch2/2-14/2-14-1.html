@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var $wrong_id_a = $("#id.a");
+            var $wrong_id_b = $("#id#b");
+            var $wrong_id_c = $("#id[1]");
+            //用\\来转义特殊字符
+            var $right_id_a = $("#id\\.a");
+            var $right_id_b = $("#id\\#b");
+            var $right_id_c = $("#id\\[1\\]");
+
+            $("<div>结果输出：<br/>值1:"+$wrong_id_a.html()+
+            "<br/>值2:"+$wrong_id_b.html()+
+            "<br/>值3:"+$wrong_id_c.html()+
+            "<br/>值4:"+$right_id_a.html()+
+            "<br/>值5:"+$right_id_b.html()+
+            "<br/>值6:"+$right_id_c.html()+"<br/></div>")
+            .appendTo("body");
+        });
+    </script>
+</head>
+<body>
+    <div id="id.a">aa</div>
+	<div id="id#b">bb</div>
+	<div id="id[1]">cc</div>
+</body>
+</html>

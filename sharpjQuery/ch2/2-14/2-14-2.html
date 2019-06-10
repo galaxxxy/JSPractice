@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var id_a = $("title=test");   //对
+            // var id_a = $("@title=test"); 错
+        });
+    </script>
+</head>
+<body>
+    <div title="test">Test</div>
+</body>
+</html>
