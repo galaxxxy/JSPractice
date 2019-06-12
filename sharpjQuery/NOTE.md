@@ -122,3 +122,8 @@ jQuery.noConflict();
  :button | 选取所有按钮 | 集合元素
  :file | 选取所有上传域| 集合元素
  :hidden | 选取所有不可见元素 | 集合元素
+### toggle方法
+.toggle(function1,function2)<br/>
+function1与function2交替
+
+## Note for chapter 3
