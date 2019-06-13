@@ -130,8 +130,6 @@ function1与function2交替执行
 ### 获取jQuery对象的属性值
 属性|描述|方法
  :-: | :-: | :-: 
- attribute | 自定义DOM属性[^attribute] | attr(attributeName)
- property | HTML元素固有属性[^property] | prop(attributeName)
-
- [^attribute]:如`<a href="#" action="delete">`中的`action`为自定义属性
- [^property]:如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性
+ attribute | 自定义DOM属性 | attr(attributeName)
+ property | HTML元素固有属性 | prop(attributeName)
+如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性,`action`为自定义属性
