@@ -132,4 +132,5 @@ function1与function2交替执行
  :-: | :-: | :-: 
  attribute | 自定义DOM属性 | attr(attributeName)
  property | HTML元素固有属性 | prop(attributeName)
+ 
 如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性,`action`为自定义属性
