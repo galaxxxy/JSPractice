@@ -124,6 +124,14 @@ jQuery.noConflict();
  :hidden | 选取所有不可见元素 | 集合元素
 ### toggle方法
 .toggle(function1,function2)<br/>
-function1与function2交替
-
+function1与function2交替执行
+- - -
 ## Note for chapter 3
+### 获取jQuery对象的属性值
+属性|描述|方法
+ :-: | :-: | :-: 
+ attribute | 自定义DOM属性[^attribute] | attr(attributeName)
+ property | HTML元素固有属性[^property] | prop(attributeName)
+
+ [^attribute]:如`<a href="#" action="delete">`中的`action`为自定义属性
+ [^property]:如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性
