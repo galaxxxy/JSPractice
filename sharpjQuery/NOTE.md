@@ -134,3 +134,18 @@ function1与function2交替执行
  property | HTML元素固有属性 | prop(attributeName)
  
 如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性,`action`为自定义属性
+
+### 插入节点方法
+原HTML代码:`<p>我想说:</p>`
+方法|描述|示例|结果
+ :-: | :-: | :-: | :-:
+ append()|在每个匹配的元素内部追加内容|`$('p').append("<b>你好</b>")`|`<p>我想说:<b>你好</b></p>`
+ appendTo()|将匹配到的所有元素追加到指定元素中|`$('<b>你好</b>').appendTo('p')`|`<p>我想说:<b>你好</b></p>`
+ prepend()|在每个匹配的元素内部前置内容|`$('p').prepend('<b>你好</b>')`|`<p><b>你好</b>我想说:</p>`
+ prependTo()|将所有匹配的元素前置添加到指定元素中|`$('<b>你好</b>').prependTo('p')`|`<p><b>你好</b>我想说:</p>`
+ insertAfter()|将所有匹配元素插入到指定元素后面|`$('<b>你好</b>').insertAfter('p')`|`<p>我想说</p><b>你好</b>`
+ insertBefore()|将所有匹配元素插入到指定元素前面|`$('<b>你好</b>').insertBefore('p')`|`<b>你好</b><p>我想说</p>`
+ after()|在每个匹配元素后添加内容|`$('p').after('<b>你好</b>')`|`<p>我想说</p><b>你好</b>`
+ before()|在每个匹配元素前添加内容|`$('p').before('<b>你好</b>')`|`<b>你好</b><p>我想说</p>`
+
+ 
