@@ -127,13 +127,6 @@ jQuery.noConflict();
 function1与function2交替执行
 - - -
 ## Note for chapter 3
-### 获取jQuery对象的属性值
-属性|描述|方法
- :-: | :-: | :-: 
- attribute | 自定义DOM属性 | attr(attributeName)
- property | HTML元素固有属性 | prop(attributeName)
- 
-如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性,`action`为自定义属性
 
 ### 插入节点方法
 原HTML代码:`<p>我想说:</p>`
@@ -168,3 +161,34 @@ function1与function2交替执行
 用一个标签将匹配的元素包裹起来，若被包裹的多个元素间有其他元素，其他元素会被放到包裹元素后
 #### wrapInner()
 将匹配元素的子内容（包括文本节点）用标签包裹起来
+### 属性操作
+属性|描述|方法
+ :-: | :-: | :-: 
+ attribute | 自定义DOM属性 | attr(attributeName)
+ property | HTML元素固有属性 | prop(attributeName)
+ 
+如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性,`action`为自定义属性<br/>
+官网建议attr(),prop()的使用:<br/>
+Attribute/Property|`.attr()`|`.prop()`
+ :-: | :-: | :-: 
+ accesskey|yes|
+ align|yes| 
+ async|yes|yes
+ autofocus|yes|yes
+ checked|yes|yes
+ class|yes|
+ contenteditable|yes|
+ draggable|yes|
+ href|yes|
+ id|yes|
+ label|yes|
+ location(i.e.window.location)|yes|yes
+ multiple|yes|yes
+ readonly|yes|yes
+ rel|yes|
+ selected|yes|yes
+ src|yes|
+ tabindex|yes|
+ title|yes|
+ type|yes|
+ width|yes|
