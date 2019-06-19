@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            var $p = $("p");
+            $("input:eq(0)").click(function(){
+                alert($p.html());
+            });
+            $("input:eq(1)").click(function(){
+                alert($p.text());
+            });
+            $("input:eq(2)").click(function(){
+                $p.html("<strong>你最喜欢的水果是?</strong>");
+            });
+            $("input:eq(3)").click(function(){
+                $p.text("你最喜欢的水果是?");
+            });
+            $("input:eq(4)").click(function(){
+                $p.text("<strong>你最喜欢的水果是?</strong>");
+            });
+            $("input:eq(5)").click(function(){
+                // alert($(this).attr("value"));
+                alert($(this).val());
+            });
+            $("input:eq(6)").click(function(){
+                // $(this).attr("value","我被点击了！");
+                $(this).val("我被点击了！");
+            });
+        });
+    </script>
+</head>
+<body>
+    <input type="button" value="获取<p>元素的HTML代码"/>
+	<input type="button" value="获取<p>元素的文本"/>
+	<input type="button" value="设置<p>元素的HTML代码"/>
+	<input type="button" value="设置<p>元素的文本"/>
+	<input type="button" value="设置<p>元素的文本(带HTML)"/>
+	<input type="button" value="获取按钮的value值"/>
+	<input type="button" value="设置按钮的value值"/>
+
+	<p title="选择你最喜欢的水果." ><strong>你最喜欢的水果是?</strong></p>
+	<ul>
+	  <li title='苹果'>苹果</li>
+	  <li title='橘子'>橘子</li>
+	  <li title='菠萝'>菠萝</li>
+	</ul>
+</body>
+</html>

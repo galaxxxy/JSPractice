@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        .high{
+         font-weight:bold;   /* 粗体字 */
+         color : red;        /* 字体颜色设置红色*/
+        }
+        .another{
+         font-style:italic;
+         color:blue;
+        }
+    </style>
+    <script src="../../scripts/jquery.js"></script>
+    <script type="text/javascript">
+    $(function () {
+        var $p = $("p");
+        $("input:eq(0)").click(function(){
+            alert($p.attr("class"));
+        });
+        $("input:eq(1)").click(function(){
+            $p.attr("class","high");
+        });
+        $("input:eq(2)").click(function(){
+            $p.addClass("another");
+        });
+        $("input:eq(3)").click(function(){
+            $p.removeClass();
+        });
+        $("input:eq(4)").click(function(){
+            $p.removeClass("high");
+        });
+        // $("input:eq(5)").toggle(function(){
+        //     $p.addClass("another");
+        // },function(){
+        //     $p.removeClass("another");
+        // });
+        $("input:eq(5)").click(function(){
+            $p.toggleClass("another");
+        });
+        $("input:eq(6)").click(function(){
+            // alert($p.hasClass("another"));
+			alert($p.is(".another"));
+        });
+    });
+    </script>
+</head>
+<body>
+    <input type="button" value="输出class类"/>
+	<input type="button" value="设置class类"/>
+	<input type="button" value="追加class类"/>
+	<input type="button" value="删除全部class类"/>
+	<input type="button" value="删除指定class类"/>
+	<input type="button" value="重复切换class类"/>
+	<input type="button" value="判断元素是否含有某个class类"/>
+
+	<p class="myClass" title="选择你最喜欢的水果." >你最喜欢的水果是?</p>
+	<ul>
+	  <li title='苹果'>苹果</li>
+	  <li title='橘子'>橘子</li>
+	  <li title='菠萝'>菠萝</li>
+	</ul>
+</body>
+</html>
