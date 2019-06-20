@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(":button:eq(0)").click(function(){
+                alert($("p").css("color"));
+            });
+            $(":button:eq(1)").click(function(){
+                $("p").css("color","red");
+            });
+            $(":button:eq(2)").click(function(){
+                $("p").css({"font-size":"30px","background-color":"rgb(136,136,136)"});
+            });
+            $(":button:eq(3)").click(function(){
+                alert($("p").height());
+            });
+            $(":button:eq(4)").click(function(){
+                alert($("p").width());
+            });
+            $(":button:eq(5)").click(function(){
+                $("p").height("100px");
+            });
+            $(":button:eq(6)").click(function(){
+                $("p").width("400px");
+            });
+            $(":button:eq(7)").click(function(){
+                var offset = $("p").offset();
+                var left = offset.left;
+                var top = offset.top;
+                alert("left:"+left+";top:"+top);
+            });
+        });
+    </script>
+</head>
+<body>
+    <input type="button" value="获取p元素的color" />
+    <input type="button" value="设置p元素的color" />
+    <input type="button" value="设置p元素的fontSize和backgroundColor" />
+    <input type="button" value="获取p元素的高度" />
+    <input type="button" value="获取p元素的宽度" />
+    <input type="button" value="设置p元素的高度" />
+    <input type="button" value="设置p元素的宽度" />
+    <input type="button" value="获取p元素的的左边距和上边距" />
+
+
+    <p title="选择你最喜欢的水果."><strong>你最喜欢的水果是?</strong></p>
+    <ul>
+        <li title='苹果'>苹果</li>
+        <li title='橘子'>橘子</li>
+        <li title='菠萝'>菠萝</li>
+    </ul>
+</body>
+</html>

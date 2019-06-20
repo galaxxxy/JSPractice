@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var $body = $("body").children();
+            var $p = $("p").children();
+            var $ul = $("ul").children();
+            alert("body元素的所有子元素的个数为"+$body.length+"个");
+            alert("p元素的所有子元素的个数为"+$p.length+"个");
+            alert("ul元素的所有子元素的个数为"+$ul.length+"个");
+            for(var i = 0; i < $ul.length; i++){
+                alert($ul[i].innerHTML);//$ul[i]的类型为HTMLLIElement
+            }
+        });
+    </script>
+</head>
+<body>
+	<p title="选择你最喜欢的水果." >你最喜欢的水果是?</p>
+	<ul>
+	  <li title='苹果'>苹果</li>
+	  <li title='橘子'>橘子</li>
+	  <li title='菠萝'>菠萝</li>
+	</ul>
+</body>
+</html>

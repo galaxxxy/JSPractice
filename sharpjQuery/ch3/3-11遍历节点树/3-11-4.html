@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var $a1 = $("a:eq(0)");
+            $(":button:eq(0)").click(function(){
+                resetStyle();
+                $a1.parent().css("background","red");
+            });
+            $(":button:eq(1)").click(function(){
+                resetStyle();
+                $a1.parents("ul").css("background","red");
+            });
+            $(":button:eq(2)").click(function(){
+                resetStyle();
+                $a1.closest("ul").css("background","red");
+            });
+            function resetStyle() {
+                $("*").css("background","");
+            }
+        });
+    </script>
+</head>
+<body>
+    <input type="button" value="parent()"/>
+    <input type="button" value="parents()"/>
+    <input type="button" value="closest()"/>
+    
+    <ul id="one" class="level-1">
+        <li class="item-i">I</li>
+        <li id="ii" class="item-ii">II
+            <ul class="level-2">
+                <li class="item-a"><a href="#" class="item-1">Home</a></li>
+                <li class="item-b"><a href="#" class="item-2">Product</a></li>
+                <li class="item-c"><a href="#" class="item-3">About</a></li>
+            </ul>
+        </li>
+        <li class="item-iii">III</li>
+    </ul>
+</body>
+</html>
