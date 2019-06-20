@@ -169,6 +169,7 @@ function1与function2交替执行
  
 如`<a href="#" action="delete class="btn"">`中的`class`和`href`为固有属性,`action`为自定义属性<br/>
 官网建议attr(),prop()的使用:<br/>
+
 Attribute/Property|`.attr()`|`.prop()`
  :-: | :-: | :-: 
  accesskey|yes|
@@ -192,3 +193,35 @@ Attribute/Property|`.attr()`|`.prop()`
  title|yes|
  type|yes|
  width|yes|
+
+ ### CSS-DOM操作
+ #### 样式属性
+ ##### css()
+ 属性若带有“-”符号，例如font-size，如果在设置该属性的值的时候不带引号，那么就要使用驼峰式写法，如“fontSize”。若带上了引号，既可以用“font-size”，也可以写成“fontSize”。<br/>
+ 若要取得某元素的高度可以使用`.css("height")`。或者也可以使用`height()`，它的作用是取得匹配元素当前计算的高度值(px)。<br/>
+ 两者的区别是：css()方法获取的高度值与样式的设置有关，可能会得到“auto”，也可能得到“10px”之类的字符串；而height()方法获取到的高度值则是元素在页面中的实际高度，与样式的设置无关，且不带单位。
+ #### 元素定位
+ ##### offset()
+ 作用是获取元素在当前视窗的相对偏移，只对可见元素有效。
+ ```
+ var offset = $("p").offset();
+ var left = offset.left;
+ var top = offset.top;
+ ```
+ ##### position()
+ 作用是获取元素相对于最近的一个position样式属性设置为relative或absolute的祖父节点的相对偏移。
+ ```
+ var position = $("p").position();
+ var left = position.left;
+ var top = position.top;
+ ```
+ ##### scrollTop()
+ 作用是获取元素的滚动条距顶端的距离
+ ```
+ $("textarea").scrollTop(300);//控制元素内的滚动条滚动到距顶端300的位置
+ ```
+ ##### scrollLeft()
+ 作用是获取元素的滚动条距左侧的距离
+ ```
+ $("textarea").scrollLeft(300);//控制元素内的滚动条滚动到距左侧300的位置
+ ```
