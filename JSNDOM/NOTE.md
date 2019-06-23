@@ -98,3 +98,24 @@ if(!method) return false;
 把所有`<script>`标签都放在文档末尾，`</body>`标记之前，可以使页面变得更快。
 #### 压缩脚本
 使用代码压缩工具来删去不必要的字节(注释和空格等)。压缩后的精简副本用于放在站点上，为与工作副本区分开，通常在文件名中加上min字样。
+
+---
+## Note for chapter 6
+### nodeName
+nodeName属性总是返回一个大写字母的值，例:
+```
+if(placeholder.nodeName != 'IMG') return false;
+//检查placeholder是否为<img>标签
+```
+```
+if(description.firstChild.nodeType == 3) {
+    //检查description元素的第一个子元素是否为文本节点
+    description.firstChild.nodeValue = text;
+}
+```
+### 键盘访问
+onkeypress事件处理函数专门用于处理键盘事件，按下键盘上的任何一个按键都会触发onkeypress(在某些浏览器中甚至包括TAB键)。<br/>
+在几乎所有浏览器中，用TAB键移动到某个链接然后按下回车键的动作也会触发onclick事件。
+因此最好不要使用onkeypress事件处理函数，而采用onclick事件。
+### DOM-Core&HTML-DOM
+HTML-DOM只能用于处理Web文档，通常比DOM-Core代码更短；DOM-Core不专属于JavaScript支持DOM的任何一门程序设计语言都能使用。
