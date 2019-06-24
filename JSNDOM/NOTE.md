@@ -119,3 +119,78 @@ onkeypress事件处理函数专门用于处理键盘事件，按下键盘上的�
 因此最好不要使用onkeypress事件处理函数，而采用onclick事件。
 ### DOM-Core&HTML-DOM
 HTML-DOM只能用于处理Web文档，通常比DOM-Core代码更短；DOM-Core不专属于JavaScript支持DOM的任何一门程序设计语言都能使用。
+
+---
+## Note for chapter 6
+### 动态创建标记
+#### 传统方法
+##### document.write
+缺点:
+* 行为未与表现分离
+* MIME类型application/xhtml+xml与document.write不兼容
+
+##### innerHTML
+缺点:
+* 不能精确的操作HTML
+* MIME类型application/xhtml+xml与innerHTML不兼容
+
+#### DOM方法
+##### createElement方法
+创建节点
+##### appendChild方法
+作为某节点的子节点插入
+##### createTextNode方法
+创建文字节点
+###改进图片库
+#### insertBefore方法
+```
+parentElement.insertBefore(newElement,targetElement)
+//parentElement:targetElement.parentNode
+```
+##### 编写insertAfter函数
+```
+function insertAfter(newElement, targetElement){
+    var parent = targetElement.parentNode;
+    if(parent.lastChild == targetElement){
+        //判断targetElement是否是parentElement最后一个子元素
+        parent.appendChild(newElement);
+    }else{
+        parent.insertBefore(newElement,targetElement.nextSibling);
+        //如果不是则将newElement插入到targetElement的下一个兄弟元素前
+    }
+}
+```
+
+### Ajax
+通过XMLHttpRequest对象发送请求和处理响应
+#### XMLHttpRequest对象
+```
+function getHTTPObject(){
+    if(typeof XMLHttpRequest == "undefined"){
+        XMLHttpRequest = function(){
+            try {
+                return new ActiveXObject("Msxml2.XMLHTTP.6.0");
+            } catch (e) {}
+            try {
+                return new ActiveXObject("Msxml2.XMLHTTP.3.0");//IE5
+            } catch (e) {}
+            try {
+                return new ActiveXObject("Msxml2.XMLHTTP");
+            } catch (e) {}
+            return false;
+        }
+    }
+    return new XMLHttpRequest();//其他浏览器
+}
+```
+XMLHttpRequest的open方法用来指定服务器上将要访问的文件，指定请求GET,POST,或SEND,第三个参数用于指定请求是否以异步方式发送和处理。
+`request.open("GET","example.txt",true);`
+服务器在向XMLHttpRequest对象发回响应时，浏览器更新readyState的值:
+* 0表示未初始化
+* 1表示未正在加载
+* 2表示加载完毕
+* 3表示正在交互
+* 4表示完成
+
+当readyState的值为4时就可以访问服务器返回的数据了。responseText属性保存文本字符串形式的数据；
+responseXML属性用于保存Content-Type头部中指定为"text/xml"的数据，实际上是一个DocumentFragment对象，可以用DOM方法处理。
