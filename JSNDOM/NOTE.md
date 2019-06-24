@@ -121,7 +121,7 @@ onkeypress事件处理函数专门用于处理键盘事件，按下键盘上的�
 HTML-DOM只能用于处理Web文档，通常比DOM-Core代码更短；DOM-Core不专属于JavaScript支持DOM的任何一门程序设计语言都能使用。
 
 ---
-## Note for chapter 6
+## Note for chapter 7
 ### 动态创建标记
 #### 传统方法
 ##### document.write
@@ -194,3 +194,30 @@ XMLHttpRequest的open方法用来指定服务器上将要访问的文件，指�
 
 当readyState的值为4时就可以访问服务器返回的数据了。responseText属性保存文本字符串形式的数据；
 responseXML属性用于保存Content-Type头部中指定为"text/xml"的数据，实际上是一个DocumentFragment对象，可以用DOM方法处理。
+
+---
+## Note for chapter 8
+#### abbr标签
+IE浏览器统计abbr元素的子节点个数时总会返回一个错误的值--0
+#### 换行符
+有些浏览器会把换行符解释为文本节点。很多DOM方法都只能用于元素节点，如果没有百分百的把握一定要检查nodeType。
+```
+function lastChildElement(parentElement){
+    // 获取最后一个子元素节点
+    // 方法1
+    var children = parentElement.getElementsByTagName("*");
+    if (children.length != 0) {
+        return children[children.length-1];
+    } else {
+        return false;
+    }
+    // 方法2
+    // var children = parentElement.childNodes;
+    // for(var i = children.length-1; i > 0; i--){
+    //     if(children[i].nodeType == 1){
+    //         return children[i];
+    //     }
+    // }
+    // return false;
+}
+```
