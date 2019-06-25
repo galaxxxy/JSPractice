@@ -221,3 +221,17 @@ function lastChildElement(parentElement){
     // return false;
 }
 ```
+
+---
+## Note for chapter 9
+### CSS-DOM
+#### style属性
+css样式属性采用驼峰命名法来表示
+style属性只能返回内嵌样式
+#### 用DOM脚本设置样式
+* CSS无法让我们找到目标元素
+* CSS寻找目标元素的方法未受广泛支持
+#### className属性
+`className <=> setAttribute("class",className)`
+className属性在赋值时会覆盖该元素原有的class的值
+
