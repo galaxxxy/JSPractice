@@ -232,6 +232,30 @@ style属性只能返回内嵌样式
 * CSS无法让我们找到目标元素
 * CSS寻找目标元素的方法未受广泛支持
 #### className属性
-`className <=> setAttribute("class",className)`
+```
+className <=> setAttribute("class",className)
+```
 className属性在赋值时会覆盖该元素原有的class的值
 
+---
+## Note for chapter 10
+### overflow属性
+overflow属性用于处理元素尺寸超出其容器尺寸<br/>
+overflow属性可取四个值:
+* visible:不剪裁溢出内容
+* hidden:隐藏溢出内容
+* scroll:隐藏溢出内容并显示滚动条
+* auto:只有发生溢出才显示滚动条
+
+### 变量
+* 全局变量:没有用var声明或在最外部声明
+* 局部变量
+* 属性:只与某个特定元素有关的变量
+
+### 使用Math对象取整
+#### ceil方法
+大于方向取整
+#### floor方法
+小于方向取整
+#### round方法
+四舍五入取整
