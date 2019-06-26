@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        window.onload = function(){
+            positionMessage();
+            moveMessage(200,100);
+        }
+        function positionMessage(){
+            var msg = document.getElementById("message");
+            msg.style.position="absolute";
+            msg.style.left = "50px";
+            msg.style.top = "100px";
+        }
+        function moveMessage(finx,finy){
+            var msg = document.getElementById("message");
+            var xpos = parseInt(msg.style.left);
+            var ypos = parseInt(msg.style.top);
+            if(xpos == finx && ypos == finy) return true;
+            if(xpos < finx) xpos++;
+            if(ypos < finy) ypos++;
+            if(xpos > finx) xpos--;
+            if(ypos > finy) ypos--;
+            msg.style.left = xpos+"px";
+            msg.style.top = ypos+"px";
+            var movement = setTimeout("moveMessage("+finx+","+finy+")",10);
+        }
+
+    </script>
+</head>
+<body>
+    <p id="message">Whee!</p>
+</body>
+</html>
