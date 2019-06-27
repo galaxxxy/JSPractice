@@ -259,3 +259,34 @@ overflow属性可取四个值:
 小于方向取整
 #### round方法
 四舍五入取整
+
+---
+## Note for chapter 11
+### HTML5
+#### Canvas
+用于动态创建和操作图形图像
+```
+if (canvas.getContext){
+    //条件检测
+}
+```
+#### vedio&audio标签
+#### 表单
+新的输入控件:
+* email
+* url
+* date
+* number
+* range:生成滑动条
+* search
+* tel
+* color
+
+新的属性:
+* autocomplete:为text输入框添加一组建议的输入项
+* autofocus:让表单元素自动获得焦点
+* form:对`<form>`标签外部的表单元素分组
+* min,max&step:用于范围(range)和数值(number)输入框中
+* pattern:定义正则表达式
+* placeholder
+* required
