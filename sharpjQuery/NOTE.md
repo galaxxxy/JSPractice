@@ -225,3 +225,8 @@ Attribute/Property|`.attr()`|`.prop()`
  ```
  $("textarea").scrollLeft(300);//控制元素内的滚动条滚动到距左侧300的位置
  ```
+ ### 超链接提示效果
+ #### MouseEvent
+ ##### pageX&pageY
+ 鼠标相对于文档的坐标，非标准属性
+ 
