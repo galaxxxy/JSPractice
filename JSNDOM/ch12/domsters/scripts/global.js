@@ -11,7 +11,7 @@ function addLoadEvent(func){
 }
 
 function insertAfter(newElement,targetElement){
-    let parentElement = targetElement.parentNode;
+    const parentElement = targetElement.parentNode;
     if(parentElement.lastChild == targetElement){
         parentElement.appendChild(newElement);
     }else{
@@ -31,8 +31,8 @@ function highlightPage(){
     if(!document.getElementsByTagName) return false;
     let nav = document.getElementsByTagName("nav");
     let links = nav[0].getElementsByTagName("a");
-    for(var i = 0; i < links.length; i++){
-        var linkurl = links[i].getAttribute("href");
+    for(let i = 0; i < links.length; i++){
+        let linkurl = links[i].getAttribute("href");
         if(window.location.href.indexOf(linkurl) != -1){
             addClass(links[i],"here");
             let linktext = links[i].lastChild.nodeValue.toLowerCase();
@@ -74,9 +74,10 @@ function moveElement(element,fin_x,fin_y,interval){
     }
     element.style.left = pos_x+"px";
     element.style.top = pos_y+"px";
-    const repeat = moveElement(element,fin_x,fin_y,interval);
-    let movement = setInterval(repeat,interval);
-    element.movement = movement;
+    // element.movement = setInterval(moveElement,interval,element,fin_x,fin_y,interval);
+    element.movement = setInterval(function(){
+        moveElement(element,fin_x,fin_y,interval);
+    },interval);
 }
 function prepareSlideshow(){
     let intro = document.getElementById("intro");
@@ -88,6 +89,28 @@ function prepareSlideshow(){
     preview.setAttribute("id","preview");
     slideshow.appendChild(preview);
     insertAfter(slideshow,intro);
+
+    const links = document.getElementsByTagName("a");
+    for(let i = 0; i < links.length; i++){
+        links[i].onmouseover = function(){
+            let linkhref = links[i].getAttribute("href");
+            if(linkhref.indexOf("index.html") != -1){
+                moveElement(preview,0,0,5);
+            }
+            if(linkhref.indexOf("about.html") != -1){
+                moveElement(preview,-150,0,5);
+            }
+            if(linkhref.indexOf("photos.html") != -1){
+                moveElement(preview,-300,0,5);
+            }
+            if(linkhref.indexOf("live.html") != -1){
+                moveElement(preview,-450,0,5);
+            }
+            if(linkhref.indexOf("contact.html") != -1){
+                moveElement(preview,-600,0,5);
+            }
+        }
+    }
 }
 
 addLoadEvent(highlightPage);
