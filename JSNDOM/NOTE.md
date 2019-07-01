@@ -290,3 +290,56 @@ if (canvas.getContext){
 * pattern:定义正则表达式
 * placeholder
 * required
+
+---
+## Note for chapter 12
+### 获取当前页面的URL
+```
+if(window.location.href.indexOf(anotherURL) ！= -1)
+//用于比较当前页面URL中是否含有另一个URL
+```
+### setInterval()方法
+```
+function moveElement(element,fin_x,fin_y,interval){
+    //返回值作为元素属性，检查此属性及时清除以更新动画
+    if(element.movement){
+        clearTimeout(element.movement);
+    }
+    if(!element.style.left){
+        element.style.left = "0px";
+    }
+    if(!element.style.top){
+        element.style.top = "0px";
+    }
+    let pos_x = parseInt(element.style.left);
+    let pos_y = parseInt(element.style.top);
+    if(pos_x==fin_x&&pos_y==fin_y){
+        return true;
+    }
+    let dist = 0;
+    if(pos_x > fin_x){
+        dist = Math.ceil((pos_x-fin_x)/10);
+        pos_x-=dist;
+    }
+    if(pos_y > fin_y){
+        dist = Math.ceil((pos_y-fin_y)/10);
+        pos_y-=dist;
+    }
+    if(pos_x < fin_x){
+        dist = Math.ceil((fin_x-pos_x)/10);
+        pos_x+=dist;
+    }
+    if(pos_y < fin_y){
+        dist = Math.ceil((fin_y-pos_y)/10);
+        pos_y+=dist;
+    }
+    element.style.left = pos_x+"px";
+    element.style.top = pos_y+"px";
+
+    // element.movement = setInterval(moveElement,interval,element,fin_x,fin_y,interval);
+    element.movement = setInterval(function(){
+        moveElement(element,fin_x,fin_y,interval);
+    },interval);
+    //避免使用字符串
+}
+```
