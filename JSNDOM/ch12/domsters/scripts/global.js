@@ -27,6 +27,7 @@ function addClass(element,value){
         element.className = oldName +" "+ value;
     }
 }
+//index.html
 function highlightPage(){
     if(!document.getElementsByTagName) return false;
     let nav = document.getElementsByTagName("nav");
@@ -80,6 +81,10 @@ function moveElement(element,fin_x,fin_y,interval){
     },interval);
 }
 function prepareSlideshow(){
+    if(!document.getElementById) return false;
+    if(!document.createElement) return false;
+    if(!document.getElementsByTagName) return false;
+    if(!document.getElementById("intro")) return false;
     let intro = document.getElementById("intro");
     let slideshow = document.createElement("div");
     slideshow.setAttribute("id","slideshow");
@@ -119,5 +124,36 @@ function prepareSlideshow(){
     }
 }
 
+//about.html
+function showSection(id){
+    const section = document.getElementsByTagName("section");
+    for(let i = 0; i < section.length; i++){
+        if(section[i].id == id){
+            section[i].style.display = "block";
+        } else {
+            section[i].style.display = "none";
+        }
+    }
+}
+
+function prepareInternalnav(){
+    const article = document.getElementsByTagName("article");
+    const section = article[0].getElementsByTagName("section");
+    const nav = document.getElementsByTagName("nav");
+    const links = nav[1].getElementsByTagName("a");
+    //隐藏section标签
+    for(let i = 0; i < section.length; i++){
+        section[i].style.display = "none";
+    }
+    //给li添加点击事件：点击展示相应section
+    for(let i = 0; i < links.length; i++){
+        links[i].onclick = function(){
+            let hrefArray = links[i].href.split("#");
+            showSection(hrefArray[1]);
+            return false;
+        };
+    }
+}
 addLoadEvent(highlightPage);
 addLoadEvent(prepareSlideshow);
+addLoadEvent(prepareInternalnav);
