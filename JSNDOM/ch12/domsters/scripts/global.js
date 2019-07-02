@@ -12,6 +12,7 @@ function addLoadEvent(func){
 
 function insertAfter(newElement,targetElement){
     const parentElement = targetElement.parentNode;
+    if(!parentElement) return false;
     if(parentElement.lastChild == targetElement){
         parentElement.appendChild(newElement);
     }else{
@@ -43,6 +44,7 @@ function highlightPage(){
         }
     }
 }
+
 function moveElement(element,fin_x,fin_y,interval){
     if(element.movement){
         clearTimeout(element.movement);
@@ -82,6 +84,7 @@ function moveElement(element,fin_x,fin_y,interval){
         moveElement(element,fin_x,fin_y,interval);
     },interval);
 }
+
 function prepareSlideshow(){
     if(!document.getElementById) return false;
     if(!document.createElement) return false;
@@ -104,7 +107,7 @@ function prepareSlideshow(){
     slideshow.appendChild(frame);
     insertAfter(slideshow,intro);
 
-    if(!document.getElementsByTagName("a")) return flase;
+    if(!document.getElementsByTagName("a")) return false;
     const links = document.getElementsByTagName("a");
     for(let i = 0; i < links.length; i++){
         links[i].onmouseover = function(){
@@ -162,6 +165,7 @@ function prepareInternalnav(){
         };
     }
 }
+
 //photos.html
 function showPic(whichPic){
     let source = whichPic.href;
@@ -176,6 +180,7 @@ function showPic(whichPic){
     }
     description.lastChild.nodeValue = title;
 }
+
 function preparePlaceholder(){
     if(!document.getElementById) return false;
     if(!document.getElementsByTagName) return false;
@@ -206,6 +211,79 @@ function preparePlaceholder(){
     }
 }
 
+//live.html
+function stripeTables(){
+    //条件检查
+    if(!document.getElementsByTagName) return false;
+    if(!document.getElementsByTagName("tbody")) return false;
+    //获取table
+    let tbodys = document.getElementsByTagName("tbody");
+    //获取单数行添加样式
+    for(let i = 0; i < tbodys.length; i++){
+        let rows = tbodys[i].getElementsByTagName("tr");
+        for(let j = 0; j < rows.length; j++){
+            if(j%2 == 0){
+                addClass(rows[j],"odd");
+            }
+        }
+    }
+}
+
+function highlightRows(){
+    //条件检查
+    if(!document.getElementsByTagName) return false;
+    if(!document.getElementsByTagName("tbody")) return false;
+    //获取tbody
+    let tbodys= document.getElementsByTagName("tbody");
+    //为每行添加悬停事件:悬停使用新样式
+    for(let i = 0; i < tbodys.length; i++){
+        let rows = tbodys[i].getElementsByTagName("tr");
+        for(let j = 0; j < rows.length; j++){
+            rows[j].onmouseover = function(){
+                rows[j].setAttribute("oldclassname",this.className);
+                rows[j].className = "highlight";
+            };
+            rows[j].onmouseout = function(){
+                rows[j].className = this.getAttribute("oldclassname");
+                rows[j].removeAttribute("oldclassname");
+            };
+        }
+    }
+}
+
+function displayAbbreviations(){
+    //条件检查
+    if(!document.getElementsByTagName) return false;
+    if(!document.createElement) return false;
+    if(!document.createTextNode) return false;
+    //获取table内所有abbr标签
+    let tables = document.getElementsByTagName("table");
+    if(!tables[0]) return false;
+    let abbreviations = tables[0].getElementsByTagName("abbr");
+    //创建标题
+    let title = document.createElement("h3");
+    let titleContent = document.createTextNode("Abbreviations");
+    title.appendChild(titleContent);
+    //创建定义列表
+    let dl = document.createElement("dl");
+    for(let i = 0; i < abbreviations.length; i++){
+        let dt = document.createElement("dt");
+        let dd = document.createElement("dd");
+        let dtContent = document.createTextNode(abbreviations[i].lastChild.nodeValue);
+        let ddContent = document.createTextNode(abbreviations[i].getAttribute("title"));
+        dt.appendChild(dtContent);
+        dd.appendChild(ddContent);
+        dl.appendChild(dt);
+        dl.appendChild(dd);
+    }
+    //在文档中插入标题列表
+    insertAfter(title,tables[0]);
+    insertAfter(dl,title);
+}
+
+addLoadEvent(displayAbbreviations);
+addLoadEvent(highlightRows);
+addLoadEvent(stripeTables);
 addLoadEvent(preparePlaceholder);
 addLoadEvent(highlightPage);
 addLoadEvent(prepareSlideshow);
