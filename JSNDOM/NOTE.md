@@ -343,3 +343,9 @@ function moveElement(element,fin_x,fin_y,interval){
     //避免使用字符串
 }
 ```
+### form对象
+#### elements属性
+表单中的所有字段都保存在form对象的elements属性中<br/>
+与childNodes属性相比,childNodes数组返回所有节点,而elements数组只返回input、select、textarea以及其他表单字段。
+##### elements.length属性
+返回表单中包含的表单元素的个数
