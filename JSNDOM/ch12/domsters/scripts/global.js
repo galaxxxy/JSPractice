@@ -281,6 +281,76 @@ function displayAbbreviations(){
     insertAfter(dl,title);
 }
 
+//contact.html
+function focusLabels(){
+    //条件检查
+    if(!document.getElementsByTagName) return false;
+    if(!document.getElementsByTagName("label")) return false;
+    if(!document.getElementById) return false;
+    //获取所有label
+    let labels = document.getElementsByTagName("label");
+    //给label建立点击事件
+    for(let i = 0; i < labels.length; i++){
+        labels[i].onclick = function(){
+            //获取for属性
+            let inputId = labels[i].getAttribute("for");
+            //使id为for属性的input元素获得焦点 
+            let targetInput = document.getElementById(inputId);
+            targetInput.focus();
+        }
+    }
+}
+
+function isSupportPlaceholder(){
+    let input = document.createElement("input");
+    return "placeholder" in input;
+}
+
+function resetFields(whichForm){
+    //条件检查
+    // if(!isSupportPlaceholder()) return false;
+    if(!whichForm.elements) return false;
+    //遍历表单元素
+    let elements = whichForm.elements;
+    for(let i = 0; i < elements.length; i++){
+        if(!elements[i].placeholder) continue;
+        //获取占位符和文本值
+        let placeholder = elements[i].placeholder;
+        let value;
+        //添加获得焦点的事件:清空占位符文本
+        elements[i].onFocus = function(){
+            //若表单元素的值与占位符相等 则清空
+            value = elements[i].value;
+            if(value == placeholder){
+                this.className = "";
+                value = "";
+            }
+        }
+        //添加失去焦点的事件:添加占位符文本
+        elements[i].onBlur = function(){
+            //若表单元素的值为空 则添加占位符
+            value = elements[i].value;
+            if(value == ""){
+                this.className = "placeholder";
+                value = placeholder;
+            }
+        }
+        //直接调用 设置placerholder
+        elements[i].onBlur();
+    }
+}
+
+function prepareForms(){
+    //获取文档中所有form元素
+    let forms = document.getElementsByTagName("form");
+    //逐一使用resetFeild
+    for(let i = 0; i < forms.length; i++){
+        resetFields(forms[i]);
+    }
+}
+
+addLoadEvent(prepareForms);
+addLoadEvent(focusLabels);
 addLoadEvent(displayAbbreviations);
 addLoadEvent(highlightRows);
 addLoadEvent(stripeTables);
