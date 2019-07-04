@@ -318,7 +318,7 @@ function resetFields(whichForm){
         let placeholder = elements[i].placeholder;
         let value;
         //添加获得焦点的事件:清空占位符文本
-        elements[i].onFocus = function(){
+        elements[i].onfocus = function(){
             //若表单元素的值与占位符相等 则清空
             value = elements[i].value;
             if(value == placeholder){
@@ -327,7 +327,7 @@ function resetFields(whichForm){
             }
         }
         //添加失去焦点的事件:添加占位符文本
-        elements[i].onBlur = function(){
+        elements[i].onblur = function(){
             //若表单元素的值为空 则添加占位符
             value = elements[i].value;
             if(value == ""){
@@ -336,7 +336,7 @@ function resetFields(whichForm){
             }
         }
         //直接调用 设置placerholder
-        elements[i].onBlur();
+        elements[i].onblur();
     }
 }
 
@@ -346,7 +346,47 @@ function prepareForms(){
     //逐一使用resetFeild
     for(let i = 0; i < forms.length; i++){
         resetFields(forms[i]);
+        forms[i].onsubmit = function(){
+            return validForm(this);
+        }
     }
+}
+
+function isFilled(field){
+    //除空格外没有其他内容
+    if(field.value.replace(" ","").length == 0) return false;
+    //值为占位符
+    let placeholder = field.placeholder || field.getAttribute('placeholder');
+    if(placeholder == field.value) return false;
+    return true;
+}
+
+function isEmail(field){
+    if(field.value.indexOf("@") == -1) return false;
+    if(field.value.indexOf(".") == -1) return false;
+    return true;
+}
+
+function validForm(whichForm){
+    //遍历form中的所有表单元素
+    for(let i = 0; i < whichForm.elements.length; i++){
+        let element = whichForm.elements[i];
+        //如果为必填元素 用isFilled验证
+        if(element.required == "required"){
+            if(!isFilled(element)){
+                alert("Please fill the "+element.name+" field.");
+                return false;
+            }
+        }
+        //如果为类型为email 用isEmail验证
+        if(element.type == "email"){
+            if(!isEmail(element)){
+                alert("The email is not valid.");
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 addLoadEvent(prepareForms);
