@@ -398,11 +398,66 @@ var num = (1,23,4,5,6,0);//num=0
 ### 流控制语句
 #### if语句
 #### do-while语句
+do-while语句是一种后测试循环语句，即只有在循环体中的代码执行之后，才会测试出口条件。在对条件表达式求值之前，循环体中的代码至少会被执行一次。
 #### while语句
+while语句属于前测试循环语句，在循环体内的代码执行之前，就会对出口条件求值。循环体内的代码有可能永远不会执行。
 #### for语句
+for语句是一种前测试循环语句，同时具有在执行循环之前初始化变量和定义循环后要执行代码的能力。
 #### for-in语句
+for-in语句是一种精准的迭代语句，可以用来枚举对象的属性。
+`for(property in expression) statement`
+ECMAScript对象的属性没有顺序，因此通过循环输出的属性名的顺序是不可预测的。但如果要迭代的对象的变量值为null或undefined，for-in语句会抛出错误。ECMAScript6更正了此行为:不再抛出错误，不执行循环体。在使用for-in循环之前，先检测确认该对象的值不是null或undefined。
 #### label语句
+用于给代码中添加标签以便将来使用。
+`label: statement`
+加标签的语句一般都与for语句等循环语句配合使用。
 #### break和continue语句
+使用break和continue语句都会立即退出循环，但break语句使用后会跳出当前循环，而continue语句会跳出当前循环的一次循环。
 #### with语句
+with语句的作用是将代码的作用域设置到一个特定的对象中。
+`with (expression) statement;`
+定义with语句的目的主要是为了简化多次编写同一对象的工作:
+```
+var qs = location.search.substring(1);
+var hostName = location.hostname;
+var url = location.href;
+
+with(location) {
+    var qs = search.substring(1);
+    var hostName = hostname;
+    var url = href;
+}
+```
+使用with语句关联了location对象，意味着在with语句的代码块内部，每个变量首先被认为是一个局部变量，而如果在该局部环境中找不到该对象的定义，就会查询location对象中是否有同名的属性。如果发现同名属性，则以location对象属性的值作为变量的值。<br/>
+严格模式不允许使用with语句，否则视为语法错误。大量使用with语句会导致性能下降，同时给调试代码造成困难。
 #### switch语句
+属于流控制语句。不同于其他语言的是:可以在switch语句中使用任何数据类型作为case；且可以不为常量，变量甚至表达式都可以作为case的值。
+```
+switch("hello world") {
+    case "hello"+" world":
+        alert("Greeting was found.");
+        break;
+    case "goodbye":
+        alert("Closing was found.");
+        break;
+    default:
+        alert("Unexcepted message was found.");
+}
+
+var num = 25;
+switch(true) { //让每个case都有机会被执行
+    case num < 0:
+        alert("Less than 0");
+        break;
+    case num >= 0 && num <= 10:
+        alert("Between 0 and 10");
+        break;
+    case num >= 10 && num <= 20:
+        alert("Between 10 and 20");
+        break;
+    default:
+        alert("More than 20");
+}
+```
+switch语句在比较值时使用的是全等操作符，因此不会发生类型转换。
 ### 函数
