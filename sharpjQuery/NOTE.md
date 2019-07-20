@@ -34,6 +34,7 @@ jQuery.noConflict();
 ```
 2. jQuery在其他库之前导入
 可以直接使用"jQuery",无需调用jQuery.noConflict();
+
 ---
 ## Note for chapter 2
 ### jQuery选择器
@@ -229,6 +230,7 @@ Attribute/Property|`.attr()`|`.prop()`
  #### MouseEvent
  ##### pageX&pageY
  鼠标相对于文档的坐标，非标准属性
+
  ---
 ## Note for chapter 4
 ### 添加事件
@@ -238,7 +240,9 @@ window.onload方法是在网页中所有的元素(包括元素的所有关联文
 jQuery还有一个关于页面加载的load()方法。load()方法会在元素的onload事件中绑定一个处理函数。如果处理函数绑定给window对象，则会在所有内容(包括窗口、框架、对象和图像等)加载完毕后触发，如果处理函数绑定在元素上，则会在元素的内容加载完毕后触发。
 #### 事件绑定
 在文档装载完成后，若打算为元素绑定事件来完成某些操作，则使用bind()方法来对匹配元素进行特定事件的绑定，其调用格式为:
-`bind(type [,data] , fn);`
+```
+bind(type [,data] , fn);
+```
 第一个参数是事件类型:jQuery中的事件绑定类型比普通JavaScript事件绑定类型少了"on"。<br/>
 第二个参数可选，作为event.data属性值传递给事件对象的额外数据对象。<br/>
 第三个参数用来绑定的处理函数。
@@ -246,11 +250,15 @@ jQuery还有一个关于页面加载的load()方法。load()方法会在元素�
 jQuery有两个合成事件:hover()方法和toggle()方法。
 ##### hover()方法
 用于模拟光标悬停事件:
-`hover(enter,leave);`
+```
+hover(enter,leave);
+```
 hover()方法准确来说替代jQuery中的bind("mouseenter")和bind("mouseleave"),而不是bind("mouseover")和bind("mouseout")。
 ##### toggle()方法
 模拟鼠标连续点击事件和切换元素的可见状态:
-`toggle(fn1,fn2,...fnN);`
+```
+toggle(fn1,fn2,...fnN);
+```
 #### 事件冒泡
 事件会按照DOM的层次结构像水泡一样不断向上直至顶端。
 ##### 事件对象

@@ -141,7 +141,7 @@ HTML-DOM只能用于处理Web文档，通常比DOM-Core代码更短；DOM-Core�
 作为某节点的子节点插入
 ##### createTextNode方法
 创建文字节点
-###改进图片库
+### 改进图片库
 #### insertBefore方法
 ```
 parentElement.insertBefore(newElement,targetElement)

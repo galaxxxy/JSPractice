@@ -48,7 +48,7 @@ alert(message);//"undefined"
 alert(age);//产生错误
 ```
 对未初始化和未声明的变量执行typeof操作符都会返回undefined值。若做到显式地初始化变量，当typeof操作符返回"undefined"值时，我们就可以知道被检测的变量还未声明，而不是未初始化。
-#### NUll类型
+#### Null类型
 null值表示一个空指针对象，因此用typeof操作符检测null值会返回"object"。<br/>
 如果定义的变量在将来用于保存对象，那么将该对象初始化为null。直接检查null值就可以知道相应的变量是否已经保存了一个对象的引用。
 ```
