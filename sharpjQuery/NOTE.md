@@ -229,4 +229,16 @@ Attribute/Property|`.attr()`|`.prop()`
  #### MouseEvent
  ##### pageX&pageY
  鼠标相对于文档的坐标，非标准属性
- 
+ ---
+## Note for chapter 4
+### 添加事件
+在常规JavaScript代码中，通常使用window.onload方法；在jQuery中，使用的是$(document).ready()方法。
+#### 执行时机
+window.onload方法是在网页中所有的元素(包括元素的所有关联文件)完全加载到浏览器后才执行。而通过jQuery中的$(document).ready()方法注册的事件处理程序，在DOM完全就绪时就可以被调用。<br/>
+jQuery还有一个关于页面加载的load()方法。load()方法会在元素的onload事件中绑定一个处理函数。如果处理函数绑定给window对象，则会在所有内容(包括窗口、框架、对象和图像等)加载完毕后触发，如果处理函数绑定在元素上，则会在元素的内容加载完毕后触发。
+#### 事件绑定
+在文档装载完成后，若打算为元素绑定事件来完成某些操作，则使用bind()方法来对匹配元素进行特定事件的绑定，其调用格式为:
+`bind(type [,data] , fn);`
+第一个参数是事件类型:jQuery中的事件绑定类型比普通JavaScript事件绑定类型少了"on"。<br/>
+第二个参数可选，作为event.data属性值传递给事件对象的额外数据对象。<br/>
+第三个参数用来绑定的处理函数。

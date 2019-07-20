@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        var startTime = new Date().getTime();
+        $(document).ready(function () {
+            test1();
+        });
+        function test1() {
+            var endTime1 = new Date().getTime();
+            var a = endTime1 - startTime;
+            $("<div>jQuery的ready() : " + a + " ms</div>").appendTo("body");
+        }
+
+        function test2() {
+            var endTime2 = new Date().getTime();
+            var b = endTime2 - startTime;
+            $("<p>JavaScript的window.onload : " + b + " ms</p>").appendTo("body");
+        }
+        window.onload = test2;
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
