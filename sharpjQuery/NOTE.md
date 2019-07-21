@@ -285,3 +285,17 @@ $("a").click(function(event){
     return false;//阻止链接跳转
 })
 ```
+##### event.preventDefault()方法
+用于阻止默认的事件行为，JavaScript中的preventDefault()方法在IE浏览器中无效，jQuery对其进行封装使其兼容各浏览器。
+##### event.stopPropagation()方法
+用于阻止事件的冒泡，JavaScript中的stopPropagation()方法在IE浏览器中无效，jQuery对其进行封装使其兼容各浏览器。
+##### event.target
+用于获取触发事件的元素
+##### event.relatedTarget
+标准DOM中，mouseover和mouseout所发生的元素通过event.target访问，相关元素是通过event.relatedTarget访问。event.relatedTarget在mouseover中相当于IE浏览器的event.fromElement，在mouseout中相当于IE浏览器的event.toElement。
+##### event.pageX和event.pageY
+用于获取光标相对页面的x坐标和y坐标。若不用jQuery，IE浏览器中应使用event.x/event.y，Firefox浏览器中应使用event.pageX/event.pageY。如果页面上有滚动条，还要加上滚动条的宽度或高度。
+##### event.which
+用于在鼠标点击事件中获取鼠标的左、中、右键，在键盘事件中获取键盘的按键。
+##### event.metaKey
+针对不同浏览器对键盘中ctrl按键解释不同，jQuery也进行了封装，并规定event.metaKey为键盘事件中获取ctrl按键。
