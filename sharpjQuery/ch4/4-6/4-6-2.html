@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#btn").bind("myclick",function(){
+                $("#test").append("<p>我的自定义事件</p>");
+            });
+            $("#btn").trigger("myclick");
+            $("#btn").click(function(){
+                $("#btn").trigger("myclick");
+            });
+        });
+    </script>
+</head>
+<body>
+    <input type="button" value="点击我" id="btn" />
+    <div id="test"></div>
+</body>
+</html>
