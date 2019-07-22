@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 100px;
+            height: 50px;
+            background: #888;
+            color: white;
+        }
+    </style>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("div").bind("click.plugin",function(){
+                $("body").append("<p>click事件</p>");
+            }).bind("mouseover.plugin",function(){
+                $("body").append("<p>mouseover事件</p>");
+            }).bind("dblclick",function(){
+                $("body").append("<p>dblclick事件</p>");
+            });
+            $("#delBtn").click(function(){
+                $("div").unbind(".plugin");
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>test</div>
+    <input type="button" value="根据命名空间，删除事件" id="delBtn" />
+</body>
+</html>

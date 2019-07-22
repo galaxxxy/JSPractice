@@ -321,3 +321,48 @@ trigger(type,[data]);
 第一个参数是要触发的事件类型，第二个参数是要传递给事件处理函数的附加数据，以数组形式传递。通常可以通过传递一个参数给回调函数来区别这次事件是代码触发的还是用户触发的。
 ##### 执行默认操作
 trigger()方法触发事件后，会执行浏览器默认动作。如果只想触发绑定的事件而不想执行浏览器默认操作，可以使用triggerHandler()方法。
+##### bind()的其他用法
+###### 绑定多个事件类型
+为元素一次性绑定多个事件类型:
+```
+$(function(){
+    $("div").bind("mouseover mouseout",function(){
+        $(this).toggleClass("over");
+    });
+});
+```
+当光标滑入div元素时，该元素的class切换为"over"；当光标滑出div元素时，class切换为先前的值。
+###### 添加事件命名空间
+可以把为元素绑定的多个事件类型用命名空间规范起来，便于管理:
+```
+$(function(){
+    $("div").bind("click.plugin",function(){
+        $("body").append("<p>click事件</p>");
+    });
+    $("div").bind("mouseover.plugin",function(){
+        $("body").append("<p>mouseover事件</p>");
+    });
+    $("div").bind("dblclick",function(){
+        $("body").append("<p>dblclick事件</p>");
+    });
+    $("button").click(function(){
+        $("div").unbind(".plugin");
+    });
+});
+```
+在所绑定的事件类型后面添加命名空间，这样在删除事件时只需要指定命名空间即可。
+###### 相同事件名称，不同命名空间执行方法
+可以为元素绑定相同的事件类型，然后以命名空间的不同按需调用:
+```
+$(function(){
+    $("div").bind("click",function(){
+        $("body").append("<p>click事件</p>");
+    });
+    $("div").bind("click.plugin",function(){
+        $("body").append("<p>click.plugin事件</p>");
+    });
+    $("button").click(function(){
+        $("div").trigger("click!");//!的作用是匹配所有不包含在命名空间中的click方法
+    });
+});
+```

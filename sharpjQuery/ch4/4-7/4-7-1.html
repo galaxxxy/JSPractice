@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 100px;
+            height: 50px;
+        }
+    
+        .over {
+            color: red;
+            background: #888;
+        }
+    </style>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        $(function(){
+            $("div").bind("mouseover mouseout",function(){
+                $(this).toggleClass("over");
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>滑入</div>
+</body>
+</html>
