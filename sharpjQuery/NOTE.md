@@ -366,3 +366,92 @@ $(function(){
     });
 });
 ```
+### jQuery动画
+#### show()和hide()方法
+通过这两种方法可以控制"内容"的显示和隐藏。隐藏内容的代码与设置display属性效果相同，:
+```
+$("element").css("display","none");
+```
+为show()方法指定一个速度参数，例如"slow":
+```
+$("element").show("slow");
+$("element").show(1000);
+$("element").hide(1000);
+```
+动画会同时减少"内容"的高度宽度和不透明度,然后从上到下增大"内容"宽度，从左到右增大"内容"宽度，同时增加"内容"不透明度，直至内容完全显示。
+#### fadeIn()和fadeOut()方法
+fadeIn()和fadeOut()只改变元素的不透明度
+#### slideUp()和slideDown()方法
+slideUp()和slideDown()方法只改变元素的高度
+#### 自定义动画方法animate()
+jQuery中，可以使用animate()方法来自定义动画:
+```
+animate(params, speed, callback);
+```
+第一个参数包含样式属性及值的映射，如{property1:"value1", property2:"value2",...}；第二个为速度参数，可选；callback为在动画完成时执行的函数，可选。
+##### 累加减动画
+```
+$(function(){
+    $("#panel").click(function(){
+        $(this).animate({left:"+=500px"},3000);//在当前位置累加500px
+    });
+});
+```
+##### 多重动画
+###### 同时执行
+```
+$(function(){
+    $("#myImg").click(function(){
+        $(this).animate({left:"500px",height:"200px"},3000);
+    });
+});
+```
+###### 按顺序执行
+```
+$(this).animate({left:"500px"},3000);
+$(this).animate({height:"200px"},3000);
+//也可改为链式写法
+$(this).animate({left:"500px"},3000)
+       .animate({height:"200px"},3000);
+```
+动画效果的执行具有先后顺序，称为"动画队列"。
+###### 综合动画
+为同一元素应用多重效果时，可以通过链式方式对这些效果进行排队。
+##### 动画回调函数
+css()方法并不会加入到动画队列中，而是立即执行。可以使用回调函数对非动画方法实现排队，只要把css()方法写在最后一个动画的回调函数中即可。<br/>
+callback回调函数适用于jQuery所有的动画效果方法，例如slideDown()方法。
+##### 停止动画
+需要在某处停止动画，需要使用stop()方法:
+```
+stop([clearQueue],[gotoEnd]);
+```
+参数clearQueue和gotoEnd都是可选参数，为Boolean值。clearQueue代表是否要清空未执行完的动画队列，gotoEnd代表是否直接将正在执行的动画跳转到末状态。<br/>
+如果直接使用stop()方法，会立即停止当前正在进行的动画，如果接下来还有动画等待继续进行，则以当前状态开始接下来的动画。如在为一个元素绑定hover事件后，用户把光标移入元素会触发动画效果，当这个动画未结束时，用户就将光标移出这个元素了，那么光标移出的动画效果将会被放入队列中，等待移入动画结束后在执行。因此若光标移入移出过快会导致动画效果与光标动作不一致，此时只要在移入移出之前加入stop()方法就能解决此问题:
+```
+$(document).ready(function () {
+    $("#panel").hover(function(){
+        $(this).stop()
+               .animate({height:"150",width:"300"},200);
+    },function(){
+        $(this).stop()
+               .animate({height:"22",width:"60"},300);
+    });
+});
+```
+下例stop()方法只会停止正在进行的动画，如果动画正执行第一阶段(改变height)，则光标移出后，只会停止当前动画，继续进行下面改变width的动画，而光标移出事件动画要等这个动画结束之后才会执行。这种情况下把stop()方法的第一个参数设置为true，此时程序会把当前元素接下来尚未执行完的动画队列都清空。
+```
+$(document).ready(function () {
+    $("#panel").hover(function(){
+        $(this).stop()
+               .animate({height:"150"},200)
+               .animate({width:"300"},300);
+    },function(){
+        $(this).stop()
+               .animate({height:"22"},200)
+               .animate({width:"60"},300);
+    });
+});
+```
+第二个参数可以用于让正在执行的动画直接到达结束时刻的状态，通常用于后一个动画需要基于前一个动画的末状态的情况，可以通过`stop(false,true)`这种方式让当前动画直接到达末状态。<br/>
+jQuery只能设置当前执行动画的最终状态，不能直接到达未执行动画队列的最终状态。
+##### 判断元素是否处于动画状态

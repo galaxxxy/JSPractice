@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-size: 13px;
+            line-height: 130%;
+            padding: 60px
+        }
+    
+        #panel {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #0050D0;
+            background-color: #96E555;
+            cursor: pointer;
+        }
+    
+        .head {
+            height: 24px;
+            line-height: 24px;
+            text-indent: 10px;
+            background: #96E555;
+            cursor: pointer;
+            width: 100%;
+        }
+    
+        .content {
+            padding: 10px;
+            text-indent: 24px;
+            border-top: 1px solid #0050D0;
+            display: block;
+        }
+    </style>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#panel").css("opacity","0.5");
+            $("#panel").click(function(){
+                $(this).animate({left:"400px",height:"200px",opacity:"1"},3000)
+                       .animate({top:"200px",width:"200px"},3000)
+                       .fadeOut("slow");
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="panel">
+    </div>
+</body>
+</html>
