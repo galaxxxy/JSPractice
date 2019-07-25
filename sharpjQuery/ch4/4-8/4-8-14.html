@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            padding: 60px
+        }
+    
+        .panel {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #0050D0;
+            background: #96E555;
+            cursor: pointer
+        }
+    </style>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        $(function(){
+		function animateIt() {
+			$("#mover").slideToggle("slow", animateIt);
+		}
+		function animateIt2() {
+			$("#mover").fadeToggle("slow", animateIt2);
+		}
+		animateIt();
+		$("button").click(function(){
+			if(!$('#mover').is(":animated")){
+				$('#mover').fadeToggle("slow", animateIt2);
+			}else{
+				$('#mover').stop();
+			}
+		});
+    });
+    </script>
+</head>
+<body>
+    <button>click</button>
+    <div class="panel" id="mover">????</div>
+</body>
+</html>

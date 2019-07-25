@@ -455,3 +455,72 @@ $(document).ready(function () {
 第二个参数可以用于让正在执行的动画直接到达结束时刻的状态，通常用于后一个动画需要基于前一个动画的末状态的情况，可以通过`stop(false,true)`这种方式让当前动画直接到达末状态。<br/>
 jQuery只能设置当前执行动画的最终状态，不能直接到达未执行动画队列的最终状态。
 ##### 判断元素是否处于动画状态
+为了避免出现动画累积，判断元素是否处于动画状态，若不处于，才为元素添加新动画，否则不添加:
+```
+if(!$(element).is(":animated")){
+    //追加新动画
+}
+```
+##### 延迟动画
+可以使用delay()方法对动画进行延迟操作:
+```
+$(this).animate({left:"400px",height:"200px",opacity:"1"},3000)
+       .delay(1000)
+       .animate({top:"200px",width:"200px",3000})
+       .delay(2000)
+       .fadeOut("slow");
+```
+delay()方法既可以推迟动画队列中函数的执行，也可以用于自定义队列。
+##### 其他动画方法
+###### toggle()方法
+toggle()方法用于切换元素的可见状态
+###### slideToggle()方法
+slideToggle()方法通过高度变化来切换匹配元素的可见性，这个动画效果只调整元素的高度。
+###### fadeTo()方法
+fadeTo()方法可以把元素的不透明度以渐进方式调整到指定值，这个动画效果只调整元素的不透明度:
+```
+$(element).click(function(){
+    $(this).next().fadeTo(600, 0.2);
+});
+```
+###### fadeToggle()方法
+fadeToggle()方法可以通过不透明度变化来切换匹配元素的可见性，这个动画效果只调整元素的不透明度。
+##### 动画方法概括
+|方法名|说明|
+|:-:|:-:|
+|hide()和show()|同时修改高度宽度和不透明度|
+|fadeIn()和fadeOut()|只改变不透明度|
+|slideUp()和slideDown()|只改变高度|
+|fadeTo()|只改变不透明度|
+|toggle()|代替hide()和show()方法|
+|slideToggle()|代替slideUp()和slideDown()方法|
+|fadeToggle()|代替fadeIn()和fadeOut()方法|
+|animate()|属于自定义动画方法|
+
+animate()方法可以用来代替其他所有方法,代替show():
+```
+$("p").animate({height:"show",width:"show",opacity:"show"},400);
+```
+用animate()方法代替fadeIn()方法:
+```
+$("p").animate({opacity:"show"},400);
+```
+用animate()方法代替slideDown()方法:
+```
+$("p").animate({height:"show"},400);
+```
+用animate()方法代替fadeTo()方法:
+```
+$("p").animate({opacity:"0.6"},400);
+```
+animate()方法中，特定样式的属性值可为"show"、"hide"和"toggle"，也可以是自定义数字(值)。
+###### 动画队列
+一组元素上的动画效果:
+* 当在一个animate()方法中应用多个属性时,动画是同时发生的
+* 当以链式写法应用动画方法时，动画按顺序发生
+
+多组元素上的动画效果:
+* 默认情况下，动画都是同时发生的
+* 当以回调形式应用动画方式时，按回调顺序发生
+
+另外在动画方法中，非动画方法会插队，如css()方法。要使非动画方法也按照顺序执行，需要把这些方法写在动画方法的回调函数中。
