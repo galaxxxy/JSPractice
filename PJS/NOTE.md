@@ -543,4 +543,29 @@ JavaScript具有自动垃圾收集机制，执行环境会负责管理代码执�
 #### 标记清除
 JavaScript中最常用的垃圾收集方式是标记清除(mark-and-sweep)。垃圾收集器在运行时给储存在内存中的所有变量打上标记，然后去掉环境中的变量以及被环境中变量引用的变量的标记，在此之后任被加上标记的变量将被视为准备删除的变量，因为环境中的变量已经无法访问到这些变量了。
 #### 引用计数
-另一种不太常见的垃圾收集策略叫引用计数。其含义是跟踪记录每一个值被引用的次数。当声明了一个变量并将一个引用类型值赋给该变量时，则该值引用次数为1。若同一个值被赋给另一变量，则该值引用次数减1.当引用次数为0，说明没有方法在访问这个值，因此可以回收其占用的内存空间。
+另一种不太常见的垃圾收集策略叫引用计数。其含义是跟踪记录每一个值被引用的次数。当声明了一个变量并将一个引用类型值赋给该变量时，则该值引用次数为1。若同一个值被赋给另一变量，则该值引用次数减1.当引用次数为0，说明没有方法在访问这个值，因此可以回收其占用的内存空间。<br/>
+Netscape Navigator 3.0 是最早使用引用计数策略的浏览器，但是很快他就遇到了一个问题:循环引用。循环引用指对象A包含指向对象B的引用，对象B也包含指向对象A的引用:
+```
+function problem(){
+    var objA = new Object();
+    var objB = new Object();
+
+    objA.someOtherObject = objB;
+    objB.anotherObject = objA;
+}
+```
+objA与objB通过各自的属性相互引用，他们的引用次数永远不会为0.假设此函数被反复调用，会导致大量内存得不到回收。因此Netscape Navigator 4.0中放弃了引用计数方式，采用标记清除来实现其垃圾收集机制。<br/>
+IE中BOM和DOM中的对象使用C++以COM(Component Object Model,组建对象模型)对象的形式实现，而COM对象的垃圾回收机制采用引用计数策略，因此只要在IE中涉及COM对象，就会存在循环引用问题:
+```
+var element = document.getElementById("some_element");
+var myObject = new Object();
+myObject.element = element;
+element.someObject = myObject;
+```
+DOM元素(element)与原生JavaScript对象(myObject)之间创建了循环引用，即使将DOM元素从页面中移除，它也不会被回收。为了避免此问题，在不使用它们时手动断开其链接:
+```
+myObject.element = null;
+element.someObject = null;
+```
+IE9把BOM和DOM对象转换成了真正的JavaScript对象，消除了常见的内存泄漏现象。
+#### 性能问题
