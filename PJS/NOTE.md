@@ -569,3 +569,15 @@ element.someObject = null;
 ```
 IE9把BOM和DOM对象转换成了真正的JavaScript对象，消除了常见的内存泄漏现象。
 #### 性能问题
+垃圾收集器是周期运行的，确定垃圾收集的时间间隔是一个非常重要的问题。IE的垃圾收集器是根据内存分配量运行的。当一个脚本在其生命周期中一直保有不少于临界值的变量时，会导致垃圾收集器频繁运行，引起严重性能问题。因此IE7改变了工作方式:触发垃圾收集的变量分配、字面量或数组元素的临界值被调整为动态修正。
+#### 管理内存
+优化内存占用的最佳方式就是解除引用:一旦数据不再有用通过将其值设置为null来释放引用。这一做法适用于大多数全局变量和全局对象的属性，局部变量会在离开执行环境时自动被解除引用:
+```
+function createPerson(name){
+    var localPerson = new Object();
+    localPerson.name = name;
+    return localPerson;
+}
+var globalPerson = createPerson("Nicholas");
+globalPerson = null;
+```
