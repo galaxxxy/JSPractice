@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font: normal 12px/17px Arial;
+        }
+    
+        .msg {
+            width: 300px;
+            margin: 100px;
+        }
+    
+        .msg_caption {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 1px;
+        }
+    
+        .msg_caption span {
+            display: block;
+            float: left;
+            margin: 0 2px;
+            padding: 4px 10px;
+            background: #898989;
+            cursor: pointer;
+            color: white;
+        }
+    
+        .msg textarea {
+            width: 300px;
+            height: 80px;
+            height: 100px;
+            border: 1px solid #000;
+        }
+    </style>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        $(function () {
+            $("span.bigger").click(function(){
+                var isNotAnimated = !$("#comment").is(":animated");
+                if(isNotAnimated && $("#comment").height()<500){
+                    $("#comment").animate({height:"+=50"},"slow");
+                }
+            });
+            $("span.smaller").click(function(){
+                var isNotAnimated = !$("#comment").is(":animated");
+                if(isNotAnimated && $("#comment").height()>50){
+                    $("#comment").animate({height:"-=50"},"slow");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <form action="" method="post">
+        <div class="msg">
+            <div class="msg_caption">
+                <span class="bigger">放大</span>
+                <span class="smaller">缩小</span>
+            </div>
+            <div>
+                <textarea id="comment" rows="8"
+                    cols="20">多行文本框高度变化.多行文本框高度变化.多行文本框高度变化.多行文本框高度变化.多行文本框高度变化.多行文本框高度变化.多行文本框高度变化.多行文本框高度变化.多行文本框高度变化.</textarea>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
