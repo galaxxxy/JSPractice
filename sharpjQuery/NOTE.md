@@ -195,6 +195,8 @@ Attribute/Property|`.attr()`|`.prop()`
  type|yes|
  width|yes|
 
+原则一:只添加属性名称该属性就会生效应该使用prop()<br/>
+原则二:只存在true/false的属性应该使用prop()
  ### CSS-DOM操作
  #### 样式属性
  ##### css()
