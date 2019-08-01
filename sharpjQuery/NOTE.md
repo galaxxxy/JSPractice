@@ -546,3 +546,15 @@ animate()方法中，特定样式的属性值可为"show"、"hide"和"toggle"，
 等价于`$(this).find(selector)`
 #### keyup事件
 每次松开按键时触发
+#### end()方法
+用于结束当前链条中的最近的筛选操作，并将匹配元素集还原为之前的状态
+#### 三元运算
+```
+$(this)[hasSelected?"removeClass":"addClass"]('selected');
+//代表这两种情况
+$(this)["removeClass"]('selected');
+$(this)["addClass"]('selected');
+//等价于
+$(this).removeClass('selected');
+$(this).addClass('selected');
+```
