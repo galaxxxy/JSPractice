@@ -542,6 +542,7 @@ animate()方法中，特定样式的属性值可为"show"、"hide"和"toggle"，
 
 #### defaultValue属性
 用于获取文本框的初始值，为DOM属性
-
 #### $(selector,this)
 等价于`$(this).find(selector)`
+#### keyup事件
+每次松开按键时触发
