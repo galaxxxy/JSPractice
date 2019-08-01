@@ -147,7 +147,7 @@ function1与function2交替执行
 #### remove()
 用法:`.remove([selector])`
 
-删除所选节点及其包含的所有后代节点，返回一个指向被删节点的引用
+删除所选节点及其包含的所有后代节点，返回一个指向被删节点的引用。remove()不会保留元素的 jQuery 数据。其他的比如绑定的事件、附加的数据等都会被移除。
 #### detach()
 用法:`.detach([selector])`
 
@@ -542,3 +542,6 @@ animate()方法中，特定样式的属性值可为"show"、"hide"和"toggle"，
 
 #### defaultValue属性
 用于获取文本框的初始值，为DOM属性
+
+#### $(selector,this)
+等价于`$(this).find(selector)`
