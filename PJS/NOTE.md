@@ -581,3 +581,7 @@ function createPerson(name){
 var globalPerson = createPerson("Nicholas");
 globalPerson = null;
 ```
+
+---
+## Chapter 5
+暂时略过
