@@ -598,4 +598,85 @@ ECMAScript中有两种属性:数据属性和访问器属性。
 - \[\[Writable]]:表示能否修改属性的值。对于直接在对象上定义的属性，这个特性值默认为true。
 - \[\[Value]]:包含这个属性的值。默认为undefined。
 
+要改变属性的默认特性，须使用ECMAScript5的Object.defineProperty()方法。这个方法接受三个参数:属性所在的对象、属性的名字和一个描述符对象。其中，描述符对象的属性必须是:configurable、enumerable、writable和value。设置其中的一或多值，可以修改对应的特性值。<br/>
+在非严格模式下，为只读属性赋值的操作将被忽略；严格模式下，赋值操作会导致抛出错误。把configurable设置为false，表示不能从对象中删除属性。在非严格模式下，对这个属性调用delete什么也不会发生，严格模式会导致错误。而且，一旦把属性定义为不可配置的，就不能把它变回可配置了。此时，再调用Object.defineProperty()方法修改除writable之外的特性都会导致错误。
 ##### 访问器属性
+访问器属性不包含数据值，他们包含一对getter和setter函数(不必需)。在读取访问器属性值时，会调用getter函数，这个函数负责返回有效的值；在写入访问器属性时，会调用setter函数并传入新值，这个函数负责决定如何处理数据。访问器属性有如下四个特性:
+- [\[Configurable]]:表示能否通过delete删除属性而重新定义属性，能否修改属性的特性，或者能否把属性修改为访问器属性。对于直接在对象上定义的属性，这个特性值默认为true。
+- [\[Enumerable]]:表示能否通过for-in循环返回属性。对于直接在对象上定义的属性，这个特性值默认为true。
+- [\[Get]]:在读取属性时调用的函数。默认为undefined。
+- [\[Set]]:在写入属性时调用的函数。默认为undefined。
+
+访问器属性不能直接定义，必须使用Object.defineProperty()来定义:
+```
+var book = {
+        _year : 2004,
+        edition: 1
+    };
+Object.defineProperty(book,"year",{
+    get:function(){
+        return this._year;
+    },
+    set:function(newValue){
+        if(newValue > 2004){
+            this._year = newValue;
+            this.edition += newValue - 2004;
+        }
+    }
+});
+book.year = 2005;
+alert(book.edition);//2
+```
+_year前面的下划线表示只能通过对象方法访问的属性。只指定getter意味属性不能写入，在严格模式下，尝试写入只指定了getter函数的属性会抛出错误。只指定setter函数的属性不能读，否则在非严格模式下返回undefined，严格模式下抛出错误。
+在不支持这个方法的浏览器中，创建访问器属性可以使用两个非标准方法:\__defineGetter__()和\__defineSetter__():
+```
+book.__defineGetter__("year",function(){
+            return this._year;
+        });
+        book.__defineSetter__("year",function(newValue){
+            if(newValue>2004){
+                this._year = newValue;
+                this.edition += newValue - 2004;
+            }
+        });
+```
+在不支持Object.defineProperty()方法的浏览器中不能修改[\[Configurable]]和[\[Enumerate]]。
+#### 定义多个属性
+利用`Object.defineProperties()`方法一次定义多个属性。这个方法接收两个对象参数:第一个参数是要添加和修改其属性的对象，第二个对象的属性与第一个对象中要添加或修改的属性一一对应:
+```
+var book = {};
+Object.defineProperties(book,{
+    _year: {
+        value: 2004
+        },
+    edition: {
+        value: 1
+        },
+    year: {
+        get: function(){
+            return this._year;
+        },
+        set: function(newValue){
+            if(newValue > 2004){
+                this._year = newValue;
+                this.edition += newValue - 2004;
+            }
+        }
+    }
+});
+```
+#### 读取属性的特性
+使用`Object.getOwnPropertyDescriptor()`方法，可以取得给定属性的描述符。这个方法接收两个参数:属性所在的对象和要读取其描述符的属性名称。返回值是一个对象，若为访问器属性，对象的属性有configurable、enumerable、get和set;若为数据属性，对象的属性有configurable、enumerable、writable和value。
+```
+var descriptor = Object.getOwnPropertyDescriptor(book,"_year");
+alert(descriptor.value);//2004
+alert(descriptor.configurable);//false
+alert(typeof descriptor.get);//"undefined"
+
+var descriptor = Object.getOwnPropertyDescriptor(book,"year");
+alert(descriptor.value);//undefined
+alert(descriptor.enumerable);//false
+alert(typeof descriptor.get);//"function"
+```
+对于数据属性_year，value等于最初的值，configurable为false，get等于undefined。对于访问器属性year，value等于undefined，enumerablw为false，get是一个指向getter函数的指针。<br/>
+在JavaScript中，可以针对任何对象--DOM和BOM对象，使用`Object.getOwnPropertyDescriptor()`方法。
