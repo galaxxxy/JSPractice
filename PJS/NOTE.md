@@ -584,7 +584,31 @@ globalPerson = null;
 
 ---
 ## Chapter 5
-暂时略过
+### 引用类型
+#### Object类型
+Object是ECMAScript中使用最多的一个类型，对于应用程序中存储和传输数据而言，是非常理想的选择。创建Object实例的方式有两种:
+```
+// new操作符后跟Object构造函数[一般不使用]
+var person = new Object();
+person.name = "Nicholas";
+person.age = 29;
+// 使用对象字面量表示法
+var person = {
+            name: "Nicholas",
+            age: 29,
+        };
+```
+访问对象属性可以使用点表示法和方括号表示法。使用方括号语法时，应该将要访问的属性以字符串的的形式放在方括号中:
+```
+//一般使用点表示法，除非必须要用变量访问属性
+alert(person["name"]);
+alert(person.name);
+//方括号语法的主要优点是可以通过变量来访问属性
+var propertyName = "name";
+alert(person[propertyName]);
+//属性名中包含会导致语法错误的字符或属性名使用保留字或关键字，也应使用方括号语法
+person["first name"] = "Nicholas";
+```
 
 ---
 ## Chapter 6
