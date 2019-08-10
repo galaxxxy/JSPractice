@@ -1,4 +1,4 @@
-# Introduction To JavaScript
+# Introduction To JavaScript
 ## Introduction
 ### Variable
 - The `var` keyword is used in pre-ES6 versions of JS.
