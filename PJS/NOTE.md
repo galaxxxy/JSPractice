@@ -734,6 +734,13 @@ var expression = / pattern / flags ;
 
 使用正则表达式字面量和使用RegExp构造函数创建的正则表达式不一样。在ECMAScript3中，正则表达式字面量始终会共享同一个RegExp实例，而使用构造函数创建的每一个新RegExp实例都是一个新实例。在ECMAScript5中，使用正则表达式字面量和使用RegExp构造函数每次都会创建新的实例。
 ##### RegExp实例属性
+RegExp的每个实例都有下列属性，通过这些属性可以取得有关模式的各种信息:
+- global:布尔值，表示是否设置g标志
+- ignoreCase:布尔值，表示是否设置i标志
+- multiline:布尔值，表示是否设置m标志
+- lastIndex:整数，表示开始搜索下一个匹配项的字符位置(从0算起)
+- source:正则表达式的字符串表示，按照字面量形式返回
+
 
 ---
 ## Chapter 6
