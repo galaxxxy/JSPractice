@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        var text = "cat, bat, sat, fat";
+        var pattern1 = /.at/;
+
+        var matches = pattern1.exec(text);
+        alert(matches.index);
+        alert(matches[0]);
+        alert(pattern1.lastIndex);
+
+        matches = pattern1.exec(text);
+        alert(matches.index);
+        alert(matches[0]);
+        alert(pattern1.lastIndex);
+
+        var pattern2 = /.at/g;
+
+        var matches = pattern2.exec(text);
+        alert(matches.index);
+        alert(matches[0]);
+        alert(pattern2.lastIndex);
+
+        matches = pattern2.exec(text);
+        alert(matches.index);
+        alert(matches[0]);
+        alert(pattern2.lastIndex);
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
