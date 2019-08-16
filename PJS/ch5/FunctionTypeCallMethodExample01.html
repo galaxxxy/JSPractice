@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        function sum(num1,num2){
+            return num1+num2;
+        }
+        function callSum(num1,num2){
+            return sum.call(this,num1,num2);
+        }
+        alert(callSum(10,10));
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
