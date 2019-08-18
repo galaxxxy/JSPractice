@@ -825,6 +825,35 @@ alert(typeof obj);//"object"
 - Boolean对象为Boolean类型的实例，所以使用instanceof操作符测试Boolean对象会返回true，测试基本类型的布尔值返回false
 
 建议永远不要使用Boolean对象。
+##### Number类型
+Number类型重写了valueOf()、toLocaleString()和toString()方法。重写后的valueOf()方法返回对象表示的基本类型的数值，另外两个方法则返回字符串形式的数值。toFixed()方法按照指定小数位返回数值的字符串表示:
+```
+var num = 10;
+alert(num.toFixed(2));//"10.00"
+```
+若数值本身包含的小数位比指定的多，那么接近指定的最大小数位的值会舍入。这一特性使得toFixed()方法适合处理货币值(不同浏览器舍入规则不同):
+```
+var num = 10.005;
+alert(num.toFixed(2));//"10.00"
+```
+另外可用toExponential()方法返回以指数表示法表示的数值的字符串形式，传入的参数指定输出结果中小数的位数:
+```
+num = 10;
+alert(num.toExponential(1));//"1.0e+1"
+```
+若想得到表示某个数值的最合适的格式，使用toPrecision()方法。此方法会返回固定大小(fixed)格式或指数(exponential)格式，接收一个参数，表示数值的所有数字的位数(不包括指数部分):
+```
+num = 99;
+alert(num.toPrecision(1));//"1e+2"
+alert(num.toPrecision(2));//"99"
+alert(num.toPrecision(3));//"99.0"
+```
+基本类型与引用类型的数值有两个区别:
+- typeof操作符对基本类型返回"number"，对引用类型返回"object"
+- Number对象为Number类型的实例，所以使用instanceof操作符测试Number对象会返回true，测试基本类型的数值返回false
+
+不建议直接实例化Number类型。
+
 ---
 ## Chapter 6
 ### 理解对象
