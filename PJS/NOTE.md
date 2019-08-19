@@ -853,6 +853,144 @@ alert(num.toPrecision(3));//"99.0"
 - Number对象为Number类型的实例，所以使用instanceof操作符测试Number对象会返回true，测试基本类型的数值返回false
 
 不建议直接实例化Number类型。
+##### String类型
+String类型提供了很多方法，用于辅助完成对ECMAScript中的字符串的解析和操作:
+1. 字符方法
+两个用于访问字符串中特定字符的方法是:charAt()和charCodeAt()。这两个方法都接收一个参数，即基于0的字符位置。其中charAt()方法以单字符字符串的形式返回给定位置的那个字符:
+```
+var stringValue = "hello world";
+alert(stringValue.charAt(1));//"e"
+```
+若想得到的不是字符而是字符编码，则应使用charCodeAt():
+```
+var stringValue = "hello world";
+alert(stringValue.charCodeAt(1));//"101"
+```
+ECMAScript5定义了另一个访问个别字符的方法。在支持此方法的浏览器中，可以使用方括号加数字索引来访问字符串中的特定字符(不支持则返回undefined):
+```
+var stringValue = "hello world";
+alert(stringValue[1]);//"e"
+```
+
+2. 字符串操作方法
+concat()方法用于将一或多个字符串拼接起来，返回拼接所得的新字符串:
+```
+var stringValue = "hello ";
+var result = stringValue.concat("world");
+alert(result);
+alert(stringValue);
+```
+concat()方法可以接受任意个参数，但实践中更多使用加号操作符(+)。<br/>
+ECMAScript提供了三个基于子字符串创建新字符串的方法:slice()、substr()和substring()。第一个参数指定子字符串的开始位置，第二个参数(可选)指定子字符串的结束位置。slice()和substring()的第二个参数指定的是子字符串最后一个字符后面的位置。substr()的第二个参数指定的是返回字符的个数。若不传递第二个参数，则默认传入字符串的长度。这三个方法也不改变字符串本身的值。<br/>
+若传入的参数是负值，slice()方法会将传入的负值与字符串长度相加，substr()方法将负的第一个参数加上字符串长度，将负的第二个参数转换为0，substring()方法会把所有负值参数转换为0。
+
+3. 字符串位置方法
+indexOf()和lastIndexOf()可以从字符串中查找子字符串。这两个方法都从一个字符串中搜索给定的子字符串，然后返回子字符串的位置(找不到返回-1)。这两个方法区别在于indexOf()从字符串开头向后搜索，而lastIndexOf()从字符串末尾向前搜索。可以传入第二个参数，表示从该位置开始搜索。
+
+4. trim()方法
+此方法会创建一个字符串的副本，删除前置及后缀的所有空格，然后返回结果。
+
+5. 大小写转换方法
+涉及大小写转换的方法可以分为两组:toLowerCase()、toUpperCase()和toLocaleLowerCase()、toLocaleUpperCase()，后者为针对特定地区的实现。一般在不知道自己的代码在哪种语言环境中运行时，建议采用针对地区的方法。
+
+6. 字符串的模式匹配方法
+match()本质上与调用RegExp的exec()方法相同。match()只接受一个参数，接收正则表达式或RegExp对象。<br/>
+search()方法接收正则表达式或RegExp对象。search()方法返回字符串中第一个匹配项的索引(没发现返回-1)，且从字符串开头向后查找。<br/>
+replace()方法接收两个参数:第一个参数是一个RegExp对象或一个字符串(不会被转换成正则表达式)，第二个参数是一个字符串或一个函数。若第一个参数是字符串，那么只会替换第一z子字符串。想要替换所有子字符串，唯一方法是提供一个正则表达式，且指定全局g标志。若第二个参数是字符串，那么可以使用一些特殊的字符序列来将正则表达式得到的值插入到结果字符串中:
+|字符序列|替换文本|
+|:-:|:-:|
+|$$|$|
+|$&|匹配整个模式的子字符串。与RegExp.lastMatch值相同|
+|$'|匹配子字符串之前的子字符串。与RegExp.leftContext值相同|
+|$`|匹配子字符串之后的子字符串。与RegExp.rightContext值相同|
+|$n|匹配第n个捕获组的子字符串。|
+|$nn|匹配第nn个捕获组的子字符串。|
+
+通过这些特殊的字符序列，可以使用最近一次的匹配结果中的内容:
+```
+var text = "cat, bat, sat, fat";
+var result = text.replace(/(.at)/g,"word($1)");
+alert(result);//word(cat), word(bat), word(sat), word(fat)
+```
+replace()方法的第二个参数也可以是一个函数。在只有一个匹配项(即与模式匹配的字符串)的情况下，会向这个函数传递三个参数:模式匹配项、模式匹配项在字符串中的位置和原始字符串。在正则表达式中定义了多个捕获组的情况下，传递给函数的参数依次是模式的匹配项、第一个捕获组的匹配项、第二个捕获组的匹配项等，但最后两个参数依然是模式匹配项在字符串中的位置和原始字符串:
+```
+function htmlEscape(text){
+    return text.replace(/[<>"&]/g,function(match, posoriginalText){
+        switch(match){
+            case "<":
+                    return "&lt;";
+            case ">":
+                    return "&gt;";
+            case "&":
+                    return "&amp;";
+            case "\"":
+                    return "&quot;";
+        }
+    });
+}
+alert(htmlEscape("<p class=\"greeting\">Hello world!</p>"));
+//&lt;p class=&quot;greeting&quot;&gt;Hello world!&lt;/p&gt;
+```
+split()方法可以基于指定的分隔符将一个字符串分割成多个子字符串，并将结果放在一个数组中。分隔符可以是字符串，也可以是一个RegExp对象(这个方法不会将字符串看成正则表达式)。split()方法可以接受可选的的第二个参数，用于指定数组大小，以确保返回的数组不会超过既定大小:
+```
+var colorText = "red,blue,green,yellow";
+
+var colors1 = colorText.split(",");
+//["red","blue","green","yellow"]
+var colors2 = colorText.split(",",2);
+//["red","blue"]
+var colors3 = colorText.split(/[^\,]+/);
+//["", ",", ",", ""]
+```
+
+7. localeCompare()方法
+这个方法比较两个字符串并返回下列值中的一个:
+- 如果字符串在字母表中应该排在字符串参数之前则返回一个负数(大多数情况下是-1)
+- 如果字符串等于字符串参数，返回0
+- 如果字符串在字母表中应该排在字符串参数之后则返回一个负数(大多数情况下是1)
+
+```
+var stringValue = "yellow";
+alert(stringValue.localeCompare("brick"));//1
+alert(stringValue.localeCompare("yellow"));//0
+alert(stringValue.localeCompare("zoo"));//-1
+
+function determineOrder(value) {
+    var result = stringValue.localeCompare(value);
+    if(result < 0){
+        alert("The string 'yellow' comes before thstring'"+value+"'.");
+    }else if(result > 0){
+        alert("The string 'yellow' comes after thstring'"+value+"'.");
+    }else{
+        alert("The string 'yellow' is equal to thstring'"+value+"'.");
+    }
+}
+determineOrder("brick");
+determineOrder("yellow");
+determineOrder("zoo");
+```
+
+8. fromCharCode()方法
+String构造函数还有一个静态方法fromCharCode()，用于接收一或多个字符编码，然后将其转换为一个字符串。本质上看，与实例方法charCodeAt()执行相反的操作。
+
+9. HTML方法
+尽量不使用这些方法，因为它们创建的标记通常无法表达语义:
+
+|方法|输出结果|
+|:-:|:-:|
+|anchor(name)|<a name="name"\>string</a\>|
+|big()|<big\>string</big\>|
+|bold()|<b\>string</b\>|
+|fixed()|<tt\>string</tt\>|
+|fontcolor(color)|<font color="color"\>string</font\>|
+|fontsize(size)|<font size="size"\>string</font\>|
+|italics()|<i\>string</i\>|
+|link(url)|<a href="url"\>string</a\>|
+|small|<small\>string</small\>|
+|strike()|<strike\>string</strike\>|
+|sub()|<sub\>string</sub\>|
+|sup()|<sup\>string</sup\>|
+
 
 ---
 ## Chapter 6

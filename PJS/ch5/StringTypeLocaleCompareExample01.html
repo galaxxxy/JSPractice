@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        var stringValue = "yellow";
+        alert(stringValue.localeCompare("brick"));//1
+        alert(stringValue.localeCompare("yellow"));//0
+        alert(stringValue.localeCompare("zoo"));//-1
+
+        function determineOrder(value) {
+            var result = stringValue.localeCompare(value);
+            if(result < 0){
+                alert("The string 'yellow' comes before the string'"+value+"'.");
+            }else if(result > 0){
+                alert("The string 'yellow' comes after the string'"+value+"'.");
+            }else{
+                alert("The string 'yellow' is equal to the string'"+value+"'.");
+            }
+        }
+        determineOrder("brick");
+        determineOrder("yellow");
+        determineOrder("zoo");
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
