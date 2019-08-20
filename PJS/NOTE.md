@@ -991,6 +991,43 @@ String构造函数还有一个静态方法fromCharCode()，用于接收一或多
 |sub()|<sub\>string</sub\>|
 |sup()|<sup\>string</sup\>|
 
+#### 单体内置对象
+单体内置对象是由ECMAScript实现提供的、不依赖于宿主环境的对象，且这些对象在ECMAScript程序执行之前就存在了，如Object、Array和String。
+##### Global对象
+事实上，没有全局变量或全局函数；所有在全局作用域中定义的属性和函数，都是Global对象的属性。除isNaN()、isFinite()等方法之外，Global对象还包含其他方法:
+1. URL编码方法
+Global对象的encodeURI()和encodeURIComponent()方法可以对URI(通用资源标识符)进行编码，以便发送给浏览器。这两个URI编码方法可以对URI进行编码，使用特殊UTF-8编码替换所有无效的字符。<br/>
+encodeURI()主要用于整个URI，而encodeURIComponent()主要用于对URI的某一段进行编码。encodeURI()不会对本身属于URI的特殊字符进行编码(冒号、正斜杠等)；encodeURIComponent()会对它发现的任何非标准字符进行编码:
+```
+var uri = "http://www.wrox.com/illegal value.htm#start";
+//http://www.wrox.com/illegal%20value.htm#start
+alert(encodeURI(uri));
+//http%3A%2F%2Fwww.wrox.com%2Fillegal%20value.htm%23start
+alert(encodeURIComponent(uri));
+```
+与两个方法对应的方法分别是decodeURI()和decodeURIComponent()。
+
+2. eval()方法
+eval()方法像是一个完整的ECMAScript解析器，只接受一个参数，即要执行的ECMAScript字符串。 通过eval()执行的代码被认为是包含该次调用的执行环境的一部分，因此被执行的代码具有与该执行环境相同的作用域链，意味着通过eval()执行的代码可以引用在包含环境中定义的变量。<br/>
+在eval()中创建的任何变量和函数都不会被提升，因为在解析代码的时候，它们被包含在一个字符串中；它们只在eval()执行的时候创建。严格模式下，在外部访问不到eval()中创建的任何变量或函数，严格模式下，为eval赋值也会导致错误。<br/>
+要谨慎使用eval()方法，可能会引起代码注入。
+
+3. Global对象的属性
+
+|属性|说明|属性|说明|
+|:-:|:-:|:-:|:-:|
+|undefined|特殊值undefined|Date|构造函数Date|
+|NaN|特殊值NaN|RegExp|构造函数RegExp|
+|Infinity|特殊值Infinity|Error|构造函数Error|
+|Object|构造函数Object|EvalError|构造函数EvalError|
+|Array|构造函数Array|RangeError|构造函数RangeError|
+|Function|构造函数Function|ReferenceError|构造函数ReferenceError|
+|Boolean|构造函数Boolean|SyntaxError|构造函数SyntaxError|
+|String|构造函数String|TypeError|构造函数TypeError|
+|Number|构造函数Number|URIError|构造函数URIError|
+
+4. window对象
+ECMAScript没有指出如何直接访问Global对象，Web浏览器将这个全局对象作为window对象的一部分加以实现的。
 
 ---
 ## Chapter 6
