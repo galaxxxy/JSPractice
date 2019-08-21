@@ -1029,6 +1029,52 @@ eval()方法像是一个完整的ECMAScript解析器，只接受一个参数，�
 4. window对象
 ECMAScript没有指出如何直接访问Global对象，Web浏览器将这个全局对象作为window对象的一部分加以实现的。
 
+##### Math对象
+Math对象用于保存数学公式和信息。
+1. Math对象的属性
+
+|属性|说明|
+|:-:|:-:|
+|Math.E|自然对数的底数，即常量e的值|
+|Math.LN10|10的自然对数|
+|Math.LN2|2的自然对数|
+|Math.LOG2E|以2为底e的对数|
+|Math.LOG10E|以2为底e的对数|
+|Math.PI|π的值|
+|Math.SQRT1_2|1/2的平方根(即2的平方根的倒数)|
+|Math.SQRT2|2的平方根|
+
+2. min()和max()方法
+min()和max()方法用于确定一组数值中的最大值和最小值，接收任意多个数值参数。<br/>
+要找到数组中的最大或最小值，可以使用apply方法:
+```
+var values = [3, 54, 32, 16];
+var max = Math.max.apply(Math, values);
+alert(max);
+```
+这个技巧的关键是把Math对象作为apply()的第一个参数，从而正确设置this值。
+
+3. 舍入方法
+- Math.ceil()执行向上舍入，即它总是将数值向上舍入为最接近的整数。
+- Math.floor()执行向下舍入，即它总是将数值向下舍入为最接近的整数。
+- Math.round()执行标准舍入，即它总是将数值四舍五入为最接近的整数。
+
+4. random()方法
+Math.random()方法返回大于等于0小于1的一个随机数。可以套用以下公式从某个整数范围内随机选择一个值:
+```
+值 = Math.floor(Math.random()*可能值的总数+第一个可能的值)
+```
+
+5. 其他方法
+
+|方法|说明|方法|说明|
+|Math.abs(num)|返回num的绝对值|Math.asin(x)|返回x的反正弦值|
+|Math.exp(num)|返回Math.E的num次幂|Math.atan(x)|返回x的反正切值|
+|Math.log(num)|返回num的自然对数|Math.atan2(y,x)|返回y/x的反正切值|
+|Math.pow(num,power)|返回num的power次幂|Math.cos(x)|返回x的余弦值|
+|Math.sqrt(num)|返回num的平方根|Math.sin(x)|返回x的正弦值|
+|Math.acos(x)|返回x的反余弦值|Math.tan(x)|返回x的正切值|
+
 ---
 ## Chapter 6
 ### 理解对象
