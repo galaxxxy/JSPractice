@@ -1223,3 +1223,14 @@ if(condition){
 }
 ```
 ### 递归
+非严格模式下，可以通过arguments.callee代替函数名来保证怎样调用函数不会出错；但在严格模式下，访问此属性会导致错误，可以使用命名函数表达式来达成相同效果:
+```
+var factorial = (function f(num){
+    if(num<=1){
+        return 1;
+    }else{
+        return num*f(num-1);
+    }
+});
+```
+以上代码创建了名为f()的命名函数表达式，并将其赋值给factorial。即便将函数赋值给了另一变量，函数名f依旧有效。
