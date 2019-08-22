@@ -1171,3 +1171,55 @@ alert(typeof descriptor.get);//"function"
 ```
 对于数据属性_year，value等于最初的值，configurable为false，get等于undefined。对于访问器属性year，value等于undefined，enumerablw为false，get是一个指向getter函数的指针。<br/>
 在JavaScript中，可以针对任何对象--DOM和BOM对象，使用`Object.getOwnPropertyDescriptor()`方法。
+
+---
+## Chapter 7
+定义函数有两种方式:一种为函数声明，另一种为函数表达式。函数声明语法如下:
+```
+function functionName(arg0,arg1){
+    //函数体
+}
+```
+关于函数声明，它的一个重要特征为函数声明提升(function declaration hoisting)，意思是执行代码前会先读取函数声明，因此函数声明可以放在调用它的语句后面。<br/>
+第二种创建函数的方式是使用函数表达式:
+```
+var functionName = function(arg0, arg1){
+    return arg0+arg1;
+}
+```
+这种情况下创建的函数叫做匿名函数(anonymous function)，因为function关键字后面没有标识符(匿名函数也叫拉姆达函数)。匿名函数的name属性为空字符串。函数表达式与其他表达式一样，使用前必须先赋值:
+```
+sayHi();//函数还不存在
+var sayHi = function(){
+    alert("Hi!");
+};
+```
+理解函数提升的关键:
+```
+//不要这么做！
+if(condition){
+    function sayHi(){
+        alert("Hi!");
+    }
+}else{
+    function sayHi(){
+        alert("Yo!");
+    }
+}
+```
+以上代码为无效语法，但可以使用函数表达式实现:
+```
+//可以这么做
+var sayHi;
+
+if(condition){
+    sayHi = function(){
+        alert("Hi!");
+    };
+}else{
+    sayHi = function(){
+        alert("Yo!");
+    };
+}
+```
+### 递归
