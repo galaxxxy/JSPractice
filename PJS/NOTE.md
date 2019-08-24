@@ -1234,3 +1234,70 @@ var factorial = (function f(num){
 });
 ```
 以上代码创建了名为f()的命名函数表达式，并将其赋值给factorial。即便将函数赋值给了另一变量，函数名f依旧有效。
+### 闭包
+闭包指有权访问另一个函数作用域中的变量的函数。创建闭包的常见方式，就是在一个函数内部创建另一个函数:
+```
+function createComparisonFunction(propertyName){
+    return function(object1, object2){
+
+        //访问了外部函数中的变量propertyName
+        var value1 = object1[propertyName];
+        var value2 = object2[propertyName];
+
+        if(value1 < value2){
+            return -1;
+        } else if (value1 > value2){
+            return 1;
+        } else {
+            return 0;
+        }
+    };
+}
+```
+createComparisonFunction()函数在执行完毕后，其活动对象也不会被销毁，因为匿名函数的作用域链仍在引用这个活动对象:
+```
+//创建函数
+var compareNames = createComparisonFunction("name");
+
+//调用函数
+var result = compareNames({name:"Nicholas"},{name:"Greg"});
+
+//解除对匿名函数的引用(释放内存)
+compareNames = null;
+````
+闭包会比其他函数占用更多内存，建议谨慎使用。
+
+#### 闭包与变量
+作用域链的匹配机制导致闭包只能取得包含函数中任何变量的最后一个值:
+```
+function createFunctions(){
+    var result = new Array();
+
+    for(var i = 0; i < 10; i++){
+        result[i] = function(){
+            return i;
+        };
+    }
+    return result;
+}
+var a = createFunctions();
+alert(a[5]());//10
+```
+当createFunctions()函数返回后，变量i为10，此时每个函数都引用着保存变量i的同一个变量对象(通过引用传值)。可以通过创建另一个匿名函数强制让闭包的行为符合预期:
+```
+function createFunctions(){
+    var result = new Array();
+
+    for(var i = 0; i < 10; i++){
+        result[i] = function(num){
+            return function(){
+                return num;
+            };
+        }(i);
+    }
+    return result;
+}
+var a = createFunctions();
+alert(a[5]());//5
+```
+由于函数参数按值传递，所以会将变量i的当前值复制给 参数num。在该函数内部又创建和返回了一个访问num的闭包。result数组中的每个函数都有各自num变量的一个副本。
