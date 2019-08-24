@@ -1334,3 +1334,21 @@ var object = {
 alert(object.getNameFunc()());//"My Object"
 ```
 this和arguments存在同样问题。若要访问作用域中的arguments对象，必须将该对象的引用保存在另一个闭包能访问的变量中。
+<br/>
+几种特殊情况下，this的值会改变:
+```
+var name = "The Window";
+
+var object = {
+    name:"My Object",
+
+    getName:function(){
+        return this.name;
+    }
+};
+alert(object.getName());//"My Object"
+alert((object.getName)());//"My Object"
+alert((object.getName = object.getName)());//"The Window"(非严格模式下)
+```
+第三种调用方式先执行了一条赋值语句，然后在调用赋值后的结果。因为这个表达式的值是函数本身，所以this的值不能得到维持，返回"The Window"。
+
