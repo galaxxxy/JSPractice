@@ -1352,3 +1352,25 @@ alert((object.getName = object.getName)());//"The Window"(非严格模式下)
 ```
 第三种调用方式先执行了一条赋值语句，然后在调用赋值后的结果。因为这个表达式的值是函数本身，所以this的值不能得到维持，返回"The Window"。
 
+#### 内存泄漏
+闭包在IE9之前的版本中会导致一些特殊的问题。若闭包的作用域链中保存着一个HTML元素，那么该元素将无法被销毁。
+```
+function assignHandler(){
+    var element = document.getElementById("someElement");
+    element.onclick = function(){
+        alert(element.id);
+    };
+}
+```
+匿名函数保存了一个对assignHandler(d的活动对象的引用，因此会导致无法减少element的引用数。只要匿名函数存在，element的引用数至少为1，因此永远不会被回收。通过改写可以解决该问题:
+```
+function assignHandler(){
+    var element = document.getElementById("someElement");
+    var id = element.id;
+    element.onclick = function(){
+        alert(id);
+    };
+    element = null;
+}
+```
+上述代码把element.id的一个副本保存在一个变量中，并且在闭包中引用该变量消除了循环引用，但不能解决内存泄漏的问题。闭包会引用包含函数的整个活动对象，而其中包含element。即使闭包不直接引用element，包含函数的活动对象也仍然会保存一个引用。因此，把element变量设置为null才能解除对DOM对象的引用。
