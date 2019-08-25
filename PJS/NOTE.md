@@ -1479,3 +1479,54 @@ alert(person1.getName());//"Michael"
 alert(person2.getName());//"Michael"
 ```
 这种模式下，变量name成了一个静态、有所有实例共享的属性。以这种方式创建静态私有变量会因为使用原型而增进代码复用，但每个实例都没有自己的私有变量。
+### 模块模式
+前面的模式是为自定义类型创建私有变量和特权方法的。而模块模式(module pattern)是为单例创建私有变量和特权方法。单例(singleton)指的是只有一个实例的对象。
+JavaScript是以对象字面量的方式来创建单例对象的:
+```
+var singleton = {
+    name : value,
+    method : function(){
+        //这里是方法的代码
+    }
+};
+```
+模块模式通过为单例添加私有变量和特权方法能够使其得到增强:
+```
+var singleton = function(){
+    //私有变量和私有函数
+    var privateVariable = 10;
+    var privateFunction = function(){
+        return false;
+    };
+    //特权/公有方法和属性
+    return {
+        publicProperty : true,
+        publicMethod : function(){
+            privateVariable++;
+            return privateFunction();
+        }
+    };
+}();
+```
+模块模式使用了一个返回对象的匿名函数。从本质上看，这个对象字面量定义的是单例的公共接口。这种模式在需要对单例进行某些初始化同时又要维护其私有变量时非常有用:
+```
+var application = function(){
+    //私有变量和函数
+    var components = new Array();
+    //初始化
+    components.push(new BaseComponent());
+    //公共
+    return {
+        getComponentCount: function(){
+            return components.length;
+        },
+        registerComponent: function(component){
+            if(typeof component == "object"){
+                components.push(component);
+            }
+        }
+    };
+}();
+```
+如果必须创建一个对象并以某些数据对其进行初始化，同时还要公开一些能够访问这些私有数据的方法，那么可以使用模块模式。
+
