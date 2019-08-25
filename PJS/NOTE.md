@@ -1412,3 +1412,19 @@ alert(i);//导致错误:变量i未定义
     };
 }
 ```
+利用私有和特权成员，可以隐藏那些不应该被直接修改的数据:
+```
+function Person(name){
+    this.getName = function(){
+        return name;
+    };
+    this.setName = function(value){
+        name = value;
+    };
+}
+var person = new Person("Nicholas");
+alert(person.getName());
+person.setName("Greg");
+alert(person.getName());
+```
+在构造函数中定义特权方法也有一个缺点，那就是你必须使用构造函数模式来达到这个目的。构造函数模式的缺点是针对每个实例都会创建同样一组新方法。
