@@ -1530,3 +1530,20 @@ var application = function(){
 ```
 如果必须创建一个对象并以某些数据对其进行初始化，同时还要公开一些能够访问这些私有数据的方法，那么可以使用模块模式。
 
+### 增强的模块模式
+这种增强的模块模式适合那些单例必须是某种类型的实例，同时还必须添加某些属性和方法对其加以增强的情况:
+```
+var singleton = function(){
+    var privateVariable = 10;
+    var privateFunction = function(){
+        return false;
+    };
+    var object = new CustomType();
+    object.publicProperty = true;
+    object.publicMethod = function(){
+        privateVariable++;
+        return privateFunction();
+    };
+    return object;
+}();
+```
