@@ -1395,3 +1395,20 @@ outputNumbers(2);
 alert(i);//导致错误:变量i未定义
 ```
 这种技术经常在全局作用域中被用在函数外部，从而限制向全局作用域中添加过多变量和函数。这种做法可以减少闭包占用的内存问题，因为没有指向匿名函数的引用。只要函数执行完备，就可以立即销毁其作用域链。
+## 私有变量
+任何在函数中定义的变量都可以认为是私有变量，因为不能在函数外部访问这些变量。私有变量包括函数的参数、局部变量和函数内部定义的其他函数。有权访问私有变量和私有函数的公有方法叫做特权方法(privileged method)。
+### 在构造函数中定义特权方法
+```
+ function MyObject(){
+    //私有变量和私有函数
+    var privateVariable = 10;
+    function privateFunction(){
+        return false;
+    }
+    //特权方法
+    this.publicMethod = function(){
+        privateVariable++;
+        return privateFunction();
+    };
+}
+```
