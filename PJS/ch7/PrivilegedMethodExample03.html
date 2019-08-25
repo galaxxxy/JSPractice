@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        (function(){
+
+            //定义私有变量和私有函数
+            var privateVariable = 10;
+
+            function privateFunction(){
+                return false;
+            }
+
+            //构造函数
+            MyObject = function(){};
+
+            //公有/特权方法
+            MyObject.prototype.publicMethod = function(){
+                // alert(privateVariable);
+                privateVariable++;
+                // alert(privateVariable);
+                return privateFunction();
+            };
+
+        })();
+        // var obj = new MyObject();
+        // obj.publicMethod();
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

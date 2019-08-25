@@ -1428,3 +1428,54 @@ person.setName("Greg");
 alert(person.getName());
 ```
 在构造函数中定义特权方法也有一个缺点，那就是你必须使用构造函数模式来达到这个目的。构造函数模式的缺点是针对每个实例都会创建同样一组新方法。
+### 静态私有变量
+通过在私有作用域中定义私有变量或函数，同样可以创建特权方法:
+```
+(function(){
+
+    //定义私有变量和私有函数
+    var privateVariable = 10;
+
+    function privateFunction(){
+        return false;
+    }
+
+    //构造函数
+    MyObject = function(){};
+
+    //公有/特权方法
+    MyObject.prototype.publicMethod = function(){
+        privateVariable++;
+        return privateFunction();
+    };
+
+})();
+```
+此模式创建了一个私有作用域，并封装了一个构造函数及相应的方法。这个模式在定义构造函数时没有使用函数声明，而是使用了函数表达式。函数声明只能创建局部函数，而初始化未经声明的变量，会创建一个全局变量。这个模式和在构造函数中定义特权方法的主要区别在于私有变量和函数是由实例共享的。
+```
+(function(){
+
+    var name = "";
+    Person = function(value){
+        name = value;
+    };
+
+    Person.prototype.getName = function(){
+        return name;
+    };
+
+    Person.prototype.setName = function(value){
+        name = value;
+    };
+})();
+
+var person1 = new Person("Nicholas");
+alert(person1.getName());//"Nicholas"
+person1.setName("Greg");
+alert(person1.getName());//"Greg"
+
+var person2 = new Person("Michael");
+alert(person1.getName());//"Michael"
+alert(person2.getName());//"Michael"
+```
+这种模式下，变量name成了一个静态、有所有实例共享的属性。以这种方式创建静态私有变量会因为使用原型而增进代码复用，但每个实例都没有自己的私有变量。
