@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        function outputNumbers(count){
+            (function(){
+                for(var i = 0;i < count; i++){
+                    alert(i);
+                }
+            })();
+        }
+        outputNumbers(2);
+        alert(i);//导致错误:变量i未定义
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
