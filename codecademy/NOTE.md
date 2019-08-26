@@ -32,3 +32,8 @@ It will mutate an array by removing element from its front.
 It will mutate an array by adding elements to its front.
 ## Loops
 empty for now
+## Iterators
+### Higher-Order Functions
+Higher-order functions are functions that accept other functions as arguments and/or return functions as output.
+#### Functions as Parameters
+We call the functions that get passed in as parameters and invoked callback functions because they get called during the execution of the higher-order function.Anonymous functions can be arguments too.
