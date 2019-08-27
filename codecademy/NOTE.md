@@ -37,3 +37,5 @@ empty for now
 Higher-order functions are functions that accept other functions as arguments and/or return functions as output.
 #### Functions as Parameters
 We call the functions that get passed in as parameters and invoked callback functions because they get called during the execution of the higher-order function.Anonymous functions can be arguments too.
+### Iterators
+The built-in JavaScript array methods that help us iterate are called iteration methods, at times referred to as iterators.Iterators are methods called on arrays to manipulate elements and return values.
