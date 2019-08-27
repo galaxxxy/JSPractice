@@ -39,3 +39,13 @@ Higher-order functions are functions that accept other functions as arguments an
 We call the functions that get passed in as parameters and invoked callback functions because they get called during the execution of the higher-order function.Anonymous functions can be arguments too.
 ### Iterators
 The built-in JavaScript array methods that help us iterate are called iteration methods, at times referred to as iterators.Iterators are methods called on arrays to manipulate elements and return values.
+#### The .forEach() Method
+`forEach()` will execute the same code for each element of an array.
+- `forEach()` takes an argument of callback function.A callback function is a function passed as an argument into another function.
+- `forEach()` loops through the array and executes the callback function for each element.During each execution, the current element is passed as an argument to the callback function.
+- The return value for `forEach()` will always be `undefined`.
+
+Another way to pass a callback for `.forEach()` is to use arrow function syntax:
+```
+groceries.forEach(groceryItem => console.log(groceryItem));
+```
