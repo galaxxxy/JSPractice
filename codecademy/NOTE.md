@@ -79,3 +79,5 @@ We can include methods in our object literals by creating ordinary,comma-separat
 With the new method syntax introduced in ES6 we can omit the colon and the `function` keyword.
 ### Nested Objects
 Nested Object is an object has another object as property which in turn could have a property that is an array of even more objects.We can chain operators to access nested properties.
+### Pass By Reference
+When we pass a variable assigned to an object into a function as an argument,the computer interprets the parameter name as pointing to the space in memory holding that object.Therefore,functions which change object properties actually mutate the object permanently even when the object is assigned to a `const` variable.
