@@ -51,3 +51,5 @@ groceries.forEach(groceryItem => console.log(groceryItem));
 ```
 #### The .map() Method
 `.map()` works in similar manner to `.forEach()`.The major difference is that `.map()` returns a new array.
+#### The .filter() Method
+`.filter()` returns an array of elements after filtering out certain elements from the origin array.The callback function for the `.filter()` method should return `true` or `false` depending on the element that is passed to it.The elements that cause the callback function to return `true` are added to the new array.
