@@ -67,4 +67,10 @@ We fill an object with unordered data.This data is organized into key-value pair
 ### Accessing Properties
 We can access a key's value by using dot notation(`.`) or bracket notation(`[ ]`).<br/>
 We must use bracket notation when accessing keys that have numbers,spaces,or special characters in them.<br/>
-With bracket notation you can also use a variable inside the brackets to select the keys of an object.
+With bracket notation you can also use a variable inside the brackets to select the keys of an object.With bracket notation you can also use a variable inside the brackets to select the keys of an object.
+### Property Assignment
+One of two things can happen with property assignment:
+- If this property already exists on the object,whatever value it held before will be replaced with the newly assigned value.
+- If there was no property with that name,a new property will be added to the object.
+
+We can't reassign an object declared with `const`,but we can still add new properties and change the properties that are here.You can delete a property from an object with the `delete` operator.
