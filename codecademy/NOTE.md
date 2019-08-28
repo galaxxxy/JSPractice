@@ -61,3 +61,10 @@ The `.reduce()` method returns a sigle value after iterating through the element
 - As `.reduce()` iterates through the array, the return value of the callback function becomes the first parameter value for the next iteration, the second parameter takes on the value of the current element in the looping process.
 
 The `.reduce()` method can also take an optional second parameter to set an initial value for the first parameter of callback function.
+## Objects
+### Creating Object Literals
+We fill an object with unordered data.This data is organized into key-value pairs.A key's value can be of any data type in the language including functions or other objects.
+### Accessing Properties
+We can access a key's value by using dot notation(`.`) or bracket notation(`[ ]`).<br/>
+We must use bracket notation when accessing keys that have numbers,spaces,or special characters in them.<br/>
+With bracket notation you can also use a variable inside the brackets to select the keys of an object.
