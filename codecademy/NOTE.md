@@ -49,3 +49,5 @@ Another way to pass a callback for `.forEach()` is to use arrow function syntax:
 ```
 groceries.forEach(groceryItem => console.log(groceryItem));
 ```
+#### The .map() Method
+`.map()` works in similar manner to `.forEach()`.The major difference is that `.map()` returns a new array.
