@@ -77,3 +77,5 @@ We can't reassign an object declared with `const`,but we can still add new prope
 ### Methods
 We can include methods in our object literals by creating ordinary,comma-separated key-value pairs.The key serves as our method's name,while the value is an anonymous function expression.<br/>
 With the new method syntax introduced in ES6 we can omit the colon and the `function` keyword.
+### Nested Objects
+Nested Object is an object has another object as property which in turn could have a property that is an array of even more objects.We can chain operators to access nested properties.
