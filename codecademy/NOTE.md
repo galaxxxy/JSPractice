@@ -55,3 +55,9 @@ groceries.forEach(groceryItem => console.log(groceryItem));
 `.filter()` returns an array of elements after filtering out certain elements from the origin array.The callback function for the `.filter()` method should return `true` or `false` depending on the element that is passed to it.The elements that cause the callback function to return `true` are added to the new array.
 #### The .findIndex() Method
 Calling `.findIndex()` on an array will return the index of the first element that evaluates to `true` in the callback function.If there isn't a single element in the array that satisfies the condition in the callback, then `.findIndex()` will return `-1`.
+#### The .reduce() Method
+The `.reduce()` method returns a sigle value after iterating through the elements of an array, thereby reducing the array.
+- `.reduce()` takes in a callback function as argument.The callback function has two parameters, the value of first parameter starts off as the value of the first element in the array and the second parameter start as the second element.
+- As `.reduce()` iterates through the array, the return value of the callback function becomes the first parameter value for the next iteration, the second parameter takes on the value of the current element in the looping process.
+
+The `.reduce()` method can also take an optional second parameter to set an initial value for the first parameter of callback function.
