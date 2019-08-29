@@ -86,3 +86,12 @@ When we pass a variable assigned to an object into a function as an argument,the
 The `this` keyword references the calling object which provides access to the calling objects's properties.
 ### Arrow Functions and this
 Arrow functions inherently bind,or tie,an already defined `this` value to the function itself that is Not the calling object.`this` retains the value of the enclosing lexical context's `this`.
+### Privacy
+To place an underscore `_` before the name of a property to mean that the property is not intended to be directly manipulated.
+#### Getters
+- We use the `get` keyword followed by a function.
+- Getters can perform an action on the data when getting a property.
+- Getters can return different values using conditionals.
+- getter methods do not need to be called with a set of parentheses.
+#### Setters
+Along with getter methods, we can also create setter methods which reassign values of existing properties within an object. 
