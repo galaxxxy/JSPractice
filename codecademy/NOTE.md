@@ -84,3 +84,5 @@ When we pass a variable assigned to an object into a function as an argument,the
 ## Advanced Objects
 ### The this Keyword
 The `this` keyword references the calling object which provides access to the calling objects's properties.
+### Arrow Functions and this
+Arrow functions inherently bind,or tie,an already defined `this` value to the function itself that is Not the calling object.`this` retains the value of the enclosing lexical context's `this`.
