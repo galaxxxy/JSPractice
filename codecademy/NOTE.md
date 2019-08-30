@@ -95,3 +95,5 @@ To place an underscore `_` before the name of a property to mean that the proper
 - getter methods do not need to be called with a set of parentheses.
 #### Setters
 Along with getter methods, we can also create setter methods which reassign values of existing properties within an object. 
+### Factory Functions
+A factory function is a function that returns an object and can be reused to make multiple object instances. Factory functions can also have parameters allowing us to customize the object that gets returned.
