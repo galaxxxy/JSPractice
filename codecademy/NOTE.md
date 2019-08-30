@@ -97,3 +97,21 @@ To place an underscore `_` before the name of a property to mean that the proper
 Along with getter methods, we can also create setter methods which reassign values of existing properties within an object. 
 ### Factory Functions
 A factory function is a function that returns an object and can be reused to make multiple object instances. Factory functions can also have parameters allowing us to customize the object that gets returned.
+### Property Value Shorthand
+ES6 introduced some new shortcuts for assigning properties to variables known as destructuring.We can use a destructuring technique, called property value shorthand, to save ourselves some keystrokes.
+```
+const monsterFactory = (name, age) => {
+  return { 
+    name: name,
+    age: age
+  };
+};
+
+//property value shorthand
+const monsterFactory = (name, age) => {
+  return { 
+    name,
+    age 
+  };
+};
+```
