@@ -125,3 +125,10 @@ var a, b;
 var {a, b} = {a: 1, b: 2};
 ```
 The parentheses ( ... ) around the assignment statement are required when using object literal destructuring assignment without a declaration.
+### Built-in Object Methods
+#### Object.keys()
+The `Object.keys()` method returns an array of a given object's own enumerable property names, in the same order as we get with a normal loop.
+#### Object.entries()
+The Object.entries() method returns an array of a given object's own enumerable string-keyed property `[key, value]` pairs, in the same order as that provided by a `for...in` loop (the difference being that a for-in loop enumerates properties in the prototype chain as well). The order of the array returned by Object.entries() does not depend on how an object is defined. If there is a need for certain ordering then the array should be sorted first like `Object.entries(obj).sort((a, b) => b[0].localeCompare(a[0]));`.
+#### Object.assign()
+The `Object.assign()` method is used to copy the values of all enumerable own properties from one or more source objects to a target object. It will return the target object.
