@@ -115,3 +115,13 @@ const monsterFactory = (name, age) => {
   };
 };
 ```
+### Destructured Assignment
+The destructuring assignment syntax is a JavaScript expression that makes it possible to unpack values from arrays, or properties from objects, into distinct variables.In destructured assignment we create a variable with the name of an object’s key that is wrapped in curly braces `{ }` and assign to it the object. We can even use destructured assignment to grab nested properties of an object.
+```
+var a, b;
+
+({a, b} = {a: 1, b: 2});
+//or 
+var {a, b} = {a: 1, b: 2};
+```
+The parentheses ( ... ) around the assignment statement are required when using object literal destructuring assignment without a declaration.
