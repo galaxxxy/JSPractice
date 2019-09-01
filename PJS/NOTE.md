@@ -1595,3 +1595,8 @@ var newValue = oldValue;
 //不会抛出错误，因为这是一次属性查询
 var newValue = window.oldValue;
 ```
+##### 窗口关系及框架
+若页面包含框架，则每个框架都拥有自己的window对象并保存在frames集合中。在frames集合中，可以通过数值索引(从0开始，从左到右，从上到下)或框架名称来访问相应的window对象。每个window对象都有一个name属性，其中包含框架的名称。<br/>
+最好使用top而非window来引用这些框架(如top.frames[0])。top对象时钟指向最外层的框架，即浏览器窗口，使用它可以确保在一个框架中正确访问另一个框架。而window对象指向的是那个框架的特定实例而非最高层的框架。<br/>
+parent对象始终指向当前框架的直接上层框架。某些情况下，parent可能等于top，无框架的情况下，parent一定等于top(此时都为window)。除非最高层窗口是通过window.open()打开的，否则其window对象的name属性不会包含任何值。<br/>
+最后一个与框架有关的对象是self，始终指向window；实际上self和window对象可以互换使用。
