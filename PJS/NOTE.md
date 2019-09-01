@@ -1573,3 +1573,25 @@ var singleton = function(){
 BOM提供了很多对象，用于访问浏览器的功能。
 #### window对象
 BOM的核心对象是window，它表示浏览器的一个实例。在浏览器中，window对象既是通过JavaScript访问浏览器窗口的一个接口，又是ECMAScript规定的Global对象。
+##### 全局作用域
+所有在全局作用域中声明的变量、函数都会变成windows对象的属性和方法。定义全局变量与在window对象上直接定义属性有一点差别:全局对象不能通过delete操作符删除，而直接在window对象上定义的属性可以。
+```
+var age = 29;
+window.color = "red";
+
+//IE<9时抛出错误，其他浏览器中返回false
+delete age;
+//IE<9时抛出错误，其他浏览器中返回true
+delete window.color;
+
+alert(age);//29
+alert(window.color);//undefined
+```
+上例中使用var语句添加的window属性有一个名为[[Configurable]]的特性，这个特性的值被设置为false，因此这样定义的属性不可以通过delete删除。此外，尝试访问未声明的变量会抛出错误，但通过查询window对象，可以知道某个可能未声明的变量是否存在:
+```
+//抛出错误，因为oldValue未定义
+var newValue = oldValue;
+
+//不会抛出错误，因为这是一次属性查询
+var newValue = window.oldValue;
+```
