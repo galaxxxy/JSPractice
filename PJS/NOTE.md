@@ -1600,3 +1600,12 @@ var newValue = window.oldValue;
 最好使用top而非window来引用这些框架(如top.frames[0])。top对象时钟指向最外层的框架，即浏览器窗口，使用它可以确保在一个框架中正确访问另一个框架。而window对象指向的是那个框架的特定实例而非最高层的框架。<br/>
 parent对象始终指向当前框架的直接上层框架。某些情况下，parent可能等于top，无框架的情况下，parent一定等于top(此时都为window)。除非最高层窗口是通过window.open()打开的，否则其window对象的name属性不会包含任何值。<br/>
 最后一个与框架有关的对象是self，始终指向window；实际上self和window对象可以互换使用。
+##### 窗口位置
+IE、Safari、Opera和Chrome都提供了screenLeft和screenTop属性，分别用于表示窗口相对于屏幕左边和上边的位置。Firefox则在screenX和screenY属性中提供相同的窗口位置信息，Safari和Chrome也同时支持这两个属性。使用下列代码可以跨浏览器取得窗口左边和上边的位置:
+```
+var leftPos = (typeof window.screenLeft == "number") ? window.screenLeft:window.screenX;
+var topPos = (typeof window.screenTop == "number") ? window.screenTop:window.screenY;
+```
+IE、Opera中，screenLeft和screenTop中保存的是从屏幕左边和上边到由window对象表示的页面可见区域的距离。若window对象是最外层对象，且浏览器窗口紧贴屏幕最上端(y轴坐标为0)，则screenTop的值就是位于页面可见区域上方的浏览器工具栏的像素高度。而在Chrome、Firefox和Safari中，screenY或screenTop中保存的是整个浏览器窗口相对于屏幕的坐标值，即在窗口的y轴坐标为0时返回0。<br/>
+Firefox、Safari和Chrome始终返回页面中每个框架的top.screenX和top.screenY值。即使在页面被设置了外边距而发生偏移的情况下，相对于window对象使用screenX和screenY每次也都会返回相同的值。而IE和Opera则会给出框架相对于屏幕边界的精确坐标值。<br/>
+因此无法在跨浏览器的条件下取得窗口左边和上边的精确坐标值。然而使用moveTo()和moveBy()方法有可能将窗口精确移动到一个新位置。moveTo()接收新位置的x和y坐标值，moveBy()接收在水平和垂直方向上移动的像素数。但这两个方法可能会被浏览器禁用，且这两个方法不适用于框架，只能对最外层的window对象使用。
