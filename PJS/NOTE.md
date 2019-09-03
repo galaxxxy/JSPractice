@@ -1609,3 +1609,22 @@ var topPos = (typeof window.screenTop == "number") ? window.screenTop:window.scr
 IE、Opera中，screenLeft和screenTop中保存的是从屏幕左边和上边到由window对象表示的页面可见区域的距离。若window对象是最外层对象，且浏览器窗口紧贴屏幕最上端(y轴坐标为0)，则screenTop的值就是位于页面可见区域上方的浏览器工具栏的像素高度。而在Chrome、Firefox和Safari中，screenY或screenTop中保存的是整个浏览器窗口相对于屏幕的坐标值，即在窗口的y轴坐标为0时返回0。<br/>
 Firefox、Safari和Chrome始终返回页面中每个框架的top.screenX和top.screenY值。即使在页面被设置了外边距而发生偏移的情况下，相对于window对象使用screenX和screenY每次也都会返回相同的值。而IE和Opera则会给出框架相对于屏幕边界的精确坐标值。<br/>
 因此无法在跨浏览器的条件下取得窗口左边和上边的精确坐标值。然而使用moveTo()和moveBy()方法有可能将窗口精确移动到一个新位置。moveTo()接收新位置的x和y坐标值，moveBy()接收在水平和垂直方向上移动的像素数。但这两个方法可能会被浏览器禁用，且这两个方法不适用于框架，只能对最外层的window对象使用。
+##### 窗口大小
+IE9+、Firefox、Safari、Opera和Chrome均提供了四个属性:innerWidth、innerHeight、outerWidth和outerHeight。outerWidth和outerHeight返回浏览器窗口本身的尺寸(IE9+、Safari和Firefox)或Opera中单个标签页对应的浏览器窗口(页面视图容器)的大小(Opera)，而innerWidth和innerHeight则表示该容器页面视图区的大小(减去边框宽度)。Chrome中，outerWidth、outerHeight和innerWidth、innerHeight返回相同的值，即视口(viewport)大小而非浏览器窗口大小。<br/>
+IE、Firefox、Safari、Opera和Chrome中，document.documentElement.clientWidth和document.documentElement.clientHeight中保存了页面视口的信息。IE6中，这些属性必须在标准模式下才有效；若为混杂模式，则必须通过document.body.clientWidth和document.body.clientHeight取得相同信息。而对于混杂模式下的Chrome，两者都可以取得视口大小。<br/>
+虽然无法确定浏览器窗口本身的大小，但可以取得页面视口的大小:
+```
+var pageWidth = window.innerWidth,
+    pageHeight = window.innerHeight;
+if(typeof pageWidth != "number"){
+    if(document.compatMode == "CSS1Compat"){
+        pageWidth = document.documentElement.clientWidth;
+        pageHeight = document.documentElement.clientHeight;
+    }else{
+        pageWidth = document.body.clientWidth;
+        pageHeight = document.body.clientHeight;
+    }
+}
+```
+对于移动设备，参考P199页。<br/>
+此外可以使用resizeTo()和resizeBy()方法调整浏览器窗口的大小。resizeTo()接收浏览器窗口的新宽度和新高度，resizeBy()接收新窗口y原窗口的宽度和高度之差。这两个方法可能会被浏览器禁用且不适用于框架。
