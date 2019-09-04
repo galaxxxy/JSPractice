@@ -1663,3 +1663,68 @@ JavaScript是单线程语言，但允许通过设置超时值和间歇时间值�
 浏览器通过alert()、confirm()和prompt()方法可以调用系统对话框向用户显示信息。并且通过这几个方法打开的对话框都是同步和模态的，即显示对话框时代码会停止执行，关掉对话框后代码恢复执行。<br/>
 alert()方法用于显示一些用户无法控制的信息。confirm()方法可以让用户决定是否执行给定的操作，可以检查其返回值确定用户点击的按钮。prompt()接收要显示给用户的文本提示和文本输入域的默认值(可以为空字符串)。若点击了ok按钮，则返回文本输入域的值；若点击cancel按钮或通过其它方式关闭对话框则返回null。<br/>
 另外还有两个可以使用JavaScript打开的对话框，即“查找”和“打印”。通过window对象的find()和print()方法打开。
+#### location对象
+location提供了当前窗口中加载的文档有关的信息和一些导航功能。location对象即是window对象的属性，也是document对象的属性。下列为location对象的所有属性:
+
+|属性名|例子|说明|
+|:-:|:-:|:-:|
+|hash|"#contents"|返回URL中的hash(#号后跟0或多个字符)，若URL中不包含散列，则返回空字符串|
+|host|"www.wrox.com:80"|返回服务器名称和端口号(如果有)|
+|hostname|"www.wrox.com"|返回不带端口号的服务器名称|
+|href|"http://www.wrox.com"|返回当前加载页面的完整URL。location对象的toString()方法也返回这个值|
+|pathname|"/WileryCDA/"|返回URL中的目录和(或)文件名|
+|port|“8080”|返回URL中指定的端口号，若不包含端口号则返回空字符串|
+|protocol|"http:"|返回页面使用的协议|
+|search|"?q=javascript"|返回URL的查询字符串(以问号开头)|
+##### 查询字符串参数
+访问URL包含的查询字符串属性并不方便，尽管location.search返回从问号到URL末尾的所有内容，但却无法访问其中每个查询字符串参数。为此可以创建如下函数:
+```
+function getQueryStringArgs(){
+    //取得并去掉开头问号
+    var qs = (window.location.search ? location.search.substring(1):""),
+        args = {},
+        items = qs.length ? qs.split("&") : [],
+        item = null,
+        name = null,
+        value = null,
+        length = items.length;
+
+        for(let i = 0; i < length; i++){
+            item = items[i].split("=");
+            name = decodeURIComponent(item[0]);
+            value = decodeURIComponent(item[1]);
+            if(name.length){
+                args[name] = value;
+            }
+        }
+        return args;
+}
+```
+##### 位置操作
+可以使用assign()方法为其传递一个URL来打开新URL并在浏览器的历史记录中生成一条记录。
+```
+//完全等价
+location.assign("http://www.wrox.com");
+window.location("http://www.wrox.com");
+location.href("http://www.wrox.com");
+```
+在这些方法中，最常用的是设置location.href属性。另外，修改location对象的其他属性也可以改变当前加载的页面:
+```
+//设初始URL为http://wrox.com/WileyCDA/
+
+//URL修改为http://wrox.com/WileyCDA/#section1
+location.hash = "#section1";
+
+//URL修改为http://wrox.com/WileyCDA/?q=javascript
+location.search = "?q=javascript";
+
+//URL修改为http://yahoo.com/WileyCDA/
+location.hostname = "www.yahoo.com";
+
+//URL修改为http://wrox.com/mydir/
+location.pathname = "mydir";
+
+//URL修改为http://wrox.com:8080/WileyCDA/
+location.port = "8080";
+```
+每次修改location属性(除hash外)页面都会以新URL重载，且浏览器的历史记录中会生成一条新纪录，因此用户点击"后退"按钮都会导航到前一个界面。若要禁用这种行为，可以使用replace()方法，此方法接收一个参数，即要导航到的URL。还可以通过reload()来重新加载当前显示的页面。若调用时不传参，页面就会以最有效的方式重载。如果要强制从服务器重新加载，则需要传入参数true。位于reload()的代码不一定会执行，因此最好将此方法放在代码的最后一行。
