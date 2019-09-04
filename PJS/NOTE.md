@@ -1728,3 +1728,43 @@ location.pathname = "mydir";
 location.port = "8080";
 ```
 每次修改location属性(除hash外)页面都会以新URL重载，且浏览器的历史记录中会生成一条新纪录，因此用户点击"后退"按钮都会导航到前一个界面。若要禁用这种行为，可以使用replace()方法，此方法接收一个参数，即要导航到的URL。还可以通过reload()来重新加载当前显示的页面。若调用时不传参，页面就会以最有效的方式重载。如果要强制从服务器重新加载，则需要传入参数true。位于reload()的代码不一定会执行，因此最好将此方法放在代码的最后一行。
+#### navigator对象
+navigator对象是识别客户端浏览器的事实标准，通常用于监测显示网页的浏览器类型。
+##### 监检插件
+检测浏览器中是否安装了特定的插件是一种最常见的检测例程。对于非IE浏览器，可以使用plugins数组来达到这个目的。该数组的每一项都包含下列属性:
+- name: 插件的名字
+- description: 插件的描述
+- filename: 插件的文件名
+- length: 插件所处理的MIME类型数量
+
+一般来说，name属性中包含检测插件必需的所有信息。在检测插件时，需要循环迭代每个插件并将插件的name与给定名字进行比较。<br/>
+检测IE中的插件比较麻烦，因为IE不支持Netscape式的插件。在IE中检测插件的唯一方式就是使用专有的ActiveXObject类型，并尝试创建一个特定插件的实例。IE是以COM对象的方式实现插件的，而COM对象使用唯一标识符来标示。因此，要检查特定的插件，必须知道其COM标识符:
+```
+//检测IE中的插件
+function hasIEPlugin(name){
+    //创建未知COM对象会抛出错误
+    try{
+        new ActiveXObject(name);
+        return true;
+    }catch(ex){
+        return false;
+    }
+}
+//检测Flash
+alert(hasIEPlugin("ShockwaveFlash.ShockwaveFlash"));
+//检测QuickTime
+alert(hasIEPlugin("QuickTime.QuickTime"));
+```
+鉴于这两种插件检测方法差别太大，因此典型的做法是针对每个插件分别创建检测函数。
+##### 注册处理程序
+Firefox2为navigator对象新增registerContentHandler()和registerProtocolHandler()方法。这两个方法可以让一个站点指明它可以处理特定类型的信息。随着RSS阅读器和在线电子邮件程序的兴起，注册处理程序就为像使用桌面应用程序一样默认使用这些在线应用程序提供了一种方式。<br/>
+registerContentHandler()方法接收三个参数:要处理的MIME类型、可以处理该MIME类型的页面的URL以及应用程序的名称:
+```
+navigator.registerContentHandler("application/rss+xml","http://www.somereader.com?feed=%s","Some Reader");
+```
+第一个参数是RSS源的MIME类型。第二个参数是接收RSS源URL的URL，%s表示RSS源URL，由浏览器自动插入。registerProtocolHandler()方法也接收三个参数:要处理的协议(如mailto或ftp)、处理该协议的页面的URL和应用程序的名称。
+```
+navigator.registerProtocolHandler("mailto","http://www.somemailclient.com?cmd=%s","Some Mail Client");
+```
+上述代码将一个应用程序注册为默认的邮件客户端。
+#### screen对象

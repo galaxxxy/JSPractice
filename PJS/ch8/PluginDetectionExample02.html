@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        //检测IE中的插件
+        function hasIEPlugin(name){
+            try{
+                new ActiveXObject(name);
+                return true;
+            }catch(ex){
+                return false;
+            }
+        }
+        //检测Flash
+        alert(hasIEPlugin("ShockwaveFlash.ShockwaveFlash"));
+        //检测QuickTime
+        alert(hasIEPlugin("QuickTime.QuickTime"));
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
