@@ -1786,3 +1786,78 @@ if(object.propertyInQuestion){
 }
 ```
 (暂时跳过)
+
+---
+## Chapter 10 DOM1
+### 节点层次
+文档节点是每个文档的根节点。文档元素是文档的最外层元素，每个文档只能有一个文档元素。在HTML中，文档元素始终为<html>元素，XML中，任何元素都可能成为文档元素。<br/>
+每一段标记都可以通过树中的一个节点来标示:HTML元素通过元素节点表示，特性通过特性节点表示，文档类型通过文档类型节点表示，注释通过注释节点表示。共有12种节点类型，这些类型都继承自一个基类型。
+#### Node类型
+DOM1级定义了一个Node接口，该接口将由DOM中的所有节点类型实现。除IE外，其他浏览器都能访问此类型，且JavaScript中所有节点类型都继承自此类型。每个节点都有nodeType属性，表明节点类型:
+- Node.ELEMENT_NODE(1)
+- Node.ATTRIBUTE_NODE(2)
+- Node.TEXT_NODE(3)
+- Node.CDATA_SECTION_NODE(4)
+- Node.ENTITY_REFERENCE_NODE(5)
+- Node.ENTITY_NODE(6)
+- Node.PROCESSING_INSTRUCTION_NODE(7)
+- Node.COMMENT_NODE(8)
+- Node.DOCUMENT_NODE(9)
+- Node.DOCUMENT_TYPE_NODE(10)
+- Node.DOCUMENT_FRAGMENT_NODE(11)
+- Node.NOTATION_NODE(12)
+
+将nodeType属性与数字值进行比较可以确保跨浏览器兼容。<br/>
+要了解节点的具体信息可以使用nodeName和nodeValue两个属性，其属性值完全取决于节点类型，因此使用前最好先检测节点类型:
+```
+if(someNode.nodeType == 1){
+    value = someNode.nodeName;
+}
+```
+对于元素节点，nodeName保存的始终为元素的标签名，而nodeValue始终为null。<br/>
+每个节点都有一个childNodes属性，其中保存了一个NodeLisd对象。NodeList是一种类数组对象，用于保存一组有序的节点，可以通过位置来访问这些节点。NodeList对象是基于DOM结构动态执行查询的结果，因此DOM结构的变化能够自动反映在NodeList对象中。可以通过方括号或item()方法访问NodeList中的节点:
+```
+var firstChild = someNode.childNodes[0];
+var secondChild = someNode.childNodes.item(1);
+var count = someNode.childNodes.length;
+```
+可以通过Array.prototype.slice()方法将NodeList对象转换成数组:
+```
+//IE8及之前版本无效
+var arrayOfNodes = Array.prototype.slice.call(someNode.childNodes,0);
+```
+IE8及更早版本将NodeList实现为一个COM对象，要想将其转换成数组，必须手动枚举所有成员:
+```
+function covertToArray(nodes){
+    var array = null;
+    try{
+        //非IE
+        array = Array.prototype.slice.call(nodes,0);
+    }catch(ex){
+        array = new Array();
+        for(var i = 0; i < nodes.length; i++){
+            array.push(nodes[i]);
+        }
+    }
+    return array;
+}
+```
+每个节点都有parentNode属性，指向文档树中的父节点。包含在childNodes中的节点都具有相同父节点，且互为同胞节点。通过使用列表中每个节点的previousSibling和nextSibling属性，可以访问同列表中的其他节点。其中第一个节点的previousSibling和最后一节点的nextSibling属性值皆为null。父节点的firstChild和lastChild属性分别指向childNodes列表中的第一个和最后一个节点。所有节点都有的最后一个属性为ownerDocument，指向表示整个文档的文档节点。<br/>
+由于关系节点都是只读的，所以DOM提供了一些操作节点的方法。appendChild()用于向childNodes列表末尾添加并返回一个节点。若需要把节点放在列表中某个特定位置上，则使用insertBefore()方法。此方法接收两个参数:要插入的节点和作为参照的节点。若参照节点为null，则insertBefore()与appendChild()执行相同操作。<br/>
+replaceChild()接收两个参数:要插入的节点和要替换的节点。要替换的节点将由此方法返回并从文档树移除，同时插入的节点将替换其位置。若要移除而非替换节点，使用removeChild()方法。此方法接收一个参数，即移除的节点。被移除的节点将会成为方法的返回值。<br/>
+这四个方法都要取得父节点才能使用，且作用在子节点上，否则会导致错误。<br/>
+有两个方法是所有类型的节点都有的。第一个是cloneNode()，用于创建调用此方法的节点的副本，接收一个布尔值参数，表示是否执行深复制。参数为true时，执行深复制(复制节点及整个子节点树)；参数为false时，执行浅复制(只复制节点本身)。cloneNode()方法不会复制添加到DOM节点中的JavaScript属性，如事件处理程序等。IE中存在一个bug即会复制事件处理程序，因此建议复制前移除事件处理程序。<br/>
+normalize()方法用于处理文档树中的文本节点。由于解析器的实现或DOM操作等原因，可能出现文本节点不包含文本或接连出现两个文本节点的情况。当在某个节点调用此方法时，就会在该节点的后代节点中查找上述情况，若找到空节点，则删除它；若找到相邻节点，则将其合并为一个文本节点。
+#### Document类型
+JavaScript通过Document类型表示文档。在浏览器中，document对象是HTMLDocument的一个实例，表示整个HTML页面。而且，document对象是window对象的一个属性，因此可以作为全局对象来访问。Document节点具有以下特征:
+- nodeType的值为9
+- nodeName的值为"#document"
+- nodeValue的值为null
+- parentNode的值为null
+- ownerDocument的值为null
+- 其子节点可能为DocumentType(最多一个)、Element(最多一个)、ProcessingInstruction或Comment
+
+Document类型最常见的应用还是作为HTMLDocument实例的document对象。通过这个文档对象，不仅可以取得与页面有关的信息，而且还能操作页面的外观及其底层结构。<br/>
+1. 文档子节点
+documentElement属性始终指向HTML页面中的<html>元素。可以通过childNodes列表访问文档元素，但通过documentElement属性则能更快捷、更直接地访问该元素。
+(待补充)
