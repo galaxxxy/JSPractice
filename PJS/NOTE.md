@@ -1768,3 +1768,7 @@ navigator.registerProtocolHandler("mailto","http://www.somemailclient.com?cmd=%s
 ```
 上述代码将一个应用程序注册为默认的邮件客户端。
 #### screen对象
+screen对象基本上只用来表明客户端的能力，其中包括浏览器窗口外部的显示器的信息。这些信息经常集中出现在测定客户端能力的站点跟踪工具中，但通常不会用于影响功能。不过，有时也可能会用到其中信息来调整浏览器窗口大小，使其占据屏幕的可用空间:
+```
+window.resizeTo(screen.availWidth,screen.availHeight);
+```
