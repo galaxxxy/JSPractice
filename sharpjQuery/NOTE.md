@@ -564,3 +564,16 @@ $(this).addClass('selected');
 ## Note for chapter 6
 先跳过此章内容
 
+- - -
+## Note for chapter 7
+### 表单验证插件Validation
+### 表单插件Form
+### 模态窗口插件SimpleModal
+### 管理Cookie插件Cookie
+### jQuery UI插件
+jQuery UI主要分为三部分，交互、微件和效果库。
+- 交互:包括一些与鼠标交互相关的内容。需要引入核心库ui.core.js。
+- 微件:包括一些界面的扩展。部分微件基于交互组建制作，因此也需要引入ui.core.js。
+- 效果库:提供丰富的动画效果。效果库由自己的核心库effects.core.js。
+
+#### 拖动排序组件Sortable
