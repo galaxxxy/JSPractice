@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Data and Methods</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="example"></div>
+    <script>
+        var data = {a:1};
+        var vm = new Vue({
+            el:"#example",
+            data:data,
+        });
+
+        console.log(vm.$data === data);
+        console.log(vm.$el === document.getElementById("example"));
+
+        vm.$watch("a",function(newValue,oldValue){
+            console.log(oldValue+"..."+newValue);
+        })
+
+        data.a = 5;
+    </script>
+</body>
+</html>

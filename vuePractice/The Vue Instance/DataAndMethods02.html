@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Data and Methods</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{foo}}</p>
+        <!-- This will no longer update `foo` -->
+        <button v-on:click="foo='bza'">change it</button>
+    </div>
+    <script>
+        var obj = {
+            foo:'bar',
+        };
+
+        Object.freeze(obj);
+
+        new Vue({
+            el:"#app",
+            data:obj
+        });
+    </script>
+</body>
+</html>

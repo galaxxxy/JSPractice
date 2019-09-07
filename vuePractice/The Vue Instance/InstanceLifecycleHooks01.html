@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Instance Lifecycle Hooks</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <script>
+        new Vue({
+            data:{
+                a:1,
+            },
+            // Do not use arrow function because it doesn't have a `this`
+            created() {
+                //`this` points to the vm instance
+                console.log("a is: "+this.a);
+            },
+        });
+    </script>
+</body>
+</html>
