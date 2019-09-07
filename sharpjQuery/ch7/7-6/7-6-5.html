@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../../scripts/jquery.js"></script>
+    <script>
+        ; (function ($) {
+            $.extend(jQuery.expr[":"],{
+                between: function (a, i, m) {
+                    var temp = m[3].split(",");
+                    return temp[0] - 0 < i && i < temp[1] - 0;//-0可以把字符变为数字
+                }
+            });
+        })(jQuery);
+
+        $(function(){
+
+			$("div:between(2,5)").css("background","white");
+		})
+    </script>
+</head>
+
+<body>
+<div style="background:red">red0</div>
+<div style="background:green">green1</div>
+<div style="background:blue">blue2</div>
+<div style="background:gray">gray3</div>
+<div style="background:orange">orange4</div>
+<div style="background:orange">orange5</div>
+</body>
+
+</html>
