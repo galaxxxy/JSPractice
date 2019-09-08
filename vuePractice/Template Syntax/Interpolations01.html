@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Interpolations</title>
+    <script src="../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <span>Message:{{ msg }}</span>
+        <br/>
+        <!-- perform once-time interpolations by using `v-once` directive -->
+        <span v-once>This will never change: {{ msg }}</span>
+    </div>
+        
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{
+                msg:"nmsl",
+            }
+        });
+        setInterval(()=>{
+            app.msg = "nmsl,too";
+        },1000);
+    </script>
+</body>
+
+</html>

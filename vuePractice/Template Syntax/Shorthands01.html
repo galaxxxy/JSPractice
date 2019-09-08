@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Shorthands</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- full syntax -->
+        <a href="#" v-bind:href="url">...</a>
+        <!-- shorthand -->
+        <a href="#" :href="url">...</a>
+        <!-- shorthand with dynamic argument(2.6.0+) -->
+        <a :[key]="url">...</a>
+    </div>
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{
+                key: "href",
+                url: "http://www.baidu.com",
+            }
+        });
+    </script>
+</body>
+</html>

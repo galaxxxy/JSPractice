@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Interpolations</title>
+    <script src="../vue.js"></script>
+    <style>
+        #red {
+            background-color: red;
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- using v-bind to bind properties dynamicly -->
+        <div v-bind:id="dynamicId"></div>
+
+        <button v-bind:disabled="isButtonDisable">Button</button>
+        <button v-on:click="enableButton">Enable Button</button>
+    </div>
+        
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{
+                dynamicId: "red",
+                isButtonDisable: true,
+            },
+            methods: {
+                enableButton(){
+                    this.isButtonDisable = false;
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>

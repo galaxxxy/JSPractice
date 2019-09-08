@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Interpolations</title>
+    <script src="../vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- each binding can only contain one single expression -->
+        <p>{{isPrint?msg:"no"}}</p>
+        <p>{{msg.split("").reverse().join("")}}</p>
+        <p>{{msg+",too"}}</p>
+        <div v-bind:id="'list-'+msg">kkid</div>
+    </div>
+        
+    <script>
+        var app = new Vue({
+            el:"#app",
+            data:{
+                msg:"nms",
+                isPrint:true,
+            }
+        });
+    </script>
+</body>
+
+</html>
