@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Binding Inline Styles</title> 
+    <script src="../vue.js"></script>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div id="demo">
+        <div v-bind:style="{color: activeColor, fontSize: fontSize+'px'}">Hi</div>
+    </div>
+    <script>
+        let vm = new Vue({
+            el: "#demo",
+            data: {
+                activeColor: 'red',
+                fontSize: 30,
+            }
+        });
+    </script>
+</body>
+</html>
