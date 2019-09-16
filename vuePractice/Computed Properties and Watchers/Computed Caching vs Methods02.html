@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Computed Caching vs Methods</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>message: "{{message}}"</p>
+        <p>computed: "{{now}}"</p>
+        <p>method: "{{time()}}"</p>
+    </div>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                message: "Hello",
+            },
+            computed: {
+                now: function(){
+                    return Date.now();
+                }
+            },
+            methods: {
+                time:function(){
+                    return Date.now();
+                }
+            },
+        });
+        // a method invocation will always run the function whenever a re-render happens.
+        setTimeout(()=>{app.message = "app"},1000);
+    </script>
+</body>
+</html>
