@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Maintaining State</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <ul id="demo">
+        //To give Vue a hint so that it can track each node’s identity, and thus reuse and reorder existing elements.
+        <li v-for="(item,index) in items" v-bind:key="index">{{index}}.{{item.message}}</li>
+    </ul>
+    <script>
+        let vm = new Vue({
+            el: '#demo',
+            data: {
+                items: [
+                    {message:"Boo"},
+                    {message:"Arial"},
+                    {message:"Coo"}
+                ]
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Object Change Detection Caveats</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <ul id="demo">
+        <li v-for="(value,key) in userProfile">{{key}}: {{value}}</li>
+    </ul>
+    <script>
+        let vm = new Vue({
+            el: '#demo',
+            data: {
+                userProfile: {
+                    name: 'Anika',
+                },
+            },
+        });
+        vm.$set(vm.userProfile, 'age', 27);
+        Object.assign(vm.userProfile, {
+            age: 2,
+            favoriteColor: 'Vue Green',
+        });
+
+        // You would add new,reactive properties with:
+        // vm.userProfile = Object.assign({}, vm.userProfile, {
+        //     age: 2,
+        //     favoriteColor: 'Vue Green',
+        // });
+        
+    </script>
+</body>
+</html>

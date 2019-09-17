@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Array Change Detection</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <ul id="demo">
+        <li v-for="item in items">{{item.message}}</li>
+    </ul>
+    <script>
+    let vm = new Vue({
+        el: '#demo',
+        data: {
+            items: [
+                {message: "hello"},
+                {message: "hi"},
+                {message: "fine"}
+            ]
+        }
+    });
+    // non-mutating methods like filter(), concat() and slice(),which do not mutate the original
+    // array but always return a new array.When working with non-mutating methods, you can replace
+    // the old array with the new one.
+    vm.items = vm.items.concat([{message: "hi"},{message: "fine"}]);
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Array Change Detection</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <ul id="demo">
+        <li v-for="item in items">{{item}}</li>
+    </ul>
+    <script>
+        let vm = new Vue({
+            el: '#demo',
+            data: {
+                items: ['a','b','c'],
+            }
+        });
+
+        // Vue cannot detect the following changes to an array
+
+        // vm.items[1] = 'x';
+        // directly set an item with the index
+        // Using following two methods to overcome caveat 1
+        // Vue.set(vm.items, indexOfItem, newValue)
+        // Vue.set(vm.items, 1, 'x');
+        // Array.prototype.splice
+        // vm.items.splice(indexOfItem, 1, newValue);
+        // vm.items.splice(1, 2, 'x','s');
+        // vm.$set(vm.items, indexOfItem, newValue)
+        vm.$set(vm.items, 1, 'z');
+
+        // vm.items.length = 2;
+        // modify the length of the array
+        // To deal with caveat 2, you can splice:
+        // vm.items.splice(newLength);
+        vm.items.splice(2);
+        
+    </script>
+</body>
+</html>

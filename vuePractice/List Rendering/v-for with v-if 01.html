@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>v-for with v-if</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <!-- Using `v-if` and `v-for` together is NOT recommended. -->
+    <ul id="demo">
+        <li v-for="todo in todos" v-if="!todo.isComplete">{{todo}}</li>
+    </ul>
+    <script>
+        let vm = new Vue({
+            el: '#demo',
+            data: {
+                todos: [
+                    {value: 'a',isComplete: true},
+                    {value: 'b',isComplete: true},
+                    {value: 'c',isComplete: false},
+                    {value: 'd',isComplete: true}
+                ],
+            }
+        });
+    </script>
+</body>
+</html>
