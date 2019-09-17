@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Controlling Reusable Elements with key</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <template v-if="loginType === 'username'">
+            <label>Username</label>
+            <input type="text" placeholder="Enter your username" key="username-input">
+        </template>
+        <template v-else>
+            <label>Email</label>
+            <input placeholder="Enter your email address" key="email-input">
+        </template>
+        <input type="button" value="change" v-on:click="change">
+    </div>
+    <script>
+        let vm = new Vue({
+            el: '#demo',
+            data: {
+                loginType: 'username',
+            },
+            methods: {
+                change: function(){
+                    this.loginType = 'email';
+                },
+            },
+        });
+    </script>
+</body>
+</html>

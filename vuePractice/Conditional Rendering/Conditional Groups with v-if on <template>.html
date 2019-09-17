@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Conditional Groups with v-if on template</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <template v-if="ok">
+            <h1>Title</h1>
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+        </template>
+    </div>
+    <script>
+        let vm = new Vue({
+            el: '#demo',
+            data: {
+                ok: true,
+            }
+        });
+    </script>
+</body>
+</html>
