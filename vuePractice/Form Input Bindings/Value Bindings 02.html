@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Value Bindings</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <input type="checkbox" v-model="toggle" true-value="yes" false-value="no">
+        <p>toggle:{{toggle}}</p>
+    </div>
+    <script>
+        new Vue({
+            el: "#demo",
+            data: {
+                toggle: null,
+            }
+        })
+    </script>
+</body>
+</html>

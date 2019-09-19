@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Value Bindings</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <input type="radio" v-model="pick" :value="a">
+        <p>pick:{{pick}}</p>
+    </div>
+    <script>
+        let vm = new Vue({
+            el: "#demo",
+            data: {
+                pick: '',
+                a: "asd",
+            }
+        });
+    </script>
+</body>
+</html>

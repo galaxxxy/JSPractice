@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Value Bindings</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <select v-model="selected">
+            <!-- inline object literal -->
+            <option :value="{number:123}">123</option>
+        </select>
+        <br>
+        <p>selected:{{selected}}</p>
+    </div>
+    <script>
+        let vm = new Vue({
+            el: "#demo",
+            data: {
+                selected: '',
+            }
+        });
+    </script>
+</body>
+</html>

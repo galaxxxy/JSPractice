@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Basic Usage</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <input type="checkbox" value="Jack" id="jack" v-model="checkedNames">
+        <label for="jack">Jack</label>
+        <input type="checkbox" value="John" id="john" v-model="checkedNames">
+        <label for="john">John</label>
+        <input type="checkbox" value="Mike" id="mike" v-model="checkedNames">
+        <label for="mike">Mike</label>
+        <br>
+        <span>Checked names: {{checkedNames}}</span>
+    </div>
+    <script>
+        new Vue({
+           el: '#demo',
+           data: {
+                checkedNames:[],
+           } 
+        });
+    </script>
+</body>
+</html>
