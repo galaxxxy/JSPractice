@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Emitting a Value With an Event</title>
+    <script src="../vue.js"></script>
+</head>
+
+<body>
+    <div id="blog-posts-events-demo">
+        <div :style="{fontSize: postFontSize + 'em'}">
+            <blog-post v-for="post in posts" :key="post.id" :post="post" @enlarge-text="onEnlargeText">
+            </blog-post>
+            <!-- Event handler is a method -->
+        </div>
+    </div>
+    <script>
+        Vue.component('blog-post', {
+            props: ['post'],
+            template: `<div class="blog-post">
+                    <h3>{{ post.title }}</h3>
+                    <button @click="$emit('enlarge-text',0.5)">Enlarge text</button>
+                    <div v-html="post.content"></div>
+                    </div>`,
+        });
+
+        new Vue({
+            el: '#blog-posts-events-demo',
+            data: {
+                posts: [
+                    { id: 1, title: "hi", content: "<p>dfgfdgfd</p>", publishedAt: "asdsd", comments: "good" },
+                    { id: 2, title: "hDi", content: "<p>dfDgfFDGd</p>", publishedAt: "DFGdsd", comments: "FDGd" }
+                ],
+                postFontSize: 1,
+            },
+            methods: {
+                onEnlargeText(enlargeAmount) {
+                    this.postFontSize += enlargeAmount;
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Listening to Child Components Events</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="blog-posts-events-demo">
+        <div :style="{fontSize: postFontSize + 'em'}">
+            <blog-post
+                v-for="post in posts"
+                :key="post.id"
+                :post="post"
+                @enlarge-text="postFontSize += 0.1"
+            ></blog-post>
+            <!-- The parent can choose to listen to any event on the child component instance with `v-on` -->
+        </div>
+    </div>
+    <script>
+        Vue.component('blog-post', {
+            props: ['post'],
+            template:`<div class="blog-post">
+                    <h3>{{ post.title }}</h3>
+                    <button @click="$emit('enlarge-text')">Enlarge text</button>
+                    <div v-html="post.content"></div>
+                    </div>`,
+        });
+        // The child component can emit an event on itself by calling the built-in `$emit` method
+        new Vue({
+            el: '#blog-posts-events-demo',
+            data: {
+                posts: [
+                    {id:1,title:"hi",content:"<p>dfgfdgfd</p>",publishedAt: "asdsd",comments:"good"},
+                    {id:2,title:"hDi",content:"<p>dfDgfFDGd</p>",publishedAt: "DFGdsd",comments:"FDGd"}
+                ],
+                postFontSize: 1,
+            }
+        });
+
+    </script>
+</body>
+</html>

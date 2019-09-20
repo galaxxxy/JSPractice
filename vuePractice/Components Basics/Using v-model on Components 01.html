@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Using v-model on Components</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <custom-input v-model="searchText"></custom-input>
+    </div>
+    <script>
+        Vue.component('custom-input', {
+            props:['value'],
+            template: `<input :value="value" @input="$emit('input',$event.target.value)">`,
+        });
+        // `v-model`: bind the `value` attribute to a `value` prop
+        //            On `input`,emit its own custom `input` event with the new value
+        let vm = new Vue({
+            el:'#demo',
+            data: {
+                searchText: "test",
+            }
+        });
+        </script>
+</body>
+</html>

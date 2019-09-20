@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DOM Template Parsing Caveats</title>
+    <script src="../vue.js"></script>
+</head>
+<body>
+    <!-- Some HTML elements have restrictions on what elements can appear inside them -->
+    <!-- Some elements can only appear inside certain other elements -->
+    <!-- cannot render correctly
+    <table id="demo">
+        <blog-post-row></blog-post-row>
+    </table> -->
+
+    <!-- render correctly -->
+    <table id="demo">
+        <tr is="blog-post-row"></tr>
+    </table>
+    <script>
+        Vue.component('blog-post-row', {
+            template: '<p>hello world</p>'
+        })
+        new Vue({
+           el: '#demo', 
+        });
+    </script>
+</body>
+</html>
