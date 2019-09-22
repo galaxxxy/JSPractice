@@ -23,6 +23,9 @@ class Stack{
         return temp;
     }
     peek(){
+        if(this.isEmpty()){
+            return undefined;
+        }
         return this[_items][this[_count] - 1];
     }
     isEmpty(){

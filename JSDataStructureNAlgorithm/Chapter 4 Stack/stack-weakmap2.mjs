@@ -26,6 +26,9 @@ class Stack{
         return items[count - 1];
     }
     peek(){
+        if(this.isEmpty()){
+            return undefined;
+        }
         const items = _items.get(this);
         let count = _count.get(this);
         return items[count - 1];
