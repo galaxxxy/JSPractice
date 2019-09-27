@@ -12,41 +12,51 @@ class LinkedList{
         const node = new Node(element);
         let current = this.head;
         if(current === null){
-            //头为空
+            // empty
             this.head = node;
         }else{
-            //找到最后一项
+            // find the last element
             while(current.next !== null){
                 current = current.next;
             }
             current.next = node;
-            this.count++;
         }
+        this.count++;
     }
     insert(element, index){
         if(index < 0 || index >this.count){
             return false;
         }
         const node = new Node(element);
-        if(this.head === null && index === 0){
+        let current = this.head;
+        if(index === 0){
+            // insert before the head node
+            if(this.count !== 0){
+                // not empty
+                node.next = this.head;
+            }
             this.head = node;
+        }else if(index === this.count){
+            // insert behind the last element
+            while(current.next !== null){
+                current = current.next;
+            }
+            current.next = node;
         }else{
-            let current = this.getElementAt(index - 1),
-            next = current.next;
-            node.next = next;
+            current = this.getElementAt(index - 1);
+            node.next = current.next;
             current.next = node;
         }
         this.count++;
         return true;
     }
     getElementAt(index){
-        if(index >= 0 && index <= this.count && !this.isEmpty()){
+        if(index >= 0 && index < this.count && !this.isEmpty()){
             let current = this.head;
-            if(index === 0){
-                return current;
-            }
-            for(let i = 0; i < index; i++){
-                current = current.next;
+            if(index !== 0){
+                for(let i = 0; i < index; i++){
+                    current = current.next;
+                }
             }
             return current;
         }
@@ -69,12 +79,11 @@ class LinkedList{
             if(this.equalsFn(element, current.element)){
                 return count;
             }
-            console.log(count);
         }
         return -1;
     }
     removeAt(index){
-        if(index >= 0 && index <= this.count && this.head !== null){
+        if(index >= 0 && index < this.count && this.head !== null){
             let target = this.getElementAt(index);
             if(index === 0){
                 this.head = target.next;
@@ -92,7 +101,7 @@ class LinkedList{
         return this.head === null;
     }
     size(){
-        return this.count + 1;
+        return this.count;
     }
     getHead(){
         return this.head;
