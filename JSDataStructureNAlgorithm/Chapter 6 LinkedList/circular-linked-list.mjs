@@ -20,25 +20,16 @@ class CircularLinkedList extends LinkedList{
                 node.next = this.head;
             }else{
                 node.next = this.head;
-                // find the last element
-                for(let i = 0; i < this.count - 1; i++){
-                    current = current.next;
-                }
+                current = this.getElementAt(this.size() - 1);
                 this.head = node;
                 current.next = this.head;
             }
         }else if(index === this.count){
-            // find the last element
-            for(let i = 0; i < this.count - 1; i++){
-                current = current.next;
-            }
+            current = this.getElementAt(this.size() - 1);
             current.next = node;
             node.next = this.head;
         }else{
-            //find the previous element of the element whose index equals to index
-            for(let i = 0; i < index - 2; i++){
-                current = current.next;
-            }
+            current = this.getElementAt(index - 1);
             node.next = current.next;
             current.next = node;
         }
@@ -50,33 +41,26 @@ class CircularLinkedList extends LinkedList{
         if(index < 0 || index >= this.count || this.head === null){
             return undefined;
         }
-        let current = this.head;
+        let current = this.head,
+            temp = current.element;
         if(index === 0){
             // remove the head node
-            const temp = this.head.element;
             if(this.count === 1){
                 this.head = null;
             }else{
                 this.head = this.head.next;
-                // find the last element
-                for(let i = 0; i < this.count - 1; i++){
-                    current = current.next;
-                }
+                current = this.getElementAt(this.size() - 1);
                 current.next = this.head;
             }
-            this.count--;
-            return temp;
         }else{
             let previous = this.head;
-            // find the privious element of the target element
-            for(let i = 0; i < index - 1; i++){
-                previous = previous.next;
-            }
+            previous = this.getElementAt(index - 1);
             current = previous.next;
             previous.next = current.next;
-            this.count--;
-            return current.element;
+            temp = current.element;
         }
+        this.count--;
+        return temp;
     }
 }
 
