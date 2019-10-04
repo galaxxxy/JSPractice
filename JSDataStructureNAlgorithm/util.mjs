@@ -14,3 +14,14 @@ export function defaultToString(item){
     }
     return item.toString();
 }
+
+// 比较两个数大小
+export function defaultCompare(a, b){
+    if(a > b){
+        return 1;
+    }else if( a < b){
+        return -1;
+    }else{
+        return 0;
+    }
+}
