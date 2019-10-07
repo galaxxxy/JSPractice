@@ -1,5 +1,4 @@
 import { Graph } from "./Graph.mjs";
-import { breadthFirstSearch } from "./breadthFirstSearch.mjs";
 
 // test example
 const graph = new Graph();
@@ -21,7 +20,3 @@ graph.addEdge('B', 'F');
 graph.addEdge('E', 'I');
 
 console.log(graph.toString());
-
-console.log("********breadth-first search********");
-const printVertex = value => console.log('Visited vertex: ' + value);
-breadthFirstSearch(graph, myVertices[0], printVertex);
