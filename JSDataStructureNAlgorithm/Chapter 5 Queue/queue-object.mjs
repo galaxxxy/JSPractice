@@ -1,4 +1,4 @@
-class Queue{
+export class Queue{
     constructor(){
         this._count = 0;
         this._lowestCount = 0;
@@ -47,5 +47,3 @@ class Queue{
         return str;
     }
 }
-
-export default Queue;
