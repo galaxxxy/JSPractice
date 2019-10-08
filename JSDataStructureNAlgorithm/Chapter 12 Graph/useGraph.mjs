@@ -1,5 +1,6 @@
 import { Graph } from "./Graph.mjs";
 import { breadthFirstSearch } from "./breadthFirstSearch.mjs";
+import { depthFirstSearch } from "./depthFirstSearch.mjs";
 
 // test example
 const graph = new Graph();
@@ -25,3 +26,6 @@ console.log(graph.toString());
 console.log("********breadth-first search********");
 const printVertex = value => console.log('Visited vertex: ' + value);
 breadthFirstSearch(graph, myVertices[0], printVertex); 
+
+console.log("********depth-first search********");
+depthFirstSearch(graph, printVertex);
