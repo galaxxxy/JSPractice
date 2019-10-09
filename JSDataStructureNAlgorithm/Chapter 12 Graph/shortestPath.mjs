@@ -1,7 +1,7 @@
-// based on breadth-first search
 import { BFS } from './breadthFirstSearch.mjs';
 import { Graph } from './Graph.mjs';
 import Stack from '../Chapter 4 Stack/stack-array.mjs';
+import { DFS } from './depthFirstSearch.mjs';
 
 const graph = new Graph();
 const myVertices = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
@@ -20,12 +20,18 @@ graph.addEdge('B', 'E');
 graph.addEdge('B', 'F');
 graph.addEdge('E', 'I');
 
+console.log("*****breadth-first search*****");
 const shortestPathA = BFS(graph, myVertices[0]);
 console.log(shortestPathA);
 
-console.log("*****shortest path*****")
-const fromVertex = myVertices[0];
+console.log("*****depth-first search*****");
 
+const shortestPathB = DFS(graph, myVertices[0]);
+console.log(shortestPathB);
+
+console.log("*****shortest path*****");
+
+const fromVertex = myVertices[0];
 for(let i = 1; i < myVertices.length; i++){
     const toVertex = myVertices[i];
     const path = new Stack();
