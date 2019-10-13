@@ -1,5 +1,5 @@
 import { defaultCompare } from "../util.mjs";
-function insertionSort(array, compareFn = defaultCompare){
+export function insertionSort(array, compareFn = defaultCompare){
     const {length} = array;
     for(let i = 0; i < length; i++){
         let j = i;
