@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../vue.js"></script>
+    <style lang="css">
+    </style>
+</head>
+<body>
+    <div id="demo">
+        <button @click="show = !show">Toggle render</button>
+        <fade :show='show'>
+            <div>hello world</div>
+        </fade>
+        <fade :show='show'>
+            <h1>hello world</h1>
+        </fade>
+    </div>
+
+    <script>
+        Vue.component('fade', {
+            props: {
+                show: Boolean
+            },
+            template: `
+            <transition @beforeEnter="handleBeforeEnter"
+                        @enter="handleEnter"
+            >
+                <slot v-if='show'></slot>
+            </transition>
+            `,
+            methods: {
+                handleBeforeEnter(el){
+                    el.style.color = "red";
+                },
+                handleEnter(el, done){
+                    setTimeout(() => {
+                    el.style.color = "green";
+                    done();
+                    }, 2000);
+                },
+            },
+        });
+        new Vue({
+            el: "#demo",
+            data: {
+                show: true,
+            },
+        });
+    </script>
+</body>
+</html>

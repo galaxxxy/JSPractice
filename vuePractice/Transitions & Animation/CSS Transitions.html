@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../vue.js"></script>
+    <style lang="css">
+        .fade-enter-active {
+            transition: all .3s ease;
+        }
+        .fade-leave-active {
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .fade-enter, .fade-leave-to {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="demo">
+        <button @click="show = !show">Toggle render</button>
+        <transition name="fade">
+            <p v-if="show">Hello</p>
+        </transition>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#demo",
+            data: {
+                show: true,
+            }
+        });
+    </script>
+</body>
+</html>

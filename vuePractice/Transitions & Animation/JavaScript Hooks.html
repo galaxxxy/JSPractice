@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../vue.js"></script>
+    <script src="../velocity.min.js"></script>
+</head>
+<body>
+    <div id="demo">
+        <button @click="show = !show">Toggle</button>
+        <transition @before-enter="handleBeforeEnter"
+        @enter="handleEnter"
+        @after-enter="handleAfterEnter"
+        >
+            <p v-if="show">Hello World</p>
+        </transition>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#demo",
+            data: {
+                show: true,
+            },
+            methods: {
+                handleBeforeEnter(el){
+                    el.style.opacity = 0;
+                },
+                handleEnter(el, done){
+                    Velocity(el, {opacity: 1}, {durition: 1000, complete: done});
+                },
+                handleAfterEnter(el){
+                    console.log('animation finished');
+                }
+            },
+        });
+    </script>
+</body>
+</html>
