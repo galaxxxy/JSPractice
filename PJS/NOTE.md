@@ -1171,6 +1171,284 @@ alert(typeof descriptor.get);//"function"
 ```
 对于数据属性_year，value等于最初的值，configurable为false，get等于undefined。对于访问器属性year，value等于undefined，enumerablw为false，get是一个指向getter函数的指针。<br/>
 在JavaScript中，可以针对任何对象--DOM和BOM对象，使用`Object.getOwnPropertyDescriptor()`方法。
+### 创建对象
+#### 工厂模式
+```javascript
+function createPerson (name, age, job) {
+    const o = new Object();
+    o.name = name;
+    o.age = age;
+    o.job = job;
+    o.sayName = function () {
+        console.log(this.name);
+    };
+    return o;
+}
+```
+解决了创建多个相似对象的问题,但没有解决对象识别的问题
+#### 构造函数模式
+```javascript
+function Person (name, age, job) {
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    this.sayName = function () {
+        console.log(this.name);
+    };
+}
+```
+与工厂模式的区别:
+ - 没有显式创建对象
+ - 直接将属性和方法赋给this对象
+ - 没有return语句
+
+使用new操作符调用构造函数会经历以下四个步骤:
+ - 创建一个新对象
+ - 将构造函数的作用域赋给新对象(this指向新对象)
+ - 执行构造函数中的代码
+ - 返回新对象
+
+与工厂模式相比,解决了对象识别的问题;但无法在定义公共属性或方法时保持良好的封装性
+#### 原型模式
+```javascript
+function Person () {
+}
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function () {
+    console.log(this.name);
+};
+```
+与构造函数模式相比,原型模式生成的对象的属性和方法是所有实例共享的
+##### 理解原型对象
+构造函数的prototype属性指向该函数的原型对象(Person.prototype -> Person Prototype);原型对象的constructor属性包含一个指向构造函数的指针(Person.prototype.constructor = Person);调用构造函数创建新实例后，实例内内部属性会包含一个指针([\[Prototype]]),指向构造函数的原型对象。也就是说实例与构造函数的原型对象而不是构造函数之间存在链接。<br/>
+虽然在脚本中没有访问[\[Prototype]]的标准方式，但是可以通过`isPrototypeOf()`方法来确定对象之间是否存在这种关系:
+```javascript
+Person.prototype.isPrototypeOf(person1);// true
+```
+ES5中新增了`Object.getPrototypeOf()`方法，可以返回[\[Prototype]的值:
+```javascript
+Object.getPrototypeOf(person1) === Person.prototype;// true
+```
+当为对象实例添加一个属性时，这个属性就会屏蔽原型对象中保存的同名属性:
+```javascript
+function Person () {
+}
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function () {
+    console.log(this.name);
+};
+
+let person1 = new Person(),
+    person2 = new Person();
+
+person1.name = "greg";
+console.log(person1.name);// "Greg"--来自实例
+console.log(person2.name);// "Nicholas"--来自原型
+```
+添加这个属性会阻止我们访问原型中的那个属性，但不会修改那个属性。即使将这个属性设置为null也不会恢复其指向原型的链接。不过可以使用`delete`操作符完全删除实例属性，从而使我们能够重新访问原型中的属性:
+```javascript
+delete person1.name;
+console.log(person1.name);// "Nicholas"--来自原型
+```
+使用`hasOwnProperty()`方法可以检测一个属性是存在于实例中还是原型中。只有在给定属性存在于对象实例中时，才会返回true。
+##### 原型与in操作符
+使用in操作符有两种方式:单独使用和在for-in循环中使用。单独使用时，in操作符会在通过对象能访问给定属性时返回true，无论该属性存在于实例还是原型中:
+```javascript
+function Person () {
+}
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function () {
+    console.log(this.name);
+};
+
+let person1 = new Person();
+
+console.log("name" in person1); // true
+console.log(person1.hasOwnProperty("name")); // false
+
+person1.name = "greg";
+console.log("name" in person1); // true
+console.log(person1.hasOwnProperty("name")); // true
+
+delete person1.name;
+console.log("name" in person1); // true
+console.log(person1.hasOwnProperty("name")); // false
+```
+可以通过同时使用`hasOwnProperty()`方法和in操作符来确定属性是否存在于对象还是原型中:
+```javascript
+function hasPrototypeProperty (object, name) {
+    return !object.hasOwnProperty(name) && (name in object);
+}
+```
+在使用for-in循环时，返回所有能够通过对象访问的、可枚举的属性，其中包括了存在于实例中和原型中的属性。屏蔽了原型中不可枚举属性(即将[\[Enumerable]]标记为false的属性)的实例属性也会在for-in循环中返回，以为根据规定，所有开发者定义的属性都为可枚举的(IE8及更早版本除外):
+```javascript
+const o = {
+    toString : function () {
+        return "My Object";
+    }
+};
+
+for (const prop in o) {
+    if (prop === "toString") {
+        console.log("Found toString");// IE早期版本不会显示
+    }
+}
+```
+要取得对象上所有可枚举的实例属性，可以使用ECMAScript5的`Object.keys()`方法:
+```javascript
+function Person () {
+}
+Person.prototype.name = "Nicholas";
+Person.prototype.age = 29;
+Person.prototype.job = "Software Engineer";
+Person.prototype.sayName = function () {
+    console.log(this.name);
+};
+
+const keys = Object.keys(Person.prototype);
+console.log(keys);// "name,age,job,sayName"
+
+let person1 = new Person();
+person1.name = "Rob";
+person1.age = 31;
+const person1keys = Object.keys(person1);
+console.log(person1keys);// "name,age"
+```
+通过Person实例调用时，方法返回的数组只包含"name"和"age"两个实例属性。若要得到所有实例属性，不论其是否可枚举，使用`Object.getOwnPropertyNames()`方法:
+```javascript
+const keys = Object.getOwnPropertyNames(Person.prototype);
+console.log(keys); // "constructor,name,age,job,sayName"
+```
+`Object.keys()`和`Object.getOwnPropertyNames()`都可以用来替代for-in循环。
+##### 更简单的原型语法
+可以使用一个包含所有属性和方法的对象字面量来重写整个原型对象:
+```javascript
+function Person () {
+}
+Person.prototype = {
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName: function () {
+        console.log(this.name);
+    }
+};
+```
+上述代码中，constructor属性不再指向Person了，因此可以手动将constructor属性设置回适当的值:
+```javascript
+Person.prototype = {
+    constructor: Person,
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName: function () {
+        console.log(this.name);
+    }
+};
+```
+以这种方式重设constructor会导致其[\[Enumerable]]特性被设置为true，可以使用`Object.defineProperty()`方法来解决此问题:
+```javascript
+Person.prototype = {
+    constructor: Person,
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName: function () {
+        console.log(this.name);
+    }
+};
+Object.defineProperty(Person.prototype, "constructor", {
+    enumerable: false,
+    value: Person
+});
+```
+##### 原型的动态性
+由于在原型中查找值的过程是一次搜索，因此对原型对象所做的任何修改都能够立即从实例上反映出来--即使是先创建了实例后修改原型也照样如此:
+```javascript
+const friend = new Person();
+Person.prototype.sayHi = function () {
+    console.log("HI");
+};
+friend.sayHi();// "HI"
+```
+若重写整个原型对象，将会切断构造函数与最初原型间的联系:
+```javascript
+const friend = new Person();
+Person.prototype = {
+    constructor: Person,
+    name: "Nicholas",
+    age: 29,
+    job: "Software Engineer",
+    sayName: function () {
+        console.log(this.name);
+    }
+};
+friend.sayName();//Error
+```
+实例中的指针仅指向原型，而不指向构造函数。而重写原型对象切断了现有原型和任何值钱已经存在的对象实例之间的联系，它们引用的依然是最初的原型。
+##### 原型对象的问题
+- 省略了为构造函数传递初始化参数的环节
+- 包含引用类型值的属性也被多个实例共享
+
+#### 组合使用构造函数模式和原型模式
+创建自定义类型的最常见方式就是组合使用构造函数模式和原型模式。构造函数模式用于定义实例属性，原型模式用于定义方法和共享的属性。这样每个实例都会有自己的一份实例属性的副本，同时有共享着对方法的引用，最大限度节省了内存，此外这种模式还支持向构造函数传递参数。因此可以说这是用来定义引用类型的一种默认模式。
+#### 动态原型模式
+动态原型模式把所有信息封装在构造函数中，通过在构造函数中初始化原型(仅在必要的情况下),又保持了同时使用构造函数和原型的优点，即可以通过检查某个应该存在的方法是否有效来决定是否需要初始化原型:
+```javascript
+function Person (name, age, job) {
+    //属性
+    this.name = name;
+    this.age = age;
+    this.job = job;
+    //方法
+    if (typeof this.sayName != "function") {
+        Person.prototype.sayName = function () {
+            console.log(this.name);
+        };
+    }
+}
+```
+#### 寄生构造函数模式
+在上述几种模式不适用的情况下，可以使用寄生构造函数模式。该函数的作用是封装创建对象的代码，然后返回新创建对象:
+```javascript
+function Person (name, age, job) {
+    const o = new Object();
+    o.name = name;
+    o.age = age;
+    o.job = job;
+    o.sayName = function () {
+        console.log(this.name);
+    };
+    return o;
+}
+```
+除了使用new操作符并把使用的包装函数称为构造函数外，此模式与工厂模式没有区别。通过在构造函数末尾添加return语句可以重写调用构造函数时返回的值。此模式不能依赖`instanceOf`操作符来确定对象类型，因此可以使用其他模式的情况下，不推荐此模式。
+#### 稳妥构造函数模式
+稳妥对象(durable objects)，指的是没有公共属性，而且其方法也不引用this的对象。稳妥对象适合在一些安全环境中(这些环境中会禁止this和new)，或者防止数据被其他应用程序改动时使用。稳妥构造函数遵循与寄生构造函数类似的模式，但有两点不同:
+- 新创建对象的实例方法不引用this
+- 不使用new操作符调用构造函数
+
+```javascript
+function Person (name, age, job) {
+    //定义创建要返回的对象
+    const o = new Object();
+    //定义私有变量和函数
+
+    //添加方法
+    o.sayName = function () {
+        alert(name);
+    };
+    //返回对象
+    return o;
+}
+```
+注意:在以这种模式创建的对象中，除了使用`sayName()`方法外，没有其他办法能访问name的值。
 
 ---
 ## Chapter 7
@@ -1861,3 +2139,5 @@ Document类型最常见的应用还是作为HTMLDocument实例的document对象�
 1. 文档子节点
 documentElement属性始终指向HTML页面中的<html>元素。可以通过childNodes列表访问文档元素，但通过documentElement属性则能更快捷、更直接地访问该元素。
 (待补充)
+#### Element类型
+
