@@ -4,6 +4,12 @@ function object (o) {
   return new F();
 }
 
+function inheritPrototype (subType, superType) {
+  const prototype = object(superType.prototype);
+  prototype.constructor = subType;
+  subType.prototype = prototype;
+}
+
 function SuperType (name) {
   this.name = name;
   this.colors = ["red", "blue", "green"];
@@ -18,8 +24,8 @@ function SubType (name, age) {
   this.age = age;
 }
 
-function inheritPrototype (subType, superType) {
-  const prototype = object(superType.prototype);
-  prototype.constructor = subType;
-  subType.prototype = prototype;
+inheritPrototype(SubType, SuperType);
+
+SubType.prototype.sayAge = function () {
+  console.log(this.age);
 }
