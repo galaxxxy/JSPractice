@@ -5,3 +5,4 @@
 3. [JavaScript高级程序设计](./PJS/NOTE.md)
 4. [codecademy笔记](./codecademy/NOTE.md)
 5. [学习JavaScript数据结构与算法](./JSDataStructureNAlgorithm/NOTE.md)
+6. [JavaScript忍者秘籍](./JavaScriptNinja/NOTE.md)
