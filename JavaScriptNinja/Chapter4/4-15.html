@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="test">click me</div>
+  <script>
+    const button = {
+      clicked: false,
+      click: () => {
+        this.clicked = true;
+        if (button.clicked) {
+          console.log('the button has been clicked');
+        }
+      },
+    };
+    const elem = document.getElementById('test');
+    const boundFunction = button.click.bind(button);
+    elem.addEventListener('click', boundFunction);
+
+    if(boundFunction != button.click) {
+      console.log('calling bind creates a completly new function');
+    }
+  </script>
+</body>
+</html>
