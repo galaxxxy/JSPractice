@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="box1">First Box</div>
+  <script>
+    function animateIt(elementId) {
+      const elem = document.getElementById(elementId);
+      let tick = 0,
+          timer = setInterval(() => {
+            if (tick < 100) {
+              elem.style.left = elem.style.top = tick + 'px';
+              tick++;
+            } else {
+              clearInterval(timer);
+                if (tick === 100) {
+                  console.log(`tick accessed via a closure`);
+                }
+                if (elem) {
+                  console.log(`element also accessed via a closure`);
+                }
+                if (timer) {
+                  console.log(`timer reference also obtained accessed via a closure`);
+                }
+            }
+          }, 10);
+      }
+    animateIt("box1");
+  </script>
+</body>
+</html>
