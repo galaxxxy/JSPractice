@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="box1">First Box</div>
+  <div id="box2">Second Box</div>
+  <script>
+    function animateIt(elementId) {
+      const elem = document.getElementById(elementId);
+      var tick = 0;
+      var timer = setInterval(function() {
+        if (tick < 100) {
+          elem.style.left = elem.style.top = `${tick} px`;
+          tick++;
+        } else {
+          clearInterval(timer);
+          if (tick === 100) {
+            console.log(`Tick accessed via a closure`);
+          }
+          if (elem) {
+            console.log(`element also accessed vis a closure`);
+          }
+          if (timer) {
+            console.log(`timer reference also obtained via a closure`);
+          }
+        }
+      }, 10);
+    }
+    animateIt("box1");
+    animateIt("box2");
+  </script>
+</body>
+</html>
