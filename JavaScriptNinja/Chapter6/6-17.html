@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function getJSON(url) {
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+
+        request.open('GET', url);
+
+        request.onload = function () {
+          try {
+            if (this.status === 200) {
+              resolve(JSON.parse(this.response));
+            } else {
+              reject(`${this.status} ${this.statusText}`);
+            }
+          } catch (error) {
+            reject(error.message);
+          }
+        };
+
+        request.onerror = function () {
+          reject(`${this.status} ${this.statusText}`);
+        };
+
+        request.send();
+      });
+    }
+
+    Promise.all([
+      getJSON('./data/ninjas.json'),
+      getJSON('./data/mapInfo.json'),
+      getJSON('./data/plan.json')
+    ]).then(results => {
+      const ninjas = results[0],
+            mapInfo = results[1],
+            plan = results[2];
+      if (
+        ninjas !== undefined &&
+        mapInfo !== undefined &&
+        plan !== undefined
+        ) {
+          console.log(`The plan is ready to be set in motion!`);
+        }
+    }).catch(err => {
+      console.log(`A problem in carrying out our plan`);
+    });
+  </script>
+</body>
+
+</html>

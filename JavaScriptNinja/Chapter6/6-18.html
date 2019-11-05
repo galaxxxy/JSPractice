@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function getJSON(url) {
+      return new Promise((resolve, reject) => {
+        const request = new XMLHttpRequest();
+
+        request.open('GET', url);
+
+        request.onload = function () {
+          try {
+            if (this.status === 200) {
+              resolve(JSON.parse(this.response));
+            } else {
+              reject(`${this.status} ${this.statusText}`);
+            }
+          } catch (error) {
+            reject(error.message);
+          }
+        };
+
+        request.onerror = function () {
+          reject(`${this.status} ${this.statusText}`);
+        };
+
+        request.send();
+      });
+    }
+
+    Promise.race([
+      getJSON('./data/yoshi.json'),
+      getJSON('./data/hattori.json'),
+      getJSON('./data/hanzo.json')
+    ]).then(ninja => {
+      if (ninja !== null) {
+        console.log(`${ninja.name} responded first`);
+      }
+    }).catch(err => {
+      console.log(`Failure!`);
+    });
+  </script>
+</body>
+
+</html>
