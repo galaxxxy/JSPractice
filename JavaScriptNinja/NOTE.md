@@ -237,7 +237,7 @@ promise对象用于作为异步任务结果的占位符，代表了一个我们�
 
 ![img6-10](./images/6.10.png)
 
-JavaScript在本次时间循环的所有代码都执行完毕后。调用then回调函数来处理promise。(?)
+JavaScript在主线程的所有代码都执行完毕后。调用then回调函数来处理任务队列中的promise。
 #### 创建第一个真实promise案例
 ```javascript
 function getJSON(url) {
@@ -311,3 +311,66 @@ Promise.race([
 });
 ```
 使用Promise.race方法并传入一个promise数组会返回一个全新的promise对象，一旦数组中某个promise被处理或被拒绝，这个返回的promise就同样会被处理或被拒绝。
+### 把生成器和promise相结合
+```javascript
+try {
+  const ninjas = syncGetJSON("data/ninjas.json");
+  const missions = syncGetJSON(ninjas[0].missionsUrl);
+  const missionDetails = syncGetJSON(missions[0].detailsUrl);
+} catch(e) {
+  // Oh no, we weren't able to get the mission details
+}
+```
+同步方法会阻塞UI，我们可以修改使其运行长时间运行的任务时不会发生阻塞。一种方法是将生成器和promise相结合。生成器让渡后会挂起执行而不会发生阻塞，我们可以调用迭代器的next方法就可以唤醒生成器继续执行代码。而promise允许指定两个回调函数，分别在能够获得预先保证的值和错误发生时触发。<br/>
+我们这样组合生成器和promise:我们将执行异步操作的代码放入生成器，然后执行生成器。当生成器内执行了一项异步操作时，一个代表当前异步操作返回值的promise会被创建。由于我们在生成器执行时无法知道promise是否会成功兑现，所以我们挂起生成器以免造成阻塞。当一会promise的状态确定后，我们通过调用迭代器的next方法继续执行生成器。只要有需要就可以重复这个过程:
+```javascript
+async (function* () {
+  try {
+    const ninjas = yield getJSON('./data/ninjas.json');
+    const missions = yield getJSON(ninjas[0].missionsUrl);
+    const missionDescription = yield getJSON(missions[0].detailsUrl);
+    console.log(missionDescription);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+function async(generator) {
+  const iterator = generator();
+
+  function handle(iteratorResult) {
+    if (iteratorResult.done) {
+      return ;
+    }
+
+  const iteratorValue = iteratorResult.value;
+  // 若生成器的值为promise 则对其进行异步处理
+  if (iteratorValue instanceof Promise) {
+    iteratorValue
+      .then(res => handle(iterator.next(res)))
+      .catch(err => iterator.throw(err));
+  }
+}
+
+  try {
+    handle(iterator.next());
+  } catch (e) {
+    iterator.throw(e);
+  }
+}
+```
+### 面向未来的async函数
+可以看到我们仍然需要书写一些样板代码，因此我们需要一个async函数能够管理所有promise函数的调用和所有向生成器发出的请求。可以使用async和await关键字来替代上述样板代码:
+```javascript
+(async function() {
+  try {
+    const ninjas = await getJSON('./data/ninjas.json');
+    const missions = await getJSON(ninjas[0].missionsUrl);
+    const missionDescription = await getJSON(missions[0].detailsUrl);
+    console.log(missionDescription);
+  } catch (e) {
+    console.log(e);
+  }
+})();
+```
+通过在关键字function前使用关键字async，可以表明当前函数依赖一个异步返回的值。在调用异步任务的每一处使用await关键字来告诉JavaScript引擎，请在不阻塞应用执行的情况下在这个位置上等待执行结果。
