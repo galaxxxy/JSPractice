@@ -225,3 +225,89 @@ ninjaIterator.throw('Catch this!');
 控制流进入生成器函数时，会创建一个新的函数环境上下文，并将该上下文入栈。生成器不会执行任何函数代码，相反地，会生成并返回一个迭代器。由于迭代器用于控制生成器的执行，所以迭代器中保存了一个它创建时的执行上下文。<br/>
 一般情况下，当程序从一个标准函数返回后，对应的执行环境上下文会从栈中弹出，并被完整的销毁。但当执行流离开生成器时，对应的上下文会从栈中弹出，但迭代器对象保存着对它的引用，因此不会被销毁。当调用迭代器的next方法时，生成器会重新激活对应的执行上下文，并将其放入栈顶，从上次离开的位置继续执行。<br/>
 当我们从生成器中取得控制权后，生成器的执行环境上下文一直是保存的，而不像标准函数一样退出后销毁。
+### 使用Promise
+使用构造函数来创建一个promise需要传入一个函数。这个函数被称为执行函数，包含resolve和reject两个参数。
+#### 理解简单回调函数所带来的问题
+- 错误难处理
+- 连续执行步骤棘手
+- 执行很多并行任务同样棘手
+
+#### 深入研究promise
+promise对象用于作为异步任务结果的占位符，代表了一个我们暂时还没获得但未来有希望获得的值。在一个promise对象的整个生命周期中，它会经历多种状态:
+
+![img6-10](./images/6.10.png)
+
+JavaScript在本次时间循环的所有代码都执行完毕后。调用then回调函数来处理promise。(?)
+#### 创建第一个真实promise案例
+```javascript
+function getJSON(url) {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+
+    request.open('GET', url);
+
+    request.onload = function() {
+      try {
+        if (this.status === 200) {
+          resolve(JSON.parse(this.response));
+        } else {
+          reject(`${this.status} ${this.statusText}`);
+        }
+      } catch (error) {
+        reject(error.message);
+      }
+    };
+
+    request.onerror = function() {
+      reject(`${this.status} ${this.statusText}`);
+    };
+
+    request.send();
+  });
+}
+
+getJSON('data/ninjas.json').then(ninja => {
+  if (ninjas !== null) {
+    console.log('Ninjas obtained!');
+  }
+}).catch(e => console.log(`Shouldn't be here: ${e}`));
+```
+XMLHttpRequest包含两种事件: onload和onerror。当浏览器从服务器端接收到了一个响应，onload事件就会被触发，当通信出错则会触发onerror事件。
+#### 等待多个promise
+除了处理相互依赖的异步任务序列以外，对于等待多个独立的异步任务，promise也能够显著减少代码量。
+```javascript
+Promise.all([
+  getJSON('./data/ninjas.json'),
+  getJSON('./data/mapInfo.json'),
+  getJSON('./data/plan.json')
+]).then(results => {
+  const ninjas = results[0],
+        mapInfo = results[1],
+        plan = results[2];
+  if (
+    ninjas !== undefined &&
+    mapInfo !== undefined &&
+    plan !== undefined
+    ) {
+      console.log(`The plan is ready to be set in motion!`);
+    }
+}).catch(err => {
+  console.log(`A problem in carrying out our plan`);
+});
+```
+通过使用内置Promise.all可以等待多个promise。这个方法接收一个promise数组，然后创建一个新promise对象，一旦数组中的promise全被解决，这个返回的promise就会被解决，而一旦其中有一个promise失败了，整个新promise对象也会被拒绝。后续的回调函数接受成功值组成的数组，其中的每一项都对应promise数组中的对应项。
+#### promise竞赛
+```javascript
+Promise.race([
+  getJSON('./data/yoshi.json'),
+  getJSON('./data/hattori.json'),
+  getJSON('./data/hanzo.json')
+]).then(ninja => {
+  if (ninja !== null) {
+    console.log(`${ninja.name} responded first`);
+  }
+}).catch(err => {
+  console.log(`Failure!`);
+});
+```
+使用Promise.race方法并传入一个promise数组会返回一个全新的promise对象，一旦数组中某个promise被处理或被拒绝，这个返回的promise就同样会被处理或被拒绝。
