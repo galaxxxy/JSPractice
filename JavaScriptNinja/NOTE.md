@@ -434,3 +434,50 @@ function async(generator) {
 ![img7-17](./images/7.17.png)
 注意原型改变时的情况
 
+### 使用ES6中的class
+虽然现在可以在JavaScript使用关键字`class`，但其底层实现仍然基于原型继承。
+#### 使用class关键字
+##### 静态方法
+在函数前使用`static`关键字来声明一个静态方法,ES6之前版本的实现方式:
+```javascript
+function Ninja() {}
+Ninja.compare = function(ninja1, ninja2) {...}
+```
+##### 实现继承
+ES6前的实现方式:
+```javascript
+function Person() {}
+Person.prototype.dance = function() {};
+
+function Ninja() {}
+Ninja.prototype = new Person();
+
+Object.defineProperty(Ninja.prototype, 'constructor', {
+  enumerable: false,
+  value: Ninja,
+  writable: true
+});
+```
+记住一点:实例方法应该被直接添加在构造函数原型上，如Person构造函数上的dance方法。为了实现继承，我们必须把父类的实例设置为子类的原型。但通过此方式会导致`constructor`属性的丢失，因此需要使用`Object.defineProperty`方法进行手动设置。在ES6中，大大简化了整个过程:
+```javascript
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+
+  dance() {
+    return true;
+  }
+}
+
+class Ninja extends Person {
+  constructor(name, weapon) {
+    super(name);
+    this.weapon = weapon;
+  }
+
+  wieldWeapon() {
+    return true;
+  }
+}
+```
