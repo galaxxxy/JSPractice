@@ -160,7 +160,7 @@ assert(typeof fun === 'number', 'still a number');
 每次调用构造函数时，都会创建一个新的词法环境，该词法环境保持构造函数内部的局部变量。此外，无论何时创建函数，被创建的函数都会通过内置`[[Environment]]`保持对词法环境的引用。
 #### 私有变量的警告
 在JavaScript中没有真正的私有对象属性，但是可以通过闭包实现一种可接受的"私有"变量的方案。虽然不是真正的私有变量，但是许多开发者发现这是一种隐藏信息的有用方式。
-## 生成器和Promise
+## 第六章 生成器和Promise
 生成器是一种特殊类型的函数。当从头到尾运行标准函数时，它最多只生成一个值。然而生成器函数会在几次运行请求中暂停，因此每次运行都可能会生成一个值。<br/>
 promise对象是一个占位符，暂时替代那些尚未计算出但未来会计算出的值。
 ### 使用生成器函数
@@ -374,7 +374,7 @@ function async(generator) {
 })();
 ```
 通过在关键字function前使用关键字async，可以表明当前函数依赖一个异步返回的值。在调用异步任务的每一处使用await关键字来告诉JavaScript引擎，请在不阻塞应用执行的情况下在这个位置上等待执行结果。
-## 面向对象与原型
+## 第七章 面向对象与原型
 ### 理解原型
 使用操作符`in`来测试对象是否包含某个特定的属性。JS中对象的原型属性属于内置属性，无法直接访问(因此被标记为`[[prototype]]`)。然而，内置方法`Object.setPrototypeOf`可以接受两个对象作为参数，并把第二个对象设置为第一个对象的原型。<br/>
 每个对象都可以有一个原型，每个对象的原型也可以拥有一个原型，以此形成一个原型链。查找特定属性会被委托到整条原型链上，只有在没有原型可以查找时才会停止(或者已经找到了该属性)。
@@ -481,3 +481,212 @@ class Ninja extends Person {
   }
 }
 ```
+## 第八章 控制对象的访问
+### 使用getter和setter控制属性访问
+#### 定义getter和setter
+在JS中，getter和setter有两种定义方式:
+- 通过字面量或ES6中的class定义
+- 使用内置`Object.defineProperty`方法
+
+```javascript
+// 通过字面量定义
+const ninjaCollection = {
+  ninjas: ['Yoshi', 'Kuma', 'Hattori'],
+  get firstNinja() {
+    console.log('getting firstNinja');
+    return this.ninjas[0];
+  },
+  set firstNinja(value) {
+    console.log('setting firstNinja');
+    this.ninjas[0] = value;
+  }
+};
+
+// 通过class定义
+class NinjaCollection {
+  constructor() {
+    this.ninjas = ['Yoshi', 'Kuma', 'Hattori'];
+  }
+
+  get firstNinja() {
+    console.log('getting firstNinja');
+    return this.ninjas[0];
+  }
+  set firstNinja(value) {
+    console.log('setting firstNinja');
+    this.ninjas[0] = value;
+  }
+}
+```
+原生getter和setter方法允许我们像标准属性一样使用访问器属性，当访问器属性被访问时，这些方法会被立刻执行。
+
+![img8-3](./images/8.3.png)
+
+对于给定属性，我们不必同时定义getter和setter。如通常我们只提供getter。若我们在某些情况下需要写入该属性，具体行为取决于代码是否处于严格模式。非严格模式下，JS引擎会忽略我们的请求；严格模式下，JS引擎会抛出异常，表示我们将给一个仅有getter没有setter的属性赋值。
+```javascript
+// 使用Object.defineProperty定义
+function Ninja() {
+  let _skillLevel = 0;
+
+  Object.defineProperty(this, 'skillLevel', {
+    get: () => {
+      console.log('The get method is called');
+      return _skillLevel;
+    },
+    set: value => {
+      console.log('The set meyhod is called');
+      _skillLevel = value;
+    }
+  });
+}
+```
+与在对象字面量和类中定义不同，通过`Object.defineProperty`定义的get和set方法与私有变量`skillLevel`在同一个作用域内，分别创建了一个包含了该变量的闭包，我们只能通过这两个方法访问该属性。
+#### 使用getter和setter校验属性值
+```javascript
+function Ninja() {
+  let _skillLevel = 0;
+
+  Object.defineProperty(this, 'skillLevel', {
+    get: () => _skillLevel,
+    set: value => {
+      if (!Number.isInteger(value)) {
+        throw new TypeError('Skill level should be a number');
+      }
+      _skillLevel = value;
+    }
+  });
+}
+```
+你可以使用同样的规则来跟踪值的变化，提供性能日志和提供值发生变化的提示等。
+#### 使用getter和setter定义计算属性
+```javascript
+const shogun = {
+  name: 'Yoshiaki',
+  clan: 'Ashikaga',
+  get fullTitle() {
+    return `${this.name} ${this.clan}`;
+  },
+  set fullTitle(value) {
+    const segments = value.split(' ');
+    this.name = segments[0];
+    this.clan = segments[1];
+  }
+};
+```
+### 使用代理控制访问
+我们控制通过代理来控制对另一个对象的访问。它使我们能够定义对象交互时执行的自定义行为。代理可以被理解为通用化的getter和setter，他们的区别在于getter和setter只能控制单个属性，而代理可以用于对象交互的通用处理，包括方法的调用。
+```javascript
+const emperor = { name: 'Komei'};
+const representative = new Proxy(emperor, {
+  get: (target, key) => {
+    console.log(`Reading ${key} through a proxy`);
+    return key in target ? target[key]
+                         : `Donnot bother the emperor!`;
+  },
+  set: (target, key, value) => {
+    console.log(`Writing ${key} through a proxy`);
+    target[key] = value;
+  }
+});
+```
+通过使用内置的Proxy构造函数，我们将emperor对象(通常称为目标对象，target)包装成代理对象(representative)。在代理构造时，我们同时传入一个定义了traps的对象。traps是一些在对象执行特定行为时被调用的函数。其中，get trap会在通过代理读取对象属性时调用；set trap会在通过代理写入属性值时被调用。
+
+![img8-4](./images/8.4.png)
+一旦我们执行了一个操作(如访问代理对象属性),就会隐式调用对应的get方法。此时JS引擎的执行过程与显示调用的普通函数类似。
+
+以下是一些其他的内置trap用于定义对象的交互行为的处理:
+- `apply` and `construct` trap: 调用函数时激活`apply`,使用new操作符时激活`construct`
+- `get` and `set` trap: 分别在读取/写入属性时被激活
+- `enumerate` trap: 执行for-in语句时被激活
+- `getPrototypeOf` and `setPrototypeOf` trap: 获取和设置原型属性值时被激活
+
+相等( === 或 == )、instanceof和typeof操作符无法被拦截:比如，表达式 x == y 用于验证x和y是否指向相同对象或相同的值。相等操作具有一些假定前提。比如被比较的两个对象总是能返回相同的值，若这个值由用户指定的函数返回，则无法被保证。
+#### 使用代理记录日志
+```javascript
+function Ninja() {
+  let _skillLevel = 0;
+  Object.defineProperty(this, 'skillLevel', {
+    get: () => {
+      console.log(`skillLevel get method is called`);
+      return _skillLevel;
+    },
+    set: value => {
+      console.log(`skillLevel set method is called`);
+      this._skillLevel = value;
+    }
+  });
+}
+```
+使用getter和setter混合了属性读写的代码和日志代码，而且代码复用性差。
+```javascript
+function makeLoggable(target) {
+  return new Proxy(target, {
+    get: (target, property) => {
+      console.log(`Reading ${property}`);
+      return target[property];
+    },
+    set: (target, property, value) => {
+      console.log(`Writing value ${value} to ${property}`);
+      target[property] = value;
+    }
+  });
+}
+```
+#### 使用代理检测性能
+```javascript
+function isPrime(num) {
+  if (num < 2) {
+    return false;
+  }
+  for (let i = 2; i < num; i++) {
+    if(num % i === 0) {
+      return false
+    }
+  }
+  return true;
+}
+isPrime = new Proxy(isPrime, {
+  apply: (target, thisArg, args) => {
+    console.time(`isPrime`);
+    const result = target.apply(thisArg, args);
+    console.timeEnd(`isPrime`);
+    return result;
+  }
+});
+```
+#### 使用代理自动填充属性
+```javascript
+function Folder() {
+  return new Proxy({}, {
+    get: (target, property) => {
+      console.log(`Reading ${property}`);
+      if (!(property in target)) {
+        target[property] = new Folder();
+      }
+      return target[property];
+    }
+  });
+}
+```
+若访问的属性不存在，会自动创建并赋值给该属性。
+#### 使用代理实现负数组索引
+```javascript
+function createNegativeArrayProxy(array) {
+  if (!Array.isArray(array)) {
+    return new TypeError('Expected an array');
+  }
+  return new Proxy(array, {
+    get: (target, index) => {
+      index = +index;// 转成number
+      return target[index < 0 ? target.length + index : index];
+    },
+    set: (target, index, value) => {
+      index = +index;
+      return target[index < 0 ? target.length + index : index] = value;
+    }
+  });
+}
+```
+#### 代理的性能消耗
+我们所有通过代理的操作都被添加了一层间接层，它导致了大量额外处理以此引起性能降低。<br/>
+谨慎使用代理。可以在性能不敏感的程序中使用代理，但在会被大量执行的代码中使用代理需要谨慎处理。
