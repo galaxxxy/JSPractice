@@ -1,4 +1,4 @@
-function assert(exp, message) {
+function assert(exp, message = exp) {
   if(exp) {
     console.log(message);
   }

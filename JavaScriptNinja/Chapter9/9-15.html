@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="firstElement"></div>
+  <div id="secondElement"></div>
+  <script>
+    const firstElem = document.getElementById('firstElement');
+    const secondElem = document.getElementById('secondElement');
+
+    const map = {};
+
+    map[firstElem] = { data: 'firstElement' };
+    if (map[firstElem].data === 'firstElement') {
+      console.log('the first element is correctly mapped');
+    }
+    
+    map[secondElem] = { data: 'secondElement' };
+    if (map[secondElem].data === 'secondElement') {
+      console.log('the second element is correctly mapped');
+    }
+
+    // firstElem的值被覆盖了 DOM被转换成字符串[object HTMLDivElement]
+    if (map[firstElem].data === 'firstElement') {
+      console.log('but now the firstElement is overriden');
+    }
+    </script>
+</body>
+</html>
