@@ -690,3 +690,75 @@ function createNegativeArrayProxy(array) {
 #### 代理的性能消耗
 我们所有通过代理的操作都被添加了一层间接层，它导致了大量额外处理以此引起性能降低。<br/>
 谨慎使用代理。可以在性能不敏感的程序中使用代理，但在会被大量执行的代码中使用代理需要谨慎处理。
+## 第九章 处理集合
+### 数组
+JS中数组是对象
+#### 创建数组
+- 使用内置Array构造函数
+- 使用数组字面量`[]`(推荐)
+
+#### 在数组两端添加、删除元素
+- push: 在末尾添加元素
+- unshift: 在开头添加元素
+- pop: 在末尾删除元素
+- shift: 在末尾删除元素
+
+建议尽可能使用pop和push方法，因为shift和unshift方法影响数组中第一个元素，因此原数组中每项的下标都需要被变动，性能相对pop和push而言更差。
+#### 在数组任意位置添加、删除元素
+使用delete操作符只会删除数组项的内容，数组项的位置仍旧保留。而使用内置spilce方法可以实现，splice方法分别接受起始索引、需要移除元素的个数，还有添加进数组的项，并返回被移除的项。
+#### 数组常用操作
+- 遍历数组: forEach
+- 基于现有数组项映射创建新数组: map
+- 验证数组元素是否匹配指定条件: some & every
+- 查找指定数组项: find & filter
+- 聚合数组，基于数组元素计算: reduce
+
+### Map
+#### 别把对象作用Map
+- 对象属性会通过原型继承
+- 对象仅支持字符串类型的key
+##### key的相等性
+```javascript
+const map = new Map();
+const currentLocation = 'http://www.baidu.com';
+
+const firstLink = new URL(currentLocation);
+const secondLink = new URL(currentLocation);
+
+map.set(firstLink, { description: 'firstLink' });
+map.set(secondLink, { description: 'secondLink' });
+
+assert(map.get(firstLink).description === 'firstLink', 'First link mapping');
+assert(map.get(secondLink).description === 'secondLink', 'Second link mapping');
+assert(map.size === 2, 'There are two mappings');
+```
+虽然两个URL对象指向相同的URL地址，但这两个对象不相等，因此关联了两个映射。
+#### 遍历map
+因为map是集合，因此可以使用for-of来遍历map，而且可以确保遍历顺序与插入顺序一致(对象则无法保证)。
+### Set
+集合(Set)中的每个元素都是唯一的
+#### Union并集
+```javascript
+const ninjas = new Set(['Kuma', 'Hattori', 'Yagyu']);
+const samurai = new Set(['Hattori', 'Oda', 'Tomoe']);
+
+const warriors = new Set([...ninjas, ...samurai]);
+```
+#### Intersect交集
+```javascript
+const ninjas = new Set(['Kuma', 'Hattori', 'Yagyu']);
+const samurai = new Set(['Hattori', 'Oda', 'Tomoe']);
+
+const ninjaSamurais = new Set(
+  [...ninjas].filter(ninja => samurai.has(ninja))
+);
+```
+#### Difference差集
+```javascript
+const ninjas = new Set(['Kuma', 'Hattori', 'Yagyu']);
+const samurai = new Set(['Hattori', 'Oda', 'Tomoe']);
+
+const ninjaSamurais = new Set(
+  [...ninjas].filter(ninja => !samurai.has(ninja))
+);
+```
