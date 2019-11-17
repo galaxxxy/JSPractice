@@ -866,3 +866,180 @@ assert(num === 6, '3 opening and 2 closing tags found');
 #### 捕获的引用
 对捕获结果进行引用有两种方式: 在自身匹配或替换字符串。<br/>
 (现阶段先跳过)
+
+## 第十一章 代码模块化
+### 在ES6前模块化代码
+ES6前只有两种作用域：全局作用域和函数作用域。它没有命名空间或模块让我们把特定功能组合到一起。为了编写模块化代码，开发者不得不创造性地利用现有语法特性。当决定要利用哪种语法特性前，我们应该牢记每个模块系统至少要能满足以下几点:
+- 能够定义接口，使我们能够通过接口访问模块提供的功能
+- 隐藏模块的内部实现使使用者无需关注内部细节。同时将内部实现与外部隔开也防止了一些可能导致副作用或bug的意外修改
+#### 使用对象、闭包和立即执行函数实现模块
+- 隐藏内部实现: 调用函数会创建一个新的作用域，在该作用域中定义的变量只能在该函数内部被访问。我们可以选择使用函数来实现模块。
+- 定义模块接口: 如果其他代码要使用模块，需要能够暴露简洁的接口。我们可以通过利用对象和闭包来实现，思路是函数模块返回一个代表公共接口的对象。这个对象应该包含模块提供的方法，方法会通过闭包保持模块内部变量，甚至在函数结束后仍然保持模块内部变量。
+
+##### 使用函数作为模块
+```javascript
+// 隐藏模块内部细节
+(function countClicks() {
+  let numClicks = 0;
+  document.addEventListener('click', () => {
+    alert(++numClicks);
+  });
+})();
+```
+
+![img11-1](./images/11.1.png)
+
+##### 模块模式: 扩展函数实现模块，使用对象作为接口
+```javascript
+const MouseCounterModule = function() {
+  let numClicks = 0;
+  const handleClick = () => {
+    console.log(++numClicks);
+  };
+  return {
+    countClicks: () => {
+      document.addEventListener('click', handleClick);
+    },
+  };
+}();
+```
+通过利用立即执行函数，我们可以隐藏特定模块实现细节。通过添加对象和闭包，我们可以实现定义模块接口，通过接口来暴露模块功能。
+
+![img11-2](./images/11.2.png)
+通过返回对象来暴露公共接口。模块内部实现(私有变量和函数)通过公共接口方法创建的闭包保持。
+
+这种使用立即执行函数、对象和闭包来创建模块的模式叫做模块模式。
+##### 扩展模块
+```javascript
+const MouseCounterModule = function() {
+  let numClicks = 0;
+  const handleClick = () => {
+    console.log(++numClicks);
+  };
+  return {
+    countClicks: () => {
+      document.addEventListener('click', handleClick);
+    },
+  };
+}();
+
+(function(module) {
+  let numScrolls = 0;
+  const handleScroll = () => {
+    console.log(++numScrolls);
+  };
+  module.countScrolls = () => {
+    document.addEventListener('scroll', handleScroll);
+  };
+})(MouseCounterModule);
+```
+
+![img11-3](./images/11.3.png)
+模块模式的缺点: 通过模块拓展无法共享模块的私有变量。我们通过将模块外部接口传入一个立即执行函数来扩展模块。但这两个独立函数内的作用域是独立的，因此无法取得彼此内部的变量。
+
+当通过独立的立即执行函数实现模块拓展时，无法共享私有模块变量，因为每个函数调用都创建了一个新作用域。虽然这是个缺点，但我们依旧可以使用它来模块化我们的程序。<br>
+模块模式还有其他缺点: 当我们构建模块化程序时，模块通常会依赖于其他模块的功能，而模块模式不具备模块依赖的管理。因此开发者不得不考虑正确的依赖顺序来保证程序拥有完整的依赖。在中小型程序中不是大问题，但在大型程序中是严重的问题。为了解决此问题，出现了互相竞争的标准，即Asynchronous Module Definition(AMD) 和 CommonJS。
+#### 使用AMD和CommonJS模块化JavaScript程序
+除了一些语法和原理上的不同外，AMD和CommonJS的主要不同为AMD的设计理念是明确基于浏览器，而CommonJS面向通用JavaScript环境(如Node.js)，而不局限于浏览器。
+##### AMD
+AMD源于Dojo toolkit，是最流行的用于构建客户端web应用JavaScript工具之一。AMD最流行的实现是RequireJS。
+```javascript
+const requirejs = require('requirejs');
+
+requirejs.define('MouseCounterModule', ['jQuery'], $ => {
+  let numClicks = 0;
+  const handleClick = () => {
+    console.log(++numClicks);
+  };
+  return {
+    countClicks: () => {
+      $(document).on('click', handleClick);
+    },
+  };
+});
+```
+AMD提供名为define的函数，接收以下参数:
+- 新创建模块的ID。使用该ID可以在系统的其他部分引用该模块。
+- 当前模块依赖的模块ID列表。
+- 初始化模块的工厂函数，该工厂函数接收依赖的模块列表作为参数。
+
+本例中，我们使用AMD的define函数定义名为MouseCounterModule模块。该模块依赖于jQuery。因此AMD首先请求jQuery模块，如果需要从服务器请求，那么此过程会花费一些时间。此过程异步执行以避免阻塞，所有依赖模块下载并解析完成后，调用模块的工厂函数，并传入所依赖的模块。可以看出AMD有以下优点:
+- 自动处理以来，无需考虑模块引入顺序
+- 异步加载模块，避免阻塞
+- 在同一个文件中可以定义多个模块
+
+##### CommonJS
+CommonJS使用基于文件的模块，因此每个文件中只能定义一个模块。CommonJS提供变量module，该变量具有属性exports，通过exports可以很容易地拓展额外属性。若希望在应用的其他部分使用模块，可以使用require引入模块。文件会被同步加载，然后我们可以访问模块公共接口。这就是CommonJS在服务器端更受欢迎的原因: CommonJS模块加载相对更快，因为只需要读取文件系统，而在客户端则必须从远程服务器下载文件，同步加载会导致阻塞。CommonJS具有两个优点:
+- 语法简单
+- CommonJS是Node.js默认的模块格式，因此可以使用npm上的包
+
+而CommonJS最大的缺点是不显式地支持浏览器，浏览器端的JavaScript不支持module变量和export属性，因此我们不得不采用浏览器支持的格式打包代码，如Browserify或RequireJS。
+### ES6模块
+ES6模块结合了AMD和CommonJS的优点:
+- 和CommonJS相似，ES6的语法相对简单，并且模块是基于文件的
+- 和AMD相似，ES6模块支持异步模块加载
+
+ES6模块的思想是只有显式地导出标识符，才能够从外部访问。而其他标识符，即使定义在最顶级的作用域中，也只能在模块内访问。为了实现此功能，ES6引入了两个新关键词:
+- export: 将标识符暴露于模块外
+- import: 引入导出的标识符
+
+#### 导出和导入功能
+```
+import * as ninjaModule from './11-5.mjs'
+```
+我们可以使用富豪*导入全部标识符，并指定模块别名。之后亦可通过属性表达式访问导出的标识符。
+##### 默认导出
+```javascript
+export default class Ninja {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+export function compareNinjas(ninja1, ninja2) {
+  return ninja1.name === ninja2.name;
+}
+```
+在关键词export后增加关键词default指定模块的默认导出。虽然指定了模块的默认导出，但仍然可以导出其他标识符。
+```javascript
+import ImportedNinja from './11-9.mjs';
+import { compareNinjas } from "./11-9.mjs";
+
+// 简写
+import ImportedNinja, { compareNinjas } from './11-9.mjs';
+```
+导入已命名的导出内容必须使用花括号，导入默认的导出内容不需要。我们可以为默认导出自定义名称，不一定需要使用导出时的命名。
+##### export和import时使用重命名
+必要时，可重命名export和import:
+```javascript
+//************ Greetings.js ***********/
+function sayHi() {
+  return 'hello';
+}
+
+assert(typeof sayHi === 'function' && typeof sayHello === 'undefined', 'Within the module we can access only sayHi');
+
+export { sayHi as sayHello };
+
+//************ main.js ***********/
+import { sayHello } from 'Greetings.js';
+
+assert(typeof sayHi === 'undefined' && typeof sayHello === 'function', 'When importing, we can only access the alias');
+```
+只能在export表达式中进行重命名，不能通过在变量或函数声明前用export关键字重命名。当对重命名的export执行import时，只能通过别名导入。
+```javascript
+//************ Hello.js ***********/
+export function greet() {
+  return 'Hello';
+}
+//************ Salute.js ***********/
+export function greet() {
+  return 'Salute';
+}
+//************ main.js ***********/
+import { greet as sayHello } from 'Hello.js';
+import { greet as salute } from 'Salute.js';
+
+assert(typeof greet === 'undefined', 'We cannot access greet');// 不能通过原始名称访问函数
+assert(sayHello() === 'Hello' && salute() === 'Salute', 'We can access aliased identifiers!');// 但可以访问别名
+```
