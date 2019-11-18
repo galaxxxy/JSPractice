@@ -1043,3 +1043,229 @@ import { greet as salute } from 'Salute.js';
 assert(typeof greet === 'undefined', 'We cannot access greet');// 不能通过原始名称访问函数
 assert(sayHello() === 'Hello' && salute() === 'Salute', 'We can access aliased identifiers!');// 但可以访问别名
 ```
+## 第十二章 DOM 操作
+### 向DOM中注入HTML
+该技术在下列情况时特别有用:
+- 向页面注入任意HTML和操作或插入客户端模版时
+- 获取并注入从服务器端返回的HTML时
+
+我们将会从头实现一套简洁的DOM操作方式，实现需要以下几步:
+- 将任意有效的HTML字符串转化为DOM结构
+- 尽可能高效地将DOM结构注入到DOM的任意位置
+
+#### 将HTML转化为DOM
+- 确保HTML字符串合法有效
+- 将字符串包裹在浏览器规则承认的闭合标签中
+- 使用`innerHTML`将HTML字符串插入到虚拟DOM元素中
+- 提取该DOM节点
+
+##### 预处理HTML源字符串
+首先，我们需要清理HTML源字符串以满足我们的需求。
+```html
+<option>Yoshi</option>
+<option>Kuma</option>
+</table>
+```
+这段HTML字符串有两个问题: 首先，option元素不能独立存在。若遵循HTML语义，它们应该包含在select元素内。第二，虽然HTML允许自闭合无子标签，但是自闭  合只对很少一部分元素有效(table不属于这部分元素)，其他部分使用自闭合会在某些浏览器中出问题。
+```javascript
+const tags = /^(area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)$/i;
+
+function convert(html) {
+  return html.replace(/(<(\w+)[^>]*?)\/>/g, (all, front, tag) => {
+    return tags.test(tag) ? all : `${front}></${tag}>`;
+  });
+}
+```
+##### 包装HTML
+根据HTML的语义，一些HTML元素必须被特定的容器元素包裹才能被注入。我们可以通过两种方式来解决此问题，两种方式都需要构建问题元素与其容器元素间的映射:
+- 通过使用`innerHTML`将字符串直接注入到提前使用`createElement`方法构造的特定的父元素中。尽管这个方法在某些情况和某些浏览器下可行，但无法完全保证通用
+- 将字符串用合适的父元素包裹后直接注入到容器元素中。此方法更易懂但是更麻烦。
+
+相比于第一种方法，第二种方法只需要少量浏览器兼容代码。
+
+![img12-1](./images/12.1.png)
+
+这里要注意几点:
+- 具有`multiple`属性的`<select>`元素，因为他不会自动选中其中的任何选项，而单选会自动选中第一个选项。
+- 对`<col>`的兼容处理包括一个额外的`<tbody>`元素，如果没有这个元素，`<colgroup>`无法正确的生成
+
+```javascript
+    function getNodes(htmlString, doc) {
+      const map = {
+        '<td': [3, '<table><tbody><tr>', '</tr></tbody></table>'],
+        '<th': [3, '<table><tbody><tr>', '</tr></tbody></table>'],
+        '<tr': [2, '<table><thead>', '</thead></table>'],
+        '<option': [1, '<select multiple>', '</select>'],
+        '<optgroup': [1, '<select multiple>', '</select>'],
+        '<legend': [1, '<fieldset>', '</fieldset>'],
+        '<thead': [1, '<table>', '</table>'],
+        '<tbody': [1, '<table>', '</table>'],
+        '<tfoot': [1, '<table>', '</table>'],
+        '<colgroup': [1, '<table>', '</table>'],
+        '<caption': [1, '<table>', '</table>'],
+        '<col': [1, '<table><tbody></tbody><colgroup>', '</colgroup></table>']
+      };
+      const tagName = htmlString.match(/<\w+/);
+      let mapEntry = tagName ? map[tagName[0]] : null;
+      if (!mapEntry) {
+        mapEntry = [0, '', ''];
+      }
+      let div = (doc || document).createElement('div');
+      div.innerHTML = `${mapEntry[1]}${htmlString}${mapEntry[2]}`;
+      // 根据映射关系的深度向下遍历刚刚创建的DOM树
+      while (mapEntry[0]--) {
+        div = div.lastChild;
+      }
+      return div.childNodes;
+    }
+```
+#### 将元素插入文档
+现在我们有了一个需要插入的元素数组(可能要插入文档的任意位置)，并且我们想要将执行操作的次数减少到最小。为此我们可以使用DOM片段(DOM fragments)。DOM片段是W3C DOM规范的一部分，并且所有浏览器都支持，这一功能为我们提供了储存DOM节点集合的容器。此外，DOM片段可以通过单次操作实现注入和克隆，而不必多次注入和克隆每个独立的节点，这大大减少了单个页面的操作数量。<br/>
+还有一个重点: 若我们在文档的不同位置插入同个节点，我们需要复制这个片段；而若我们不使用片段，则需要单独复制每个节点，而不是一次复制整个DOM片段。
+### DOM的特性和属性
+当访问元素的特性值时，我们有两种方法: 使用传统DOM方法`getAttribute`和`setAttribute`或使用DOM对象上相对应的属性。
+```html
+<div></div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const div = document.querySelector('div');
+    div.setAttribute('id', 'ninja-1');
+    if(div.getAttribute('id') === 'ninja-1') {
+      console.log('Attribute successfully changed');
+    }
+    div.id = 'ninja-2';
+    if(div.id === 'ninja-2') {
+      console.log('Property successfully changed');
+    }
+    if(div.getAttribute('id') === 'ninja-2') {
+      console.log('Attribute successfully changed via property');
+    }
+    div.setAttribute('id', 'ninja-3');
+    if(div.id === 'ninja-3') {
+      console.log('Property successfully changed via attribute');
+    }
+    if(div.getAttribute('id') === 'ninja-3') {
+      console.log('Attribute successfully changed');
+    }
+  });
+</script>
+```
+这个例子展示了元素特性(attribute)与属性(property)之间的有趣行为。在文档的`DOMContentLoaded`(为了确保DOM加载完成)事件处理函数内，我们获得了一个div元素的引用。通过上述代码，我们了解到属性和特性之间有某种联系:改变属性的值会改变特性的值，改变特性的值同样也会改变属性的值，但是属性和特性并不同享同一个值。<br>
+值得注意的是:不是所有的特性都能被属性表示。虽然HTML DOM的原生特性通常都能被属性表示。但我们在页面上设置的自定义特性并不能被元素属性所表示。为了取得自定义特性的值，我们需要使用DOM方法`getAttribute`和`setAttribute`。如果不确定一个特性的对应属性是否存在，可以测试判断，若不存在，则退回到DOM方法:
+```javascript
+const value = element.someValue ? element.someValue
+                                : element.getAttribute('someValue');
+```
+在HTML5中，为遵循规范，建议使用`data-`作为自定义属性的前缀，便于清楚区分自定义特性和原生特性。
+### 令人头疼的样式属性
+我们同样有两个方法来处理`style`属性值: 特性值或由特性值创建的元素属性。最常用的为`style`属性，它不是一个字符串，而是一个对象。该对象中的属性与在元素标记中声明的样式一一对应。
+#### 样式在哪
+DOM元素上的`style`属性中的样式信息最初是根据在元素标记上声明的`style`特性设置的。如:`style="color: red;"`将会把相应的样式信息放入style对象中。在页面执行期间，脚本语言可以设置或修改style对象中的值，并且style对象中的变化会影响元素的展示。但在元素的style对象不包含style标签和外部样式表中的值。
+#### 获取计算后样式
+计算样式是应用在该元素上的所有样式的组合，包括样式表、元素的style特性以及脚本对style做的各种操作。所有现代浏览器实现的标准方法是`getComputedStyle`方法。该方法接收要计算其样式的元素，并返回一个接口，通过该接口可以进行属性查询。返回的接口提供了一个名为`getPropertyValue`方法以检索特定样式属性的计算风格。与style对象不同，`getPropertyValue`方法接收CSS属性名称而不是这些名称的驼峰式版本。
+
+![img12-2](./images/12.2.png)
+
+```javascript
+function fetchComputedStyle(element, property) {
+  const computedStyles = getComputedStyle(element);
+  if (computedStyles) {
+    property = property.replace(/([A-Z])/g,'-$1').toLowerCase();
+    return computedStyles.getPropertyValue(property);
+  }
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const div = document.querySelector('div');
+  console.log(`background-color: ${fetchComputedStyle(div, 'background-color')}`);
+  console.log(`display: ${fetchComputedStyle(div, 'display')}`);
+  console.log(`font-size: ${fetchComputedStyle(div, 'fontSize')}`);
+  console.log(`color: ${fetchComputedStyle(div, 'color')}`);
+  console.log(`border-top-color: ${fetchComputedStyle(div, 'borderTopColor')}`);
+  console.log(`border-top-width: ${fetchComputedStyle(div, 'border-top-width')}`);
+});
+```
+在元素的style特性上指定的样式权重比继承的样式更高(即使被`!important`标记)。在处理样式属性的时候，还需要注意一个问题: 混合属性(amalgam properties)。在检索属性时，我们要获得的是底层的单个属性。
+#### 转换像素值
+style特性中不是所有的数值都代表像素。为样式属性赋值时，我们必须指定单位，使其在所有浏览器中都能可靠地运行。在尝试获取style特性的像素值时，应该使用parseFloat方法进行转换操作，以确保在任何情况下获取的值都是预期值。
+##### 测量元素的高和宽
+在不指定值的情况下，height和width的默认值是auto，以便让元素的大小根据其内容进行决定。因此我们不能使用height和width来获取准确的值。<br>
+幸运的事，offsetHeight和offsetWidth提供了访问元素的高度和宽度的可靠方法。但是这两个属性所返回的值包括了元素的padding值。如果我们想要将某元素相对于另一个元素定位，这些信息通常准确。当一个元素不显示时，它就没有尺寸，offsetWidth和offsetHeight的属性值都为0。<br>
+对于隐藏元素，若想获得它在非隐藏状态时的尺寸，我们可以暂时取消元素的隐藏，获取值后再将其隐藏:
+- 将display设置为block
+- 将visibility设置为hidden
+- 将position设置为absolute
+- 获取元素尺寸
+- 恢复原先更改的属性
+
+将display属性修改为block可以使我们获取到offsetHeight和offsetWidth的真实值，但元素会变为可见，为了使其不可见，我们将visibility设置为hidden。但是元素依旧占据体积，因此我们将position属性设置为absolute将元素移出正常的可视区。
+```javascript
+(function() {
+  const PROPERTIES = {
+    position: 'absolute',
+    visibility: 'hidden',
+    display: 'block'
+  };
+  window.getDimensions = element => {
+    const previous = {};
+    for (let key in PROPERTIES) {
+      previous[key] = element.style[key];
+      element.style[key] = PROPERTIES[key];
+    }
+    const result = {
+      width: element.offsetWidth,
+      height: element.offsetHeight
+    };
+    for (let key in PROPERTIES) {
+      element.style[key] = previous[key];
+    }
+    return result;
+  };
+})();
+```
+### 避免布局抖动
+修改DOM同时会给我们带来一些副作用，其中最重要的是可能会造成布局抖动。当我们对DOM执行一系列的连续的读写操作时会发生布局抖动，而在此过程中，浏览器不能执行布局优化。<br>
+在我们深入研究之前，我们要认识到:改变一个元素的特性(或修改其内容)不一定只会影响到那个元素，相反会导致级联的变化。如: 设置一个元素的宽度会导致该元素的子元素、兄弟元素和父元素的变化。因此每次更改时，浏览器不得不计算这些变化的影响。因为重新计算布局十分昂贵，因此浏览器尽可能少做并延缓布局的工作。浏览器试着在队列中批量处理尽可能多的DOM写入操作以便一次性执行这些操作，最后更新布局。当我们的代码对DOM进行一系列(通常是不必要的)连续读写时，浏览器就无法优化布局操作。核心问题在于:浏览器必须在读取任何布局信息前先重新计算布局，这使性能的损耗十分变得巨大。
+```html
+<div id="ninja">I'm a ninja</div>
+<div id="samurai">I'm a samurai</div>
+<div id="ronin">I'm a ronin</div>
+<script>
+  const ninja = document.getElementById('ninja'),
+        samurai = document.getElementById('samurai'),
+        ronin = document.getElementById('ronin');
+
+  const ninjaWidth = ninja.clientWidth;
+  ninja.style.width = ninjaWidth / 2 + 'px';
+
+  const samuraiWidth = samurai.clientWidth;
+  samurai.style.width = samuraiWidth / 2 + 'px';
+  
+  const roninWidth = ronin.clientWidth;
+  ronin.style.width = roninWidth / 2 + 'px';
+</script>
+```
+读取元素的clientWidth属性值是众多需要浏览器重新计算布局的操作之一。通过对不同元素的width执行连续读写操作，浏览器便无法智能的执行惰性计算。相反，由于我们在每次布局修改后都会阅读布局信息，因此每次浏览器都必须重新计算布局，以确保我们一直能够获得正确的信息。避免布局抖动的一种方法，就是使用不会导致浏览器重排的方式编写代码:
+```javascript
+<div id="ninja">I'm a ninja</div>
+<div id="samurai">I'm a samurai</div>
+<div id="ronin">I'm a ronin</div>
+<script>
+  const ninja = document.getElementById('ninja'),
+        samurai = document.getElementById('samurai'),
+        ronin = document.getElementById('ronin');
+
+  const ninjaWidth = ninja.clientWidth;
+  const samuraiWidth = samurai.clientWidth;
+  const roninWidth = ronin.clientWidth;
+
+  ninja.style.width = ninjaWidth / 2 + 'px';
+  samurai.style.width = samuraiWidth / 2 + 'px';
+  ronin.style.width = roninWidth / 2 + 'px';
+</script>
+```
+批量读取和写入，因为我们知道元素的尺寸间不存在依赖关系。这样可以让浏览器进行批量修改DOM的操作。<br>
+布局抖动对于精简的页面无需过分考虑，但在开发复杂的Web应用程序时需要特别注意，尤其是移动设备。因此最好记住所有会引起布局抖动的方法和属性:
+
+![img12-3](./images/12.3.png)
+
+![img12-4](./images/12.4.png)
