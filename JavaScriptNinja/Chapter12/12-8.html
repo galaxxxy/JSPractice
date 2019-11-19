@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    div {
+      background-color: #ffc;
+      display: inline;
+      font-size: 1.8em;
+      border: 1px solid crimson;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div style="color: crimson;" id="testSubject" title="Ninja power!">
+    忍者パワー
+  </div>
+  <script>
+    function fetchComputedStyle(element, property) {
+      const computedStyles = getComputedStyle(element);
+      if (computedStyles) {
+        property = property.replace(/([A-Z])/g,'-$1').toLowerCase();
+        return computedStyles.getPropertyValue(property);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      const div = document.querySelector('div');
+      console.log(`background-color: ${fetchComputedStyle(div, 'background-color')}`);
+      console.log(`display: ${fetchComputedStyle(div, 'display')}`);
+      console.log(`font-size: ${fetchComputedStyle(div, 'fontSize')}`);
+      console.log(`color: ${fetchComputedStyle(div, 'color')}`);
+      console.log(`border-top-color: ${fetchComputedStyle(div, 'borderTopColor')}`);
+      console.log(`border-top-width: ${fetchComputedStyle(div, 'border-top-width')}`);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div></div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const div = document.querySelector('div');
+      div.setAttribute('id', 'ninja-1');
+      if(div.getAttribute('id') === 'ninja-1') {
+        console.log('Attribute successfully changed');
+      }
+      div.id = 'ninja-2';
+      if(div.id === 'ninja-2') {
+        console.log('Property successfully changed');
+      }
+      if(div.getAttribute('id') === 'ninja-2') {
+        console.log('Attribute successfully changed via property');
+      }
+      div.setAttribute('id', 'ninja-3');
+      if(div.id === 'ninja-3') {
+        console.log('Property successfully changed via attribute');
+      }
+      if(div.getAttribute('id') === 'ninja-3') {
+        console.log('Attribute successfully changed');
+      }
+    });
+  </script>
+</body>
+</html>

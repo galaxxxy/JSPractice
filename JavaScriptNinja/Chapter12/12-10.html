@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="ninja">I'm a ninja</div>
+  <div id="samurai">I'm a samurai</div>
+  <div id="ronin">I'm a ronin</div>
+  <script>
+    const ninja = document.getElementById('ninja'),
+          samurai = document.getElementById('samurai'),
+          ronin = document.getElementById('ronin');
+
+    const ninjaWidth = ninja.clientWidth;
+    ninja.style.width = ninjaWidth / 2 + 'px';
+
+    const samuraiWidth = samurai.clientWidth;
+    samurai.style.width = samuraiWidth / 2 + 'px';
+    
+    const roninWidth = ronin.clientWidth;
+    ronin.style.width = roninWidth / 2 + 'px';
+  </script>
+</body>
+</html>

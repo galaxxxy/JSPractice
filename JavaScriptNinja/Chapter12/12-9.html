@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Suspendisse congue facilisis dignissim. Fusce sodales,odio commodo accumsan commodo, lacus odio aliquet purus,
+    <img src="../images/10.1.1.png" alt="ninja pole" id="withPole">
+    <img src="../images/10.1.2.png" alt="ninja shuriken" id="withShuriken" style="display: none;">
+    vel rhoncus elit sem quis libero. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In hac habitasse platea dictumst. Donec adipiscing urna ut nibh vestibulum vitae mattis leo rutrum. Etiam a lectus ut nunc mattis laoreet at placerat nulla. Aenean tincidunt lorem eu dolor commodo ornare.
+  </div>
+  <script>
+    (function() {
+      const PROPERTIES = {
+        position: 'absolute',
+        visibility: 'hidden',
+        display: 'block'
+      };
+      window.getDimensions = element => {
+        const previous = {};
+        for (let key in PROPERTIES) {
+          previous[key] = element.style[key];
+          element.style[key] = PROPERTIES[key];
+        }
+        const result = {
+          width: element.offsetWidth,
+          height: element.offsetHeight
+        };
+        for (let key in PROPERTIES) {
+          element.style[key] = previous[key];
+        }
+        return result;
+      };
+    })();
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const withPole = document.getElementById('withPole'),
+              withShuriken = document.getElementById('withShuriken');
+
+        console.log(`Pole image width fetched: actual: ${withPole.offsetWidth}`);
+        console.log(`Pole image height fetched: actual: ${withPole.offsetHeight}`);
+
+        console.log(`Shuriken image width fetched: actual: ${withShuriken.offsetWidth}`);
+        console.log(`Shuriken image height fetched: actual: ${withShuriken.offsetHeight}`);
+
+        const dimensions = getDimensions(withShuriken);
+        console.log(`Shuriken image width fetched: actual: ${dimensions.width}`);
+        console.log(`Shuriken image height fetched: actual: ${dimensions.height}`);
+      }, 3000);
+    })
+  </script>
+</body>
+</html>
