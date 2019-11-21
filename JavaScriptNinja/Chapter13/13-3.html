@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <button id="myButton"></button>
+  <script>
+    setTimeout(function timeoutHandler() {
+      // some timeout handle code that runs for 6ms
+    }, 10);
+
+    setInterval(function intervalHandler() {
+      // some interval handle code that runs for 8ms
+    })
+
+    const myButton = document.querySelector('#myButton');
+    myButton.addEventListener('click', function clickHandler() {
+      // some click handle code that runs for 10ms
+    });
+    // code that runs for 18ms
+  </script>
+</body>
+</html>

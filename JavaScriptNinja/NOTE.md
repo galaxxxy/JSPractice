@@ -1344,3 +1344,44 @@ JavaScript的单线程执行模型的结果是一次只能执行一个任务。�
 ![img13-9](./images/13.9.png)
 
 需要强调的一点是: 当宏任务执行完毕后，事件循环会立刻处理微任务队列，在微任务队列为空之前不会允许浏览器渲染。上图显示了只有在两个微任务之间不含微任务页面重渲染才可以发生。在微任务执行完毕，且微任务队列为空之后才会发生页面重渲染。
+### 玩转计时器: 延迟执行和间隔执行
+计时器允许我们延迟一段代码的执行，延迟时长至少是数毫秒。我们可以利用这一功能将长时间运行的任务拆分成不阻塞事件循环的小任务，以此来阻止浏览器渲染。在浏览器渲染过程中，会使得应用运行缓慢、没有响应。<br>
+注意: 计时器的延迟时间是无法保证的
+#### 事件循环内的计时器执行
+计时器与标准事件不同:
+```html
+<button id="myButton"></button>
+<script>
+  setTimeout(function timeoutHandler() {
+    // some timeout handle code that runs for 6ms
+  }, 10);
+
+  setInterval(function intervalHandler() {
+    // some interval handle code that runs for 8ms
+  })
+
+  const myButton = document.querySelector('#myButton');
+  myButton.addEventListener('click', function clickHandler() {
+    // some click handle code that runs for 10ms
+  });
+  // code that runs for 18ms
+</script>
+```
+假设在程序执行6ms时用户点击了按钮，下图展示了应用执行前18ms的情况:
+
+![img13-10](./images/13.10.png)
+
+上例中，队列中的第一项任务是执行主线JavaScript代码。在约为18ms的执行过程中，发生了三件重要的事情:
+- 0ms时，一个延迟计时器延迟10ms执行，一个间隔计时器同样延迟10ms执行。浏览器保存了它们的引用。
+- 6ms时，用户点击了鼠标
+- 10ms时，延迟计时器到期并且第一个时间间隔触发。
+
+通常，当又一个时间间隔触发时，会创建一个新任务并将其加入任务队列。但是，当已经有一个间隔任务的实例存在于队列中等待执行时，本次调用会被撤销。也就是说浏览器不会允许某个间隔定时器的多个间隔任务同时存在于队列中。
+
+![img13-12](./images/13.12.png)
+
+从上图可以看出，因为JavaScript单线程的本质，我们只能控制计时器何时被加入到队列中，而无法控制何时执行。<br>
+当间隔时间处理器在执行时(不在队列中等待被执行)，若又一个间隔被触发，则一个新的间隔任务会被加入任务队列。可以看出，时间间隔需要特殊考虑，时间延迟则不需要:
+
+![img13-13](./images/13.13.png)
+
