@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    #outerContainer {
+      width: 100px;
+      height: 100px;
+      background-color: blue;
+    }
+
+    #innerContainer {
+      width: 50px;
+      height: 50px;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div id="outerContainer">
+    <div id="innerContainer"></div>
+  </div>
+  <script>
+    const outerContainer = document.getElementById('outerContainer');
+    const innerContainer = document.getElementById('innerContainer');
+
+    outerContainer.addEventListener('click', function(e) {
+      alert('Outer container click');
+      if (this === outerContainer) {
+        alert('This refers to the outerContainer');
+      }
+      if (e.target === outerContainer) {
+        alert('e.target refers to the outerContainer');
+      }
+    });
+    innerContainer.addEventListener('click', function(e) {
+      alert('Inner container click');
+      if (this == innerContainer) {
+        alert('This refers to the innerContainer');
+      }
+      if (e.target === innerContainer) {
+        alert('e.target refers to the innerContainer');
+      }
+    });
+  </script>
+</body>
+</html>
