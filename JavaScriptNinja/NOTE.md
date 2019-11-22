@@ -1385,3 +1385,138 @@ JavaScript的单线程执行模型的结果是一次只能执行一个任务。�
 
 ![img13-13](./images/13.13.png)
 
+##### 延迟计时器和间隔计时器的区别
+```javascript
+setTimeout(function repeatMe() {
+  // Some long block of code
+  setTimeout(repeatMe, 10);
+});
+
+setInterval(() => {
+  // Some long block of code
+}, 10);
+```
+setTimeout内的代码在前一个回调函数执行完成之后，至少延迟10ms执行(取决于事件队列的状态)；而setInterval每10ms都会执行回调函数，并不关心前一个回调函数是否执行。
+
+![img13](./images/13.png)
+
+#### 处理计算复杂度高的任务
+为了防止脚本执行时间过长导致浏览器用户交互卡顿，我们可以使用计时器将代码分解为片段。
+```html
+<table>
+  <tbody></tbody>
+</table>
+<script>
+  const tbody = document.querySelector('tbody');
+  for (let i = 0; i < 20000; i++) {
+    const tr = document.createElement('tr');
+    for (let t = 0; t < 6; t++) {
+      const td = document.createElement('td');
+      td.appendChild(document.createTextNode(`${i},${t}`));
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+</script>
+```
+上例中，创建了大量DOM节点，这会导致浏览器挂起一段时间，且用户无法正常操作。我们可以引入定时器来解决这个问题:
+```html
+<table>
+  <tbody></tbody>
+</table>
+<script>
+  const rowCount = 20000;
+  const divideInto = 4;
+  const chuckSize = rowCount / divideInto;
+  let iteration = 0;
+  const tbody = document.querySelector('tbody');
+  setTimeout(function generateRows() {
+    const base = chuckSize * iteration;
+    for (let i = 0; i < chuckSize; i++) {
+      const tr = document.createElement('tr');
+      for (let t = 0; t < 6; t++) {
+        const td = document.createElement('td');
+        td.appendChild(document.createTextNode(`${base + i}, ${t}, ${iteration}`));
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+    iteration++;
+    if (iteration < divideInto) {
+      setTimeout(generateRows, 0);
+    }
+  }, 0);
+</script>
+```
+这个例子中，我们将代码分解为四个小操作。
+
+![img13-14](./images/13.14.png)
+
+使用0作为超时时间表示通知浏览器尽快执行回调，但与其他微任务不同，在回调之前可以执行页面渲染。
+### 处理事件
+当发生某一事件时，我们可以在代码中处理。最常见的注册事件处理器的方法是使用内置`addEventListener`方法。在事件处理器内部，我们可以使用this关键字(除箭头函数)，this一般指向事件发生的对象。但其实这不太准确，this关键字指向事件处理器所注册的元素。
+#### 通过DOM代理事件函数
+Netscape事件模型中，事件处理器从顶部元素开始，直到事件目标元素。这称为事件捕获。Microsoft则采用相反方向:从目标元素开始，按DOM树向上冒泡。这称为事件冒泡。<br>
+W3委员会设立标准，它同时包含两种方式，所有现代浏览器都实现了该标准。一个事件的处理有两种方式:
+- 捕获: 首先被顶部元素捕获，并依次向下传递
+- 冒泡: 目标元素被捕获之后，事件处理转向冒泡，从目标元素向顶部元素冒泡。
+
+我们可以向addEventListener传递参数来选择希望的事件处理顺序。第三个参数默认为false，若传入true，将采用事件捕获；若传入false，则采用事件冒泡。
+
+![img13-15](./images/13.15.png)
+
+一个事件可以触发多次事件处理器的执行，每个事件处理器可以使捕获或冒泡模式。因此，事件首先通过捕获，从顶部元素传递到目标元素。当到达目标元素时，激活冒泡模式，从目标元素传回到顶部元素。从这里也能看出，事件处理的元素不一定是发生事件的元素。
+##### 在祖先元素上代理事件
+假设我们需要指出用户在表格中单击的是哪一个单元格，可以将所有的单元格背景色设置为白色，当单击单元格时，将被单击的单元格设置为黄色。我们可以遍历所有的单元格，分别建立处理器，处理背景色的变化。但更好的做法是创建唯一的处理器，注册到比单元格更高层级的元素上，通过冒泡可以处理所有的单元格点击事件。
+```javascript
+const table = document.getElementById('someTable');
+table.addEventListener('click', e => {
+  // 仅当点击事件发生在cell元素上才执行动作
+  if (e.target.tagName.toLowerCase() === 'td) {
+    e.target.style.backgroundColor = 'yellow';
+  }
+});
+```
+#### 自定义事件
+##### 松耦合
+松耦合指当代码触发匹配条件时，无需指定关于条件的细节代码。事件处理器的优点之一是，我们可以创建任意数量的事件处理器，并且事件处理器之间是完全独立的。
+##### 创建自定义事件
+自定义事件模拟真实事件的一种方式。
+```html
+<style>
+  #whirlyThing {
+    display: none;
+  }
+</style>
+<button id="clickMe">start</button>
+<img src="../images/10.1.1.png" id="whirlyThing">
+<script>
+  function triggerEvent(target, eventType, eventDetail) {
+    const event = new CustomEvent(eventType, {
+      detail: eventDetail
+    });
+    target.dispatchEvent(event);
+  }
+
+  function performAjaxOperation() {
+    triggerEvent(document, 'ajax-start', {url: 'my-url'});
+    setTimeout(() => {
+      triggerEvent(document, 'ajax-complete');
+    }, 5000);
+  }
+  const button = document.getElementById('clickMe');
+  button.addEventListener('click',() => {
+    performAjaxOperation();
+  });
+
+  document.addEventListener('ajax-start', e => {
+    document.getElementById('whirlyThing').style.display = 'inline-block';
+    if (e.detail.url === 'my-url') {
+      alert('We can pass in event data');
+    }
+  });
+  document.addEventListener('ajax-complete', e => {
+    document.getElementById('whirlyThing').style.display = 'none';
+  });
+</script>
+```
